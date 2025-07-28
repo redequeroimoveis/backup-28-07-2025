@@ -1,0 +1,884 @@
+{
+  "createdAt": "2025-07-25T02:53:29.204Z",
+  "updatedAt": "2025-07-25T02:53:30.000Z",
+  "id": "7roIH0stTiMs6S9Y",
+  "name": "Créditos Site Revendedor Typebot",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "52de1d6d-e198-48b7-b927-c53b54175345",
+              "leftValue": "={{ $('Webhook1').item.json.body.Tipo }}",
+              "rightValue": "Adicionar",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ddfa7082-5944-47f1-a400-429427532aef",
+      "name": "Adicionar",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1720,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "6682150e-a93c-447d-b134-38c4d986f4a3",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1000,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c1dd057-4868-4f17-9c6c-a9145ecc3912",
+              "name": "resposta",
+              "value": "=Crédito adicionado com sucesso!\n\nSaldo atual cliente: {{ $json.creditos }} créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "191373f9-ad9e-49ca-87df-9046134bfa10",
+      "name": "Edit Fields2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        600,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c1dd057-4868-4f17-9c6c-a9145ecc3912",
+              "name": "creditos",
+              "value": "={{ $json.body['Crédito Alteração'] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "65b6da99-9c6a-47d2-bbda-bc5b86d7f783",
+      "name": "Edit Fields3",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1920,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "creditos-banco-de-dados-typebot",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "007fa4ad-47f5-4beb-b1dc-18c4e333607f",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2120,
+        -300
+      ],
+      "webhookId": "9f3c619d-c88f-41cc-9b97-b2a128c30e90"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtém o telefone da string dinâmica\nlet telefone = $('Webhook1').item.json.body['Telefone Cliente'];\n\n// Verifica se o telefone foi fornecido\nif (!telefone) {\n  return [\n    {\n      erro: 'O telefone do cliente não foi fornecido.',\n    }\n  ];\n}\n\n// Remove quaisquer espaços em branco ao redor do telefone\ntelefone = telefone.trim();\n\n// Remove caracteres não numéricos, caso existam\ntelefone = telefone.replace(/[^0-9]/g, '');\n\n// Extrai o código do país, o DDD e o número\nconst codigoPais = telefone.slice(0, 2); // Primeiro e segundo dígito\nconst ddd = telefone.slice(2, 4); // Terceiro e quarto dígito\nlet numero = telefone.slice(4); // O restante é o número\n\n// Verifica se o número começa com '9' adicional e ajusta para 8 dígitos\nif (numero.length === 9 && numero.startsWith('9')) {\n  numero = numero.slice(1);\n}\n\n// Retorna os dados formatados\nreturn [\n  {\n    codigoPais: `+${codigoPais}`, // Código do país com o \"+\" incluído\n    ddd,\n    numero\n  }\n];\n"
+      },
+      "id": "a1c1342d-88b2-4121-b5eb-26bb3deb2750",
+      "name": "Code Cliente",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1480,
+        -780
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+{{ $('Edit Fields1').item.json.codigoPais }}{{ $('Edit Fields1').item.json.ddd }}{{ $('Edit Fields1').item.json.numero }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Edit Fields3').item.json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1f8bfa95-f571-4e59-bf6b-8ea037361b82",
+      "name": "Cliente Adicionar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -960,
+        -640
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "5b90d077-42b8-444a-b943-51828d24e5f8",
+              "leftValue": "={{ $json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a5c04ccd-31b2-4de2-9f66-86a929006dd4",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -580,
+        -640
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+{{ $('Edit Fields1').item.json.codigoPais }}{{ $('Edit Fields1').item.json.ddd }}{{ $('Edit Fields1').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "80952ac2-765e-4f49-a9bf-88727d9ab028",
+      "name": "Cliente Retornar Créditos Disponíveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -760,
+        -640
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+{{ $('Edit Fields1').item.json.codigoPais }}{{ $('Edit Fields1').item.json.ddd }}9{{ $('Edit Fields1').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1f7f90e1-0e59-4e96-9747-4df0ad5b0665",
+      "name": "Cliente Retornar Créditos Disponíveis1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -760,
+        -420
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "94edfcd0-35c1-4aef-9bfc-e8a86b4f92f8",
+              "leftValue": "={{ $json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f3edce2c-0e22-4d66-86e7-ce6c48e053b4",
+      "name": "If Cliente",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        -520
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtém o telefone da string dinâmica\nlet telefoneRevendedor = $('Webhook1').item.json.body['Telefone Revendedor'];\n\n// Remove quaisquer espaços em branco ao redor do telefone\ntelefoneRevendedor = telefoneRevendedor.trim();\n\n// Remove caracteres não numéricos, caso existam\ntelefoneRevendedor = telefoneRevendedor.replace(/[^0-9]/g, '');\n\n// Extrai o código do país, o DDD e o número\nconst codigoPais = telefoneRevendedor.slice(0, 2); // Primeiro e segundo dígito\nconst ddd = telefoneRevendedor.slice(2, 4); // Terceiro e quarto dígito\nlet numero = telefoneRevendedor.slice(4); // O restante é o número\n\n// Verifica se o número começa com '9' adicional e ajusta para 8 dígitos\nif (numero.length === 9 && numero.startsWith('9')) {\n  numero = numero.slice(1);\n}\n\n// Retorna os dados formatados\nreturn [\n  {\n    codigoPais: `+${codigoPais}`, // Código do país com o \"+\" incluído\n    ddd,\n    numero\n  }\n];\n"
+      },
+      "id": "7ca20647-5566-486a-bd39-7720671b8f5d",
+      "name": "Code Revendedor",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1480,
+        -620
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+{{ $('Edit Fields4').item.json.codigoPais }}{{ $('Edit Fields4').item.json.ddd }}{{ $('Edit Fields4').item.json.numero }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Edit Fields3').item.json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4cdc0a3f-4b5b-426d-90ed-61fecb89c30d",
+      "name": "Revendedor Retirar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -280,
+        -320
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+{{ $('Edit Fields4').item.json.codigoPais }}{{ $('Edit Fields4').item.json.ddd }}{{ $('Edit Fields4').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7d39e400-38a9-44d9-944d-e7f1b9f9d814",
+      "name": "Revendedor Retornar Créditos Disponíveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -80,
+        -320
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+{{ $('Edit Fields4').item.json.codigoPais }}{{ $('Edit Fields4').item.json.ddd }}9{{ $('Edit Fields4').item.json.numero }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Edit Fields3').item.json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "aed3eb27-353d-401d-8d9a-875b8b722b3b",
+      "name": "Revendedor Retirar Créditos1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -280,
+        -120
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+{{ $('Edit Fields4').item.json.codigoPais }}{{ $('Edit Fields4').item.json.ddd }}9{{ $('Edit Fields4').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "02b96905-bcda-4b06-91a7-674cfd08bfc0",
+      "name": "Revendedor Retornar Créditos Disponíveis1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -80,
+        -120
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+{{ $('Edit Fields1').item.json.codigoPais }}{{ $('Edit Fields1').item.json.ddd }}9{{ $('Edit Fields1').item.json.numero }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Edit Fields3').item.json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "087473f6-6e60-4ff8-876a-ecfc810328b8",
+      "name": "Cliente Adicionar Créditos1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -960,
+        -420
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "3489fc7d-6317-40a8-82dd-31205ec8222e",
+              "leftValue": "={{ $json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d65bb733-3dd6-408f-901f-7eaa14470ead",
+      "name": "If1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        140,
+        -320
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "94edfcd0-35c1-4aef-9bfc-e8a86b4f92f8",
+              "leftValue": "={{ $json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f93bd1ea-400b-4cd8-ad18-130731dca640",
+      "name": "If Revendor",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        380,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c1dd057-4868-4f17-9c6c-a9145ecc3912",
+              "name": "resposta",
+              "value": "=Crédito adicionado com sucesso! ✅\n\n------- / / -------\n\n*Cliente:* {{ $('If Cliente').item.json.creditos }} créditos\n\n*Seu saldo atual revendedor:* {{ $('If Revendor').item.json.creditos }} créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1125cbc9-6607-42f1-a590-8fd7dddb7bbf",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        800,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5b25b74a-3ee2-43d8-8d8c-02e7a76f72e8",
+              "name": "codigoPais",
+              "value": "={{ $json.codigoPais }}",
+              "type": "number"
+            },
+            {
+              "id": "16a66869-470e-4406-bfb8-14e91e7191a6",
+              "name": "ddd",
+              "value": "={{ $json.ddd }}",
+              "type": "number"
+            },
+            {
+              "id": "c182a71f-7dfa-485c-9d31-f20ebeeb7eca",
+              "name": "numero",
+              "value": "={{ $json.numero }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b074ed0a-0a5b-4349-b7fd-843ae42d96c4",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1300,
+        -780
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5b25b74a-3ee2-43d8-8d8c-02e7a76f72e8",
+              "name": "codigoPais",
+              "value": "={{ $json.codigoPais }}",
+              "type": "number"
+            },
+            {
+              "id": "16a66869-470e-4406-bfb8-14e91e7191a6",
+              "name": "ddd",
+              "value": "={{ $json.ddd }}",
+              "type": "number"
+            },
+            {
+              "id": "c182a71f-7dfa-485c-9d31-f20ebeeb7eca",
+              "name": "numero",
+              "value": "={{ $json.numero }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ae55ed8b-aeb8-4771-ac80-0411bb9a92fe",
+      "name": "Edit Fields4",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1300,
+        -620
+      ]
+    }
+  ],
+  "connections": {
+    "Adicionar": {
+      "main": [
+        [
+          {
+            "node": "Code Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Adicionar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Cliente": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cliente Adicionar Créditos": {
+      "main": [
+        [
+          {
+            "node": "Cliente Retornar Créditos Disponíveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "If Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cliente Adicionar Créditos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cliente Retornar Créditos Disponíveis": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cliente Retornar Créditos Disponíveis1": {
+      "main": [
+        [
+          {
+            "node": "If Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Cliente": {
+      "main": [
+        [
+          {
+            "node": "Revendedor Retirar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Revendedor": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revendedor Retirar Créditos": {
+      "main": [
+        [
+          {
+            "node": "Revendedor Retornar Créditos Disponíveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revendedor Retornar Créditos Disponíveis": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revendedor Retirar Créditos1": {
+      "main": [
+        [
+          {
+            "node": "Revendedor Retornar Créditos Disponíveis1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cliente Adicionar Créditos1": {
+      "main": [
+        [
+          {
+            "node": "Cliente Retornar Créditos Disponíveis1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "If Revendor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Revendedor Retirar Créditos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revendedor Retornar Créditos Disponíveis1": {
+      "main": [
+        [
+          {
+            "node": "If Revendor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Revendor": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Code Revendedor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Cliente Adicionar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "120",
+            "content-type": "application/json",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "br, gzip, deflate"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "Telefone Cliente": "+553799780656",
+            "Telefone Revendedor": "+553799781110",
+            "Tipo": "Adicionar",
+            "Crédito Alteração": "2"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/creditos-banco-de-dados-typebot",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "e9192ae4-6910-47c3-b5ea-9daff1d0b78c",
+  "triggerCount": 1,
+  "tags": []
+}
