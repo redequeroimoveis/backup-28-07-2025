@@ -1,0 +1,5440 @@
+{
+  "createdAt": "2025-07-25T01:03:32.709Z",
+  "updatedAt": "2025-07-25T16:43:51.000Z",
+  "id": "nLmKhQV0Euqejgkf",
+  "name": "Dividas CNPJ 4-2 (ehmconsultas - dividas/multi /cnpj)",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "fa9ae66b-e2a7-452f-8e85-8bfc5b29e237",
+              "leftValue": "={{ $json.HEADER.PARAMETROS.CPFCNPJ.replace(/[.\\-\\/\\s]/g, '') }}",
+              "rightValue": "={{ $('Webhook').item.json.body.CPF.replace(/[.\\-\\/\\s]/g, '') }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "5eecb8f8-c22a-4352-b282-ae13530054b1",
+              "leftValue": "={{ $json.HEADER.INFORMACOES_RETORNO.STATUS_RETORNO.DESCRICAO }}",
+              "rightValue": "SUCESSO",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "7020df52-e83f-48c7-8c14-dada8daf4715",
+              "leftValue": "={{ $json.data }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "5629a039-4482-41e4-9984-f8bf1b0b008e",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2000,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "Consulta",
+        "options": {}
+      },
+      "id": "257190e1-dd8e-4df5-ab31-6a30ee6f826b",
+      "name": "Aggregate6",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        5380,
+        2940
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b4c4b8b4-ac50-4977-b5b7-22b2d88b5eed",
+              "name": "Créditos a retirar",
+              "value": "=5",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f5cbf8aa-ad69-4c6c-a06e-08e649050e7d",
+      "name": "Créditos a retirar1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        10240,
+        2460
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "6611ca4d-c98b-4930-bf78-78785d12378b",
+              "leftValue": "={{ $('Retornar Créditos1').item.json.creditos }}",
+              "rightValue": "={{ $('Créditos a retirar1').item.json['Créditos a retirar'] }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f0e3139f-d41f-47b4-a656-f5e31fc057fd",
+      "name": "Maior ou igual1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        10640,
+        2440
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7984399f-c6c7-4366-b819-e9c2078d3cbf",
+      "name": "Verificar saldo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        11080,
+        2420
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "48b4bb8d-d346-4b40-ad4b-ebf96192e691",
+      "name": "Retornar Créditos1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        10040,
+        2460
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "3a0d598a-3b82-480e-b95a-b760b969e9fe",
+              "leftValue": "={{ $('Retornar Créditos1').item.json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "58225223-7855-407d-8685-b460fa22726c",
+      "name": "Se crédito existe1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        10420,
+        2460
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Créditos a retirar1').item.json['Créditos a retirar'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cbd4bff8-0126-4dd9-9265-4bc5c6ee541a",
+      "name": "Retirar Créditos1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        10880,
+        2420
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "ad9c09c1-3aaf-4c42-ab43-9f8f30a12e99",
+              "leftValue": "={{ $('Retornar Créditos1').item.json.creditos }}",
+              "rightValue": "={{ $json.creditos }}",
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "98d429ae-0672-41cc-85f5-f52afe56bf4b",
+      "name": "If20",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        11280,
+        2420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Retirar Créditos",
+        "height": 332,
+        "width": 1533
+      },
+      "id": "45ecc59c-07d0-4a27-8c57-9e3323cdaeae",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        9960,
+        2340
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3db00fee-081d-4b19-99dd-cbc4ab4a0e0e",
+              "name": "Nome Consulta",
+              "value": "={{ $json['Tipo Consulta'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ac5a7a11-a016-4827-a7ae-88a6490e25ec",
+              "name": "URL Consulta Padrão",
+              "value": "-",
+              "type": "string"
+            },
+            {
+              "id": "c166d2b9-681c-4216-8f4d-0d1737c888dd",
+              "name": "Credito consulta",
+              "value": "={{ $json['Credito consulta'] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ec8c4cf8-c847-4f41-a2b6-f870ed47747d",
+      "name": "Dados N8N",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -7040,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            },
+            {
+              "name": "Informações",
+              "value": "={{ $('Aggregate6').item.json.Consulta[0]['Informações'].replace(/_ /g, '_') }}"
+            },
+            {
+              "name": "Nome Menu",
+              "value": "=_{{ $('Dados N8N').item.json['Nome Consulta'] }}_"
+            },
+            {
+              "name": "Nome Menu Status",
+              "value": "={{ $('Dados N8N').item.json['Nome Consulta'] }} - Online"
+            },
+            {
+              "name": "Tipo consulta",
+              "value": "={{ $('Webhook').item.json.body['Tipo consulta'] }}"
+            },
+            {
+              "name": "Pendências",
+              "value": "={{ $('Aggregate6').item.json.Consulta[1].Pendencias.replace(/_ /g, '_') }}"
+            },
+            {
+              "name": "Protestos",
+              "value": "={{ $('Aggregate6').item.json.Consulta[3].Protesto.replace(/_ /g, '_') }}"
+            },
+            {
+              "name": "SCPC",
+              "value": "={{ $('Aggregate6').item.json.Consulta[2].SCPC.replace(/_ /g, '_').replace(/Cr\\uFFFDdito/g, 'Crédito') }}"
+            },
+            {
+              "name": "URL PDF",
+              "value": "=### PDF\n{{ $('IF PDF').item.json.FileUrl }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cbb82c5f-c82a-4823-bfb1-226857116b8f",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        9020,
+        2460
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a69a39e2-82d5-437d-a186-9e0562f34e2b",
+              "name": "api",
+              "value": "cnpj_pros",
+              "type": "string"
+            },
+            {
+              "id": "3db00fee-081d-4b19-99dd-cbc4ab4a0e0e",
+              "name": "Tipo Consulta",
+              "value": "Consulta Serasa Pendências + SCPC Boa Vista + Protestos + Resumo IA (5 créditos)",
+              "type": "string"
+            },
+            {
+              "id": "ac5a7a11-a016-4827-a7ae-88a6490e25ec",
+              "name": "URL Consulta Padrão",
+              "value": "-",
+              "type": "string"
+            },
+            {
+              "id": "c166d2b9-681c-4216-8f4d-0d1737c888dd",
+              "name": "Credito consulta",
+              "value": 5,
+              "type": "number"
+            },
+            {
+              "id": "bcebf250-2d5f-4971-927c-55f5fa8d3a4f",
+              "name": "Prompt Resumo IA",
+              "value": "=Você receberá dados financeiros e de pendências relacionadas a um CPF ou CNPJ, incluindo informações como dívidas, protestos, status de crédito e score. Sua tarefa é organizar essas informações de maneira clara e objetiva, estruturando-as em seções e terminando com um breve resumo da situação financeira da pessoa física ou jurídica.\n\nInstruções para a Estrutura e Redação:\nEstrutura dos Dados:\nInicie apresentando as principais informações do CPF ou CNPJ, como nome, data de nascimento, nome da mãe e situação na Receita Federal, se disponível.\nCrie uma seção que apresente, de forma resumida, todas as pendências financeiras, dívidas e protestos identificados.\nApresente o score de crédito e a probabilidade de inadimplência, se forem disponibilizados.\n\nResumo da Situação Financeira:\nElabore um parágrafo resumindo a situação financeira geral do CPF ou CNPJ.\nUse uma linguagem neutra e clara, apontando os riscos de crédito, quantidade de dívidas ou protestos e qualquer outra informação relevante que possa impactar a análise do perfil financeiro.\n\nObservações Importantes:\nNÃO exiba ou informe nenhum dado de contato, incluindo telefones, endereços ou e-mails.\nNÃO invente dados que não foram explicitamente fornecidos.\nSiga rigorosamente as normas de proteção de dados pessoais (LGPD), respeitando a privacidade do consultado.\n\nSegue abaixo um breve exemplo de resumo\n\"### Resumo da Situação Financeira\nRafael dos Santos Nogueira apresenta um histórico financeiro com múltiplas pendências, incluindo dívidas com instituições educacionais e um protesto registrado. O total das pendências varia, mas a principal dívida se destaca no valor de R$ 1.467,62. Essas ocorrências podem impactar negativamente seu acesso ao crédito. A situação atual sugere um certo risco de inadimplência e é recomendável que Rafael busque regularizar suas pendências para evitar complicações financeiras futuras.\"\n\nFaça um breve resumo com no máximo 700 caracteres de forma simples explicando a situação financeira utilizando todas as informações fornecidas. Não ignore nenhum dado. No resumo você não precisa escrever ou listar todas as pendências. Apenas resumir com um total e quantidade dos titulos abaixo.\nO titulo do resumo precisa ser exatamente \"### RESUMO DA SITUAÇÃO FINANCEIRA\" (EM LETRAS MAIÚSCULAS)\nUma observação. O titulo dos menus estão entre ##\nRetorne apenas os dados a partir de \"## RESUMO DA SITUAÇÃO FINANCEIRA\"\n\nSegue abaixo os dados para formatar:",
+              "type": "string"
+            },
+            {
+              "id": "e91bebb7-5a96-4254-adef-d41486ba471e",
+              "name": "Prompt PDF",
+              "value": "=Objetivo: Formatar os dados da consulta de crédito de forma estruturada e organizada, seguindo o modelo de análise de crédito do Serasa, retornando exclusivamente um código HTML.\nInstruções:\n* Retornar apenas o HTML, sem nenhum outro texto no output.\n* Seguir a estrutura de tabelas para organizar os dados.\n* Usar fontes de até 11px para informações dentro das tabelas.\n* Remover o título <h1>, mas adicionar duas quebras de linha (<br><br>) após a logo para espaçamento.\n* Não alterar o campo \"URL-LOGO\", pois ele será substituído dinamicamente.\n* Adicionar \"Resumo através de IA\" no final, com um resumo dos dados recebidos bem básico sem apresentar muitos os valores.\n* Incluir um rodapé com informações de confidencialidade e LGPD, usando fonte de 9px e alinhado à esquerda.\n* Nunca utilizar a expressão \"Dados do Cotista\", apenas \"Dados\".\nFormato esperado:\n* HTML bem estruturado, com seções claras.\n* Uso de <div> para blocos de informações e <table> para dados tabulares.\n* Listas <ul> para e-mails, telefones e parentes.\n* Footer fixo no final do relatório.\n* Caso a frase inicie e termine com _ pode remover. Ex: _Sem pendências registradas._ fica Sem pendências registradas.\n* É obrigatório que todas as informações fornecidas abaixo conste no HTML.\n* Se tiver \"_Sem pendências registradas._\", \"_Sem pendências._\" ou algo que comece e termine com \"_\", remova o \"_\".\n* Se o dados como telefone, email ou parentes não existir nos dados para serem formatados, não crie a div class=\"section\". Você vai criar somente se existir informações.\n* Se não existir nenhum email, não adicione no html Email\n* Se não existir nenhum telefone, não adicione no html Telefone\n* Se não existir nenhum Possíveis Parentes, não adicione no html Possíveis Parentes\n* Se email estiver vazio ou não existir, não crie no html <strong>Email:</strong>\n* Se telefone estiver vazio ou não existir, não crie no html <strong>Telefone:</strong>\n\nAdicione um texto no final com os dados recebidos de \"RESUMO ATRAVÉS DE IA\"\"\n\nAdicione também um rodapé na página com fonte tamanho 9 alinhado a esquerda da página com os seguintes dados:\n\"INFORMAÇÕES IMPORTANTES\nESTAS INFORMAÇÕES SÃO CONFIDENCIAIS E DEVERÃO SER UTILIZADAS, ÚNICA E EXCLUSIVAMENTE, PARA ORIENTAÇÃO DAS TRANSAÇÕES COMERCIAIS DO USUÁRIO , RESPONSABILIZANDO-SE CIVIL E CRIMINALMENTE POR DANOS QUE OCASIONAR A TERCEIROS, QUANDO UTILIZADAS EM DESACORDO COM A LEGISLAÇÃO EM VIGOR.\n\nMINUTA DE DECLARAÇÃO LGPD\nDECLARO QUE A UTILIZAÇÃO DOS DADOS RESPEITARÁ AS FINALIDADES E PROCEDIMENTOS LEGALMENTE ADMITIDOS PELA LEI GERAL DE PROTEÇÃO DE DADOS DIVULGADOS EM MINHA PÁGINA INICIAL DE ACESSO.\"\n\nHTML DE EXEMPLO 1:\n<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Consulta de Análise de Crédito</title>\n    <style>\n        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #eef2f7; }\n        .container { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }\n        .banner { width: 100%; height: auto; display: block; margin-bottom: 20px; }\n        .section { margin-bottom: 20px; padding: 20px; border-radius: 8px; background: #f9f9f9; border-left: 5px solid #181d3e; }\n        .section-header { font-size: 18px; font-weight: bold; color: #181d3e; margin-bottom: 15px; }\n        p, ul { margin: 5px 0; line-height: 1.6; }\n        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }\n        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }\n        th { background-color: #181d3e; color: #fff; }\n        .highlight { font-weight: bold; color: #dc3545; }\n        .info { font-weight: bold; color: #495057; }\n        .score-box { text-align: center; padding: 20px; background: #e9ecef; border-radius: 8px; font-size: 20px; font-weight: bold; color: #28a745; }\n        .footer { font-size: 9px; padding: 10px; background: #f1f1f1; border-radius: 8px; text-align: left; }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <img src=\"URL-LOGO\" alt=\"Logo\" class=\"banner\"><br><br>\n        \n        <div class=\"section\">\n            <h2 class=\"section-header\">Dados</h2>\n            <p><span class=\"info\">Nome:</span> A&C LIMA HOLDING LTDA</p>\n            <p><span class=\"info\">CNPJ:</span> 34484128000190</p>\n            <p><span class=\"info\">Situação Cadastral:</span> Ativa</p>\n            <p><span class=\"info\">Porte:</span> Demais</p>\n            <p><span class=\"info\">Natureza Jurídica:</span> Sociedade Empresária Limitada</p>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Telefone</h2>\n            <p><span class=\"info\">Telefone:</span> (15)32110164</p><br>\n            <h2 class=\"section-header\">Email</h2>\n            <p><span class=\"info\">Email:</span> legalizacao1@net-rosario.com.br</p><br>\n            <h2 class=\"section-header\">Endereço</h2>\n            <p><span class=\"info\">Endereço:</span> AVENIDA AGAMENON MAGALHAES, Número 1019, PAVMTO5                   SALA  505 - MAURICIO DE NASSAU</p>\n            <p><span class=\"info\">Cidade:</span> Caruaru</p>\n            <p><span class=\"info\">Estado:</span> PE</p>\n            <p><span class=\"info\">CEP:</span> 55014000</p>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Atividade Principal</h2>\n            <p><span class=\"info\">Atividade Principal:</span> Construção de edifícios</p>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Atividade Secundária</h2>\n            <p><span class=\"info\">Atividade Secundária:</span> Incorporação de empreendimentos imobiliários</p>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Sócios</h2>\n            <ul>\n                <li>AUGUSTO CEZAR LIMA JACINTO</li>\n            </ul>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Pendências</h2>\n            <table>\n                <tr>\n                    <th>Data</th>\n                    <th>Contrato</th>\n                    <th>Origem</th>\n                    <th>Valor</th>\n                </tr>\n                <tr>\n                    <td>11/01/2024</td>\n                    <td>02401289250315</td>\n                    <td>R-EE  - OUTR</td>\n                    <td>R$115,96</td>\n                </tr>\n                <tr>\n                    <td>09/02/2024</td>\n                    <td>02402293463909</td>\n                    <td>R-EE  - OUTR</td>\n                    <td>R$114,96</td>\n                </tr>\n                <tr>\n                    <td>12/03/2024</td>\n                    <td>02403297718281</td>\n                    <td>R-EE  - OUTR</td>\n                    <td>R$115,20</td>\n                </tr>\n                <tr>\n                    <td>30/08/2024</td>\n                    <td>37/2561</td>\n                    <td>P-DUPLICATA</td>\n                    <td>R$3.861,00</td>\n                </tr>\n                <tr>\n                    <td>05/09/2024</td>\n                    <td>47/2567</td>\n                    <td>P-DUPLICATA</td>\n                    <td>R$3.861,00</td>\n                </tr>\n                <tr>\n                    <td>31/10/2024</td>\n                    <td>02410330628074</td>\n                    <td>R-EE  - OUTR</td>\n                    <td>R$22,09</td>\n                </tr>\n            </table>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">SCPC</h2>\n            <p><span class=\"info\">SCPC:</span> Sem pendências registradas.</p>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Protestos</h2>\n            <table>\n                <tr>\n                    <th>Cidade</th>\n                    <th>Data</th>\n                    <th>Cartório</th>\n                    <th>Valor</th>\n                </tr>\n                <tr>\n                    <td>Caruaru - PE</td>\n                    <td>30/01/2025</td>\n                    <td>1</td>\n                    <td>R$4.127,41</td>\n                </tr>\n                <tr>\n                    <td>Caruaru - PE</td>\n                    <td>07/02/2025</td>\n                    <td>2</td>\n                    <td>R$4.119,69</td>\n                </tr>\n            </table>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Resumo através de IA</h2>\n            <p>A&C LIMA HOLDING LTDA apresenta um histórico financeiro com pendências registradas, com um total de R$ 4.246,10. Embora não existam protestos, a presença de dívidas pode impactar negativamente seu acesso ao crédito. Além disso, é importante lembrar que a situação financeira da empresa pode ser afetada por fatores como a natureza jurídica e o porte da empresa.</p>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Sugestões para Regularização em caso de Débitos</h2>\n            <ul>\n                <li>📞 <strong>Negociar débitos:</strong> Contate os credores para verificar opções de parcelamento.</li>\n                <li>🔍 <strong>Acompanhar o CPF:</strong> Mantenha um monitoramento constante para evitar novas restrições.</li>\n                <li>📑 <strong>Remover protestos quitados:</strong> Após o pagamento, solicite a retirada do registro.</li>\n                <li>📝 <strong>Realizar pagamentos:</strong> Aumente a frequência e os valores dos pagamentos para reduzir a dívida.</li>\n            </ul>\n        </div>\n\n        <div class=\"footer\">\n            <p><strong>INFORMAÇÕES IMPORTANTES:</strong> ESTAS INFORMAÇÕES SÃO CONFIDENCIAIS E DEVERÃO SER UTILIZADAS, ÚNICA E EXCLUSIVAMENTE, PARA ORIENTAÇÃO DAS TRANSAÇÕES COMERCIAIS DO USUÁRIO, RESPONSABILIZANDO-SE CIVIL E CRIMINALMENTE POR DANOS QUE OCASIONAR A TERCEIROS, QUANDO UTILIZADAS EM DESACORDO COM A LEGISLAÇÃO EM VIGOR.<br><br></p>\n            <p><strong>MINUTA DE DECLARAÇÃO LGPD:</strong> DECLARO QUE A UTILIZAÇÃO DOS DADOS RESPEITARÁ AS FINALIDADES E PROCEDIMENTOS LEGALMENTE ADMITIDOS PELA LEI GERAL DE PROTEÇÃO DE DADOS DIVULGADOS EM MINHA PÁGINA INICIAL DE ACESSO.</p>\n        </div>\n        \n        <div class=\"footer-link\" style=\"font-size: 9px; margin-top: 5px; text-align: center;\">\n            <a href=\"https://app.unisistemas.tech/Inicio\" target=\"_blank\">Acesse sua consulta em https://app.unisistemas.tech/Inicio</a>\n        </div>\n    </div>\n</body>\n</html>\n\nImportante, escreva \"Inicio HTML\" e \"Fim HTML\" no inicio e no final. Somente isso. Não escreva mais nenhum dados fora do código.\nQuando for exatamente começar o código HTML, escreva da seguinte maneira: Inicio HTML\\n<!DOCTYPE html>\\n\nEscreva no código html todas as informações fornecidas. Não ignore nenhum dado.\nUma observação. O titulo dos menus entrão entre <>\nCaso a frase comece e termine com \"_\", pode remover o \"_\"\nSempre formate no html utilizando TODOS os dados fornecidos abaixo como informações, valores, dados, tudo sem exceção.\nVocê vai adicionar na formatação somente os dados existentes e informados abaixo.\nImportante. Se o dados como telefone, email ou parentes não estiver disponível e não for fornecido, você não precisa adicionar a \"div class\" no html.\nAdicione \"Sugestões para Regularização em caso de Débitos\"\nSempre adicione <br> entre uma \"div class\" e outra.\nÉ obrigatório que pendências, scpc, débitos, refin e pefin e protestos sejam sempre em tabela.\nSiga fielmente o layout do exemplo de html acima.\nCaso a frase inicie e termine com _ pode remover. Ex: _Sem pendências registradas._ fica Sem pendências registradas.\nSe o dados como telefone, email ou parentes não existir nos dados para serem formatados, não crie a div class=\"section\". Você vai criar somente se existir informações.\nÉ importante que você adicione no HTML somente os dados fornecidos abaixo que são para formatar. Os dados dos HTML de exemplo servem somente para seguir o layout do HTML (Nunca utilize as informações de exemplo ou invente dados para adicionar no html formatado).\nÉ obrigatório que todas as informações fornecidas abaixo conste no HTML.\nRemova todos os _ do html exceto de email.\nImportante, você vai formatar em pendências, somente o que está em pendências, você vai formatar em scpc, somente o que está em scpc e vai formatar em protestos, somente o que está em protestos. E assim por diante.\n\n\nAtenção, faça \"Resumo através de IA\" levando em consideração todos os dados informados abaixo.\n\nAtenção, todos os dados e informações acima server exclusivamente como exemplo para você estruturar o HTML.\nAs informações na formatação do HTML precisam estar na mesma ordem dos dados para formatar.\nUtilize somente os dados abaixo para formatar o HTML:",
+              "type": "string"
+            },
+            {
+              "id": "b84bfcda-a2c7-433c-93e8-8f6c51cdcc00",
+              "name": "URL-LOGO",
+              "value": "=https://i.imgur.com/g0gImpK.jpeg",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "97af3e79-7163-4dca-bf68-1dacf6d14368",
+      "name": "Dados N8N1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -7240,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "858b7713-537b-4b62-8620-141b2c395591",
+      "name": "Respond to Webhook1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -1740,
+        1200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "bfac3c94-a23c-4008-aa6c-dd5fcb21c8e6",
+              "leftValue": "={{ $json.valido }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "4d931b15-5abe-496e-b959-533c2910370e",
+              "leftValue": "={{ $json.tipo }}",
+              "rightValue": "CNPJ",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "55786bac-412e-44b9-956f-67bf5638bbcd",
+      "name": "If15",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -6420,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## CPF / CNPJ inválido",
+        "height": 876.7623384092028,
+        "width": 456.60627452732734,
+        "color": 3
+      },
+      "id": "d10d808d-51e8-428b-8974-81ae04d4d09a",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -6680,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Função para validar o CPF\nfunction validarCPF(cpf) {\n    cpf = cpf.replace(/[^\\d]+/g, ''); // Remove caracteres não numéricos\n    if (cpf.length !== 11 || /^(\\d)\\1+$/.test(cpf)) return false; // Verifica se possui 11 dígitos e não é uma sequência repetida\n\n    let soma = 0, resto;\n\n    // Validação do primeiro dígito verificador\n    for (let i = 1; i <= 9; i++) {\n        soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);\n    }\n    resto = (soma * 10) % 11;\n    if (resto === 10 || resto === 11) resto = 0;\n    if (resto !== parseInt(cpf.substring(9, 10))) return false;\n\n    // Validação do segundo dígito verificador\n    soma = 0;\n    for (let i = 1; i <= 10; i++) {\n        soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);\n    }\n    resto = (soma * 10) % 11;\n    if (resto === 10 || resto === 11) resto = 0;\n    if (resto !== parseInt(cpf.substring(10, 11))) return false;\n\n    return true;\n}\n\n// Função para validar o CNPJ\nfunction validarCNPJ(cnpj) {\n    cnpj = cnpj.replace(/[^\\d]+/g, ''); // Remove caracteres não numéricos\n    if (cnpj.length !== 14 || /^(\\d)\\1+$/.test(cnpj)) return false; // Verifica se possui 14 dígitos e não é uma sequência repetida\n\n    let tamanho = cnpj.length - 2;\n    let numeros = cnpj.substring(0, tamanho);\n    let digitos = cnpj.substring(tamanho);\n    let soma = 0;\n    let pos = tamanho - 7;\n\n    for (let i = tamanho; i >= 1; i--) {\n        soma += numeros.charAt(tamanho - i) * pos--;\n        if (pos < 2) pos = 9;\n    }\n\n    let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;\n    if (resultado != digitos.charAt(0)) return false;\n\n    tamanho = tamanho + 1;\n    numeros = cnpj.substring(0, tamanho);\n    soma = 0;\n    pos = tamanho - 7;\n\n    for (let i = tamanho; i >= 1; i--) {\n        soma += numeros.charAt(tamanho - i) * pos--;\n        if (pos < 2) pos = 9;\n    }\n\n    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;\n    if (resultado != digitos.charAt(1)) return false;\n\n    return true;\n}\n\n// Captura o CPF ou CNPJ diretamente do campo 'body.CPF' ou 'body.CNPJ' dentro do 'Webhook'\nconst numero = ($('Webhook').item.json.body.CPF || $('Webhook').item.json.body.CNPJ).replace(/[^\\d]+/g, '');\nconst tipo = numero.length === 11 ? 'CPF' : 'CNPJ';\nconst valido = tipo === 'CPF' ? validarCPF(numero) : validarCNPJ(numero);\n\nreturn [\n    {\n        json: {\n            numeroOriginal: numero,\n            tipo: tipo,\n            valido: valido // Retorna true ou false\n        }\n    }\n];\n"
+      },
+      "id": "7eca9812-bff8-4ca1-88bd-9c0b75a9b43f",
+      "name": "Code2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -6620,
+        620
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "03f5174b-3e5f-49fd-ac6a-4a78335ae9f6",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -6400,
+        1240
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "TelefoneBC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "CPF",
+              "value": "={{ $('Webhook').item.json.body.CPF }}"
+            },
+            {
+              "name": "Consulta",
+              "value": "=\nAtenção: O CNPJ informado é inválido. 🚨\nVerifique os números e digite corretamente.\n\nObs: Digite apenas números, sem pontos, traços ou espaços."
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6c6fa1ef-bf80-4c92-95a8-cfb3b5a73aff",
+      "name": "HTTP Request7",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -6600,
+        1240
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "botconversa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "62dab5c1-35e3-4fcc-90ce-456b4ecce811",
+      "name": "If14",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -6600,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "CPF inválido"
+            },
+            {
+              "name": "Informações",
+              "value": "=Atenção: O CNPJ informado é inválido. 🚨\nVerifique os números e digite corretamente."
+            },
+            {
+              "name": "Nome Menu",
+              "value": "=_{{ $('Dados N8N').item.json['Nome Consulta'] }}_"
+            },
+            {
+              "name": "Nome Menu Status",
+              "value": "={{ $('Dados N8N').item.json['Nome Consulta'] }} - Online"
+            },
+            {
+              "name": "Tipo consulta",
+              "value": "={{ $('Webhook').item.json.body['Tipo consulta'] }}"
+            },
+            {
+              "name": "Pendências",
+              "value": "=Erro"
+            },
+            {
+              "name": "Protestos",
+              "value": "=Erro"
+            },
+            {
+              "name": "SCPC",
+              "value": "=Erro"
+            },
+            {
+              "name": "URL PDF",
+              "value": "=Erro"
+            },
+            {
+              "name": "Resumo IA",
+              "value": "Erro"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "192b6f6e-cd19-4cb4-8d69-804df450a047",
+      "name": "Erro1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -6420,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "TelefoneBC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "CPF",
+              "value": "={{ $('Webhook').item.json.body.CPF }}"
+            },
+            {
+              "name": "Consulta",
+              "value": "=\n\n## PDF\n{{ $('IF PDF').item.json.FileUrl }}\n\n\n______________________________________________________________\n\n\n\n{{ $('CONSULTA _ TEXTO').item.json['CONSULTA _ TEXTO'].replace(/_ /g, '_').replace(/[*_]/g, '') }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            },
+            {
+              "name": "URL PDF",
+              "value": "="
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0d44b597-0369-4a70-8994-150290d416a1",
+      "name": "HTTP Request5",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        9020,
+        2680
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "botconversa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "51148a50-6b1a-4b70-96d6-b11f64fb5afc",
+      "name": "If16",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        8680,
+        2460
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "6522fc3b-af4d-4cc8-858a-61666849e292",
+      "name": "Respond to Webhook3",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        9540,
+        2460
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.redequeroimoveis.com/webhook/dividas-cnpj_4-2",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "CPF",
+              "value": "={{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}"
+            },
+            {
+              "name": "Telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Webhook",
+              "value": "={{ $('Webhook').item.json.body.Webhook }}"
+            },
+            {
+              "name": "URL_LogoPDF",
+              "value": "={{ $('Webhook').item.json.body.URL_LogoPDF }}"
+            },
+            {
+              "name": " Tipo consulta",
+              "value": "Completa"
+            },
+            {
+              "name": "Prompt Resumo IA",
+              "value": "={{ $('Dados N8N1').item.json['Prompt Resumo IA'] }}"
+            },
+            {
+              "name": "Prompt PDF",
+              "value": "={{ $('Dados N8N1').item.json['Prompt PDF'] }}"
+            },
+            {
+              "name": "URL-LOGO",
+              "value": "={{ $('Dados N8N1').item.json['URL-LOGO'] }}"
+            },
+            {
+              "name": "RequestToken",
+              "value": "={{ $('Webhook').item.json.body.RequestToken }}"
+            },
+            {
+              "name": "Informações",
+              "value": "={{ $('Webhook').item.json.body[\"Informações\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d6f03a30-7721-4df0-bad2-3812ae80271f",
+      "name": "HTTP Request19",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -1920,
+        1200
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## CONTINUAÇÃO",
+        "height": 251.51571340885795,
+        "width": 571.376359106563,
+        "color": 6
+      },
+      "id": "70e1daa1-89de-463a-8e5b-3b192cfb9054",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2180,
+        1140
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "248d9775-39cd-41ed-98c2-10f0139e9ffe",
+              "leftValue": "={{ $('Webhook').item.json.body['Tipo consulta'] }}",
+              "rightValue": "Completa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ed48c299-65db-4748-9ead-fdbaf6e2d648",
+              "leftValue": "={{ $('Webhook').item.json.body['Tipo consulta'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "39809eeb-8ba1-431b-b071-7fe550922802",
+              "leftValue": "={{ $('Webhook').item.json.body.CPF }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "56b202bc-2a4e-4c37-b8f5-8665b2883065",
+              "leftValue": "={{ $('Webhook').item.json.body.CPF }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "02fddeba-29eb-477b-a447-c1f50b08a77e",
+      "name": "If9",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        5560,
+        2940
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "typebot",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "aaf16c91-dbd4-4fe7-b2f4-fc5c37a74005",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "consultasite44",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "429d25d0-8975-47a2-9f3c-9f4346db9da3",
+      "name": "se typebot",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -6600,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4523dbda-713f-421c-94d1-db6b52bbbe08",
+              "name": "resposta",
+              "value": "=Atenção: O CNPJ informado é inválido. 🚨\nVerifique os números e digite corretamente.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "858e550d-9507-4aaa-a210-579febf1b9a0",
+      "name": "typebot",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -6240,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "typebot",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4f22bdd9-b298-4a5a-8aaf-652c7621abb4",
+      "name": "se typebot1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        8680,
+        2180
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "fa9ae66b-e2a7-452f-8e85-8bfc5b29e237",
+              "leftValue": "={{ $json.data }}",
+              "rightValue": "SUCESSO",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "65e04827-e7d8-4ffe-84c7-b3074fd3fe5d",
+      "name": "If19",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2620,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Erro"
+            },
+            {
+              "name": "Informações",
+              "value": "={{ $json['Consulta erro'] }}"
+            },
+            {
+              "name": "Nome Menu",
+              "value": "=_{{ $('Dados N8N').item.json['Nome Consulta'] }}_"
+            },
+            {
+              "name": "Nome Menu Status",
+              "value": "={{ $('Dados N8N').item.json['Nome Consulta'] }} - Online"
+            },
+            {
+              "name": "Tipo consulta",
+              "value": "={{ $('Webhook').item.json.body['Tipo consulta'] }}"
+            },
+            {
+              "name": "Pendências",
+              "value": "=Erro"
+            },
+            {
+              "name": "Protestos",
+              "value": "=Erro"
+            },
+            {
+              "name": "SCPC",
+              "value": "=Erro"
+            },
+            {
+              "name": "URL PDF",
+              "value": "=Erro"
+            },
+            {
+              "name": "Resumo IA",
+              "value": "Erro"
+            },
+            {
+              "name": "Cadin",
+              "value": "Erro"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2c8e300e-fd47-4d57-afff-95a2443804ce",
+      "name": "Erro",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1160,
+        2580
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "TelefoneBC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "CPF",
+              "value": "={{ $('Webhook').item.json.body.CPF }}"
+            },
+            {
+              "name": "Consulta",
+              "value": "={{ $json['Consulta erro'] }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a2135f3e-0cbd-443f-be90-d704bca012ef",
+      "name": "HTTP Request6",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1380,
+        2760
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## ERRO CONSULTA",
+        "height": 647.1423012728503,
+        "width": 455.90538040659635,
+        "color": 3
+      },
+      "id": "45e13ae3-6c5f-4d08-a9ce-cdd97ce93edb",
+      "name": "Sticky Note10",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1440,
+        2300
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "0eb60256-5ac6-4a2e-af89-d40aa9f6cb4b",
+      "name": "Date & Time1",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        -1360,
+        1720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtém a data e hora do campo\nconst currentDate = new Date($('Date & Time1').item.json.currentDate);\n\n// Converte para o horário de São Paulo (GMT-3)\nconst options = { timeZone: 'America/Sao_Paulo', hour12: false };\nconst brazilianTime = new Date(currentDate.toLocaleString('en-US', options));\n\n// Obtém o dia da semana (0 = Domingo, 1 = Segunda, ..., 6 = Sábado) e a hora\nconst dayOfWeek = brazilianTime.getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado\nconst hour = brazilianTime.getHours();\n\n// Verifica se a hora está entre 08:00 e 18:00 e se o dia é útil (segunda a sexta)\nif (hour >= 9 && hour < 18 && dayOfWeek >= 1 && dayOfWeek <= 5) {\n    return {\n        json: {\n            status: 'Horário funcionamento'\n        }\n    };\n} else {\n    return {\n        json: {\n            status: 'Fora do horário'\n        }\n    };\n}\n"
+      },
+      "id": "ac31518d-6649-4bb8-8e99-0b270045a6f4",
+      "name": "Code Horário funcionamento",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1180,
+        1720
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "00cfe53f-c309-4404-87b3-de0a2064903a",
+              "name": "Consulta erro",
+              "value": "Tente novamente utilizando outra opção de consulta disponível.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3b08e7cc-9caa-4cee-b12c-461ffb10cb38",
+      "name": "Horário funcionamento1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1180,
+        1880
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "8ec90439-29cc-4f7e-9318-906539cd9a2d",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "funcionamento",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "cb53f8f1-d065-4978-bef8-31a88a122abc",
+      "name": "Verificar Horário funcionamento",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1360,
+        1880
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "00cfe53f-c309-4404-87b3-de0a2064903a",
+              "name": "Consulta erro",
+              "value": "🕗 Alguns birôs restringem as consultas ao horário comercial. Aguarde até o horário de funcionamento para realizar a consulta e melhor experiência ou tente novamente utilizando outra opção disponível.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cd6579ae-988d-4677-b1a3-3cbb77609c40",
+      "name": "Fora do horário",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1360,
+        2020
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Horário funcionamento",
+        "height": 578.2747827033502,
+        "width": 397.97803245596407,
+        "color": 3
+      },
+      "id": "35240a79-b3c2-4bae-a136-839c10ae6ab4",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1420,
+        1640
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "a63d10ac-41f7-4d0a-a687-fda3770c6b4c",
+      "name": "Respond to Webhook4",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -1160,
+        2760
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "botconversa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b30edb69-678c-49ba-b969-c0d88a895ca0",
+      "name": "If21",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1380,
+        2600
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "typebot",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "735b0b18-9d10-4863-88a6-1bbef297cbb5",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "consultasite44",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "20052956-7692-41cc-a9f6-dccd2688aa4e",
+      "name": "se typebot2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1380,
+        2400
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4523dbda-713f-421c-94d1-db6b52bbbe08",
+              "name": "resposta",
+              "value": "={{ $json['Consulta erro'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "903dec8d-fdd2-4153-8a9a-ea15c2aa592f",
+      "name": "typebot2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -980,
+        2380
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "2e091d53-c3dc-44dc-8e9f-11e470765000",
+      "name": "Limit1",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -2080,
+        1200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=http://api.ehmconsultas.com:8880/dividas/multi/cnpj_{{ $json.value[1].split(':')[1].trim().split('_')[1] }}/{{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_token",
+              "value": "29447aaaa3ad93d43d3a0bf5f5eaf19185547be7c0875eab126a229003b0c4e6ab266631"
+            },
+            {
+              "name": "token",
+              "value": "KiDXU8psYtx08RrwMbhqQN3X1tDLEcS5J8nznoQZDy2PmSO7XnCtQ5kFZX7x"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          },
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "5ea4eb80-a270-47e6-9808-a3610f39878b",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -3440,
+        780
+      ],
+      "retryOnFail": false,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "9cb94037-f769-42b3-9255-c44ea3453468",
+              "leftValue": "={{ $('Webhook').item.json.body[\"Informações\"] }}",
+              "rightValue": "erro",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "96b8f39f-6781-46a1-afac-33c1c5d06b5a",
+      "name": "If42",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e5c78911-1718-4e18-9728-fe15eaa93c45",
+              "name": "Informações",
+              "value": "=*CNPJ:* _{{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}_",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d5acefed-4979-48ab-8779-f9f9485303d2",
+      "name": "Informações",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -240,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "49e85b80-0532-46a3-8a58-2528501bf09e",
+              "name": "CONSULTA _ TEXTO",
+              "value": "=## INFORMAÇÕES\n{{ $('Aggregate6').item.json.Consulta[0]['Informações'].replace(/_ /g, '_') }}\n\n--------------------------------------------------------------\n\n## PENDÊNCIAS\n{{ $('Aggregate6').item.json.Consulta[1].Pendencias.replace(/_ /g, '_') }}\n--------------------------------------------------------------\n\n## SCPC\n{{ $('Aggregate6').item.json.Consulta[2].SCPC.replace(/_ /g, '_') }}\n--------------------------------------------------------------\n\n## PROTESTOS\n{{ $('Aggregate6').item.json.Consulta[3].Protesto.replace(/_ /g, '_') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8a23e40f-3a29-4658-a4a1-c39d98bbcd5c",
+      "name": "CONSULTA _ TEXTO",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        5900,
+        2940
+      ]
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {
+          "temperature": 0
+        }
+      },
+      "id": "8b02db44-2a9f-48d4-9cac-81cc41742cef",
+      "name": "Groq Chat Model2",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        5920,
+        3360
+      ],
+      "credentials": {
+        "groqApi": {
+          "id": "0U8f3VFF5G2KERm1",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = [];\nfor (let i = 0; i < 10; i++) {\n  items.push({ json: { iteration: i + 1 } });\n}\nreturn items;"
+      },
+      "id": "0a80513c-382c-4fe1-9fcb-174c07052926",
+      "name": "Code3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6420,
+        3360
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "id": "1c172ff8-6a36-4eda-a021-56d43b1457be",
+      "name": "Wait4",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        6840,
+        3380
+      ],
+      "webhookId": "09ee98d6-3afd-4919-9b7c-2d825a449229"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "195af974-c126-484e-b5a5-acc1383966d5",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "Fim HTML",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "88d65093-2062-4bb2-8c09-b886be978aa4",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "Inicio HTML",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "4e53ceab-27cb-4326-9ceb-1f0a84a3ceed",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "<!DOCTYPE html>",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "5bea24d3-e5a1-4548-8613-41ac8a057cb7",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "URL-LOGO",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "d7e3ee7c-f821-4a56-968c-8f34bf65bc9a",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": ">Pendências<",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "061bd90b-7b4e-458a-b081-b10f9e56a75e",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": ">SCPC<",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "3b079008-20e9-41bb-bbdb-f2a1a071babb",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": ">Protestos<",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c66bda9f-036d-4021-bab5-258086e87493",
+      "name": "If22",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        6220,
+        3180
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://v2.api2pdf.com/chrome/pdf/html",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "085551d3-3165-49d6-9fff-22ac23f127b9"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "html",
+              "value": "={{ \n  (() => {\n    const html = $('Code Formatar HTML').item.json.htmlContent;\n    const urlImg = $('If27').item.json['URL PDF Imagem'];\n    const urlFallback = $('Dados N8N1').item.json['URL-LOGO'];\n    const url = urlImg && urlImg.trim() !== '' ? urlImg : urlFallback;\n    return html.replace(/LOGOARTHUR/g, url).replace(/URL-LOGO/g, url);\n  })()\n    .replace(/```html|```|Inicio HTML|Início HTML|Fim HTML/g, '')\n}}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "id": "1b3d6dc6-0a3b-4821-a6b5-1354a89a9050",
+      "name": "Gerar PDF API1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6620,
+        3160
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "try {\n    // Obter a string de HTML do campo {{ $json.output }}\n    const htmlString = $json.output;\n\n    // Verificar se htmlString está definido e é uma string\n    if (!htmlString || typeof htmlString !== 'string') {\n        throw new Error(\"O campo 'output' está vazio ou não é uma string.\");\n    }\n\n    // Encontrar o índice da primeira ocorrência de 'Inicio HTML'\n    const doctypeIndex = htmlString.indexOf('Inicio HTML\\n<!DOCTYPE html>\\n');\n\n    // Se a string for encontrada, cortar tudo antes dela\n    let htmlContent = doctypeIndex !== -1 ? htmlString.slice(doctypeIndex) : htmlString;\n\n    // Substituir \"URL-LOGO\" por \"LOGOARTHUR\"\n    htmlContent = htmlContent.replace('URL-LOGO', 'LOGOARTHUR');\n\n    // Substituir tabelas específicas por parágrafos informativos\n    htmlContent = htmlContent.replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Contrato<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem pendências registradas.<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Cidade<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem pendências registradas.<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Cidade<\\/th>\\s*<th>Data<\\/th>\\s*<th>Cartório<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem pendências registradas.<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Contrato<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>\\s*<\\/td>\\s*<td>\\s*<\\/td>\\s*<td>\\s*<\\/td>\\s*<td>\\s*<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Informante<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem pendências registradas.<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Contrato<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Cidade<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Cidade<\\/th>\\s*<th>Data<\\/th>\\s*<th>Cartório<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Contrato<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>\\s*<\\/td>\\s*<td>\\s*<\\/td>\\s*<td>\\s*<\\/td>\\s*<td>\\s*<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Informante<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Contrato<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>-<\\/td>\\s*<td>-<\\/td>\\s*<td>-<\\/td>\\s*<td>-<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Cidade<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>-<\\/td>\\s*<td>-<\\/td>\\s*<td>-<\\/td>\\s*<td>-<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Cidade<\\/th>\\s*<th>Data<\\/th>\\s*<th>Cartório<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>-<\\/td>\\s*<td>-<\\/td>\\s*<td>-<\\/td>\\s*<td>-<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Contrato<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>\\s*<\\/td>\\s*<td>\\s*<\\/td>\\s*<td>\\s*<\\/td>\\s*<td>\\s*<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Informante<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>-<\\/td>\\s*<td>-<\\/td>\\s*<td>-<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Cidade<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Cidade<\\/th>\\s*<th>Data<\\/th>\\s*<th>Cartório<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Cidade<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Contrato<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<td><\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Contrato<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Cidade<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Cidade<\\/th>\\s*<th>Data<\\/th>\\s*<th>Cartório<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>Sem pendências registradas.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Contrato<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>Sem informações registradas.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Data<\\/th>\\s*<th>Cidade<\\/th>\\s*<th>Origem<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>Sem informações registradas.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n    ).replace(\n        /<table>\\s*<tr>\\s*<th>Cidade<\\/th>\\s*<th>Data<\\/th>\\s*<th>Cartório<\\/th>\\s*<th>Valor<\\/th>\\s*<\\/tr>\\s*<tr>\\s*<td>Sem informações registradas.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<td>Sem informações disponíveis.<\\/td>\\s*<\\/tr>\\s*<\\/table>\\s*<\\/div>/g,\n        '<p>Sem pendências registradas.</p></div>'\n\n);\n\n\n    // Retornar o conteúdo modificado\n    return { htmlContent };\n} catch (error) {\n    // Em caso de erro, retornar a string {{ $json.message.content }}\n    return { htmlContent: $json.message?.content || \"Erro desconhecido\" };\n}"
+      },
+      "id": "a15fa1e9-ec14-44f6-b842-bbb317c44b92",
+      "name": "Code Formatar HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6420,
+        3180
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "9c50a33f-aec8-4184-a453-b25e5e1bdbb3",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        6640,
+        3360
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f15aa4ca-4c63-4ea6-b385-b5f611b35588",
+      "name": "Limit",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        6240,
+        3360
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "92a6e939-a7db-4ec5-aea4-999c74db94c6",
+      "name": "Limit3",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        7080,
+        3180
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## GROQ",
+        "height": 810.5701325137197,
+        "width": 1470.1173247966844,
+        "color": 6
+      },
+      "id": "be3c9d01-bbba-49e6-b6d5-e0ba2400fd51",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5800,
+        2800
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "f72aecac-f8f3-445b-b743-03e61e2bf49b",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "929f0ec5-040e-4cd5-8079-fe02651df9c1",
+      "name": "IF PDF",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        6860,
+        3180
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://n8n.unisistemas.tech/webhook/resposta-typebot",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "TelefoneBC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "CPF",
+              "value": "={{ $('Webhook').item.json.body.CPF }}"
+            },
+            {
+              "name": "Consulta",
+              "value": "={{ $json['Consulta erro'] }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Erro"
+            },
+            {
+              "name": "Webhook",
+              "value": "={{ $('Webhook').item.json.body.Webhook }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c870ac81-4cca-482a-93f3-825a34a9b6dc",
+      "name": "Resposta Typebot Erro",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1160,
+        2380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://n8n.unisistemas.tech/webhook/resposta-typebot",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "TelefoneBC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "CPF",
+              "value": "={{ $('Webhook').item.json.body.CPF }}"
+            },
+            {
+              "name": "Consulta",
+              "value": "=Atenção: O CNPJ informado é inválido. 🚨\nVerifique os números e digite corretamente."
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Erro"
+            },
+            {
+              "name": "Webhook",
+              "value": "={{ $('Webhook').item.json.body.Webhook }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6f77d7bf-96ec-4b10-aea1-0e990da8ca8f",
+      "name": "Resposta Typebot CNPJ Errado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -6420,
+        800
+      ],
+      "alwaysOutputData": true,
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "id": "e3d84620-7647-4433-937d-d9d5f3d36213",
+      "name": "Merge3",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        4560,
+        1380
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "dividas-cnpj_4-1-2",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "89816f99-03f8-463f-bdc8-80603ea23c15",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -7440,
+        620
+      ],
+      "webhookId": "b175c331-cf91-4e27-b834-0a20151834ef"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Dados N8N1').item.json['Prompt PDF'] }}\n\n{{ $('CONSULTA _ TEXTO').item.json['CONSULTA _ TEXTO'].replace(/ - (?![A-Z]{2})/g, '').replace(/_(?![\\w.-]+@[\\w.-]+)/g, '').replace(/_(?![\\w.-]+@[\\w.-]+)/g, '').replace(/\\*/g, '') }}",
+        "options": {}
+      },
+      "id": "4ce2e83a-ab9d-4194-b049-5044f7b1a206",
+      "name": "AI Agent2",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        5860,
+        3180
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=http://api.ehmconsultas.com:8880/dividas/multi/cnpj_pro/{{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_token",
+              "value": "29447aaaa3ad93d43d3a0bf5f5eaf19185547be7c0875eab126a229003b0c4e6ab266631"
+            },
+            {
+              "name": "token",
+              "value": "KiDXU8psYtx08RrwMbhqQN3X1tDLEcS5J8nznoQZDy2PmSO7XnCtQ5kFZX7x"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          },
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 80000
+        }
+      },
+      "id": "49a8d2af-ade6-4587-af68-1fbb6832c6fc",
+      "name": "HTTP Request2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -3180,
+        940
+      ],
+      "retryOnFail": false,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "fa9ae66b-e2a7-452f-8e85-8bfc5b29e237",
+              "leftValue": "={{ $json.data }}",
+              "rightValue": "SUCESSO",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "ee2f05a7-ab15-4dc4-bfbc-f2d7d2d5936f",
+      "name": "If23",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2620,
+        940
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c154cada-a3ee-4a35-aedd-3cc3c7aefe37",
+              "leftValue": "={{ $json.error.message }}",
+              "rightValue": "timeout",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            },
+            {
+              "id": "b00ef0b3-03d2-456b-818a-518906598c18",
+              "leftValue": "={{ $json.error.message }}",
+              "rightValue": "501",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            },
+            {
+              "id": "b12a5ca7-ff12-4339-a2cb-f3235ad64034",
+              "leftValue": "={{ $json.error.message }}",
+              "rightValue": "connect ETIMEDOUT",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -3040,
+        780
+      ],
+      "id": "6a796601-b308-4fd5-952d-ea56f889f416",
+      "name": "if timeout"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c154cada-a3ee-4a35-aedd-3cc3c7aefe37",
+              "leftValue": "={{ $json.error.message }}",
+              "rightValue": "timeout",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            },
+            {
+              "id": "b00ef0b3-03d2-456b-818a-518906598c18",
+              "leftValue": "={{ $json.error.message }}",
+              "rightValue": "501",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2900,
+        940
+      ],
+      "id": "b2425710-2824-48e5-9f09-331235c07897",
+      "name": "if timeout1"
+    },
+    {
+      "parameters": {},
+      "id": "ffc13998-10ea-4bf1-9f63-e08d10e751de",
+      "name": "Merge60",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        4580,
+        2100
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "SCPC",
+              "stringValue": "=_Sem pendências registradas._\n"
+            }
+          ]
+        },
+        "include": "selected",
+        "options": {}
+      },
+      "id": "9943f747-405f-4563-a5a4-f91ba9c96f17",
+      "name": "SCPC - 49",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.1,
+      "position": [
+        3540,
+        1880
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b0024250-715b-4df8-b09d-4c515dcbab1d",
+              "name": "SCPC",
+              "value": "={{ $('If').item.json.data.SCPC }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "885c0164-0237-4feb-a8de-306f280fdcc7",
+      "name": "Mapa - SCPC2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        2740,
+        1880
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "Protesto",
+              "stringValue": "=_Sem pendências registradas._\n"
+            }
+          ]
+        },
+        "include": "selected",
+        "options": {}
+      },
+      "id": "b2b99ac6-5b2e-428b-8b32-dc82a48d30d2",
+      "name": "Protesto - 49",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.1,
+      "position": [
+        3580,
+        2680
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "fa38f3c8-fdd8-4dcb-a862-34f0c3f7b386",
+      "name": "Merge78",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        4540,
+        2920
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "7eef6126-408a-479b-8d38-716485b8898f",
+              "leftValue": "={{ $json.Protesto }}",
+              "rightValue": "Data",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "52f8fffd-8708-4530-8b26-86d43f93d0cb",
+      "name": "SE Protesto - 50",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3340,
+        2680
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "Protesto",
+              "stringValue": "={{ $json.Protesto }}"
+            }
+          ]
+        },
+        "include": "selected",
+        "options": {}
+      },
+      "id": "38ec87f4-04b3-4881-ae47-60a7ad7c1aa8",
+      "name": "Protesto - 52",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.1,
+      "position": [
+        3340,
+        2920
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dcebe609-25a3-4e5d-82e6-62075b92af61",
+              "name": "Protesto",
+              "value": "={{ $('If').item.json.data.Protesto }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c384602c-225e-4c33-9b84-82544b5db00d",
+      "name": "Mapa - Protesto2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        2740,
+        2680
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "SCPC",
+              "stringValue": "={{ $json.SCPC }}"
+            }
+          ]
+        },
+        "include": "selected",
+        "options": {}
+      },
+      "id": "3877e9b1-b64b-44d1-84ee-8d67a5c3dc6a",
+      "name": "SCPC - 53",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.1,
+      "position": [
+        3340,
+        2120
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "7eef6126-408a-479b-8d38-716485b8898f",
+              "leftValue": "={{ $json.SCPC }}",
+              "rightValue": "Data",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4ea971bb-bd72-46ab-ab34-880ed15e544d",
+      "name": "SE SCPC - 50",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3340,
+        1880
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Captura os dados do SCPC\nconst scpc = $('If').item.json.data['SCPC'];\n\n// Limita a 15 ocorrências\nconst scpcLimitado = scpc.slice(0, 15);\n\n// Formata os dados no formato desejado\nconst resultado = scpcLimitado.map(item => {\n  return `*Data:* _${item['Dt Ocorr']}_\\n*Cidade:* _${item['Cidade']}_\\n*Origem:* _${item['Nome']}_\\n*Valor:* _${item['Vr Dívida']}_\\n`;\n});\n\n// Junta todas as ocorrências formatadas em uma única string\nconst textoFinal = resultado.join('\\n');\n\n// Retorna o texto como parte do objeto json dentro de um array\nreturn [{ json: { texto: textoFinal } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2940,
+        1880
+      ],
+      "id": "65328bfd-126e-44e0-86d2-468f28d2217c",
+      "name": "Code5",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60bc819d-3591-4bdb-bd62-300cc7e6a05b",
+              "name": "SCPC",
+              "value": "={{ $json.texto }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3140,
+        1880
+      ],
+      "id": "a3fb1717-9ece-4949-9ae6-c7ddc679bc3a",
+      "name": "Edit Fields2",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Captura os dados do Protesto\nconst protestos = $('If').item.json.data['Protesto'];\n\n// Limita a 15 protestos\nconst protestosLimitados = protestos.slice(0, 15);\n\n// Formata os protestos no formato desejado\nconst resultado = protestosLimitados.map(protesto => {\n  return `*Cidade:* _${protesto['Cidade']} - ${protesto['UF']}_\\n*Data:* _${protesto['Data']}_\\n*Cartório:* _${protesto['Cartório']}_\\n*Valor:* _R$${protesto['Valor Protesto']}_\\n`;\n});\n\n// Junta todos os protestos formatados em uma única string\nconst textoFinal = resultado.join('\\n');\n\n// Retorna o texto como parte do objeto json dentro de um array\nreturn [{ json: { texto: textoFinal } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2940,
+        2680
+      ],
+      "id": "e69daf3c-40fe-4202-891b-7d1769b9d2ea",
+      "name": "Code6",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60bc819d-3591-4bdb-bd62-300cc7e6a05b",
+              "name": "Protesto",
+              "value": "={{ $json.texto }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3140,
+        2680
+      ],
+      "id": "da9f945a-8853-4a05-83b7-e07c03f6e695",
+      "name": "Edit Fields3",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3dc1efe0-4397-4b12-89e3-b97c36914b36",
+              "name": "Pendencias",
+              "value": "={{ $json.data['REFIN/PEFIN'] }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7994d87f-9af8-4275-9b64-ba8b461a7b00",
+      "name": "Mapa - Pendencias2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        2740,
+        1380
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "Pendencias",
+              "stringValue": "=_Sem pendências registradas._\n"
+            }
+          ]
+        },
+        "include": "selected",
+        "options": {}
+      },
+      "id": "6184cb54-d5f4-4ce0-a527-80785b92053f",
+      "name": "Pendencias - 83",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.1,
+      "position": [
+        3540,
+        1380
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "7eef6126-408a-479b-8d38-716485b8898f",
+              "leftValue": "={{ $json.Pendencias }}",
+              "rightValue": "Data",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "82342480-f495-4fbf-99d3-a6e66820f281",
+      "name": "SE Pendencias - 82",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3340,
+        1380
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "Pendencias",
+              "stringValue": "={{ $json.Pendencias }}"
+            }
+          ]
+        },
+        "include": "selected",
+        "options": {}
+      },
+      "id": "044c432d-124a-4bae-9332-f0a3dd99de1d",
+      "name": "Pendencias - 87",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.1,
+      "position": [
+        3340,
+        1620
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60bc819d-3591-4bdb-bd62-300cc7e6a05b",
+              "name": "Pendencias",
+              "value": "={{ $json.texto }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3140,
+        1380
+      ],
+      "id": "133c3849-2bdf-4b43-b905-d7c443147f13",
+      "name": "Edit Fields1",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Captura os dados das pendências\nconst pendencias = $('Mapa - Pendencias2').item.json.Pendencias;\n\n// Verifica se há pendências antes de continuar\nif (!pendencias || pendencias.length === 0) {\n  return [{ json: { texto: \"Nenhuma pendência encontrada.\" } }];\n}\n\n// Limita a 15 pendências\nconst pendenciasLimitadas = pendencias.slice(0, 15);\n\n// Formata as pendências no formato desejado\nconst resultado = pendenciasLimitadas.map(pendencia => {\n  return `*Data:* _${pendencia['Dt Ocorr']}_\\n*Contrato:* _${pendencia['Contrato']}_\\n*Origem:* _${pendencia['Tipo']}_\\n*Valor:* _R$${pendencia['Vr Dívida'].replace('.', ',')}_\\n`;\n});\n\n// Junta todas as pendências formatadas em uma única string\nconst textoFinal = resultado.join('\\n');\n\n// Retorna o texto como parte do objeto json dentro de um array\nreturn [{ json: { texto: textoFinal } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2940,
+        1380
+      ],
+      "id": "c715f91a-399f-409f-bee7-76fe176e2896",
+      "name": "Code7",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f8e5d1e6-feda-4373-8e50-936f54a48786",
+              "name": "Créditos",
+              "value": "=5",
+              "type": "string"
+            },
+            {
+              "id": "e83c4952-cefe-4e2e-accf-865e014c5c20",
+              "name": "Opção Consulta",
+              "value": "CNPJ 4",
+              "type": "string"
+            },
+            {
+              "id": "b465d432-f3ad-4b56-8e49-81a06ca7db1a",
+              "name": "Tipo Consulta",
+              "value": "={{ $workflow.name }}",
+              "type": "string"
+            },
+            {
+              "id": "ccbdfb0b-45f1-40b2-b095-fcfefa698376",
+              "name": "Telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "41bac44d-098a-4889-ad47-0138194c7d6b",
+              "name": "Dado consultado",
+              "value": "={{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "5f0eaada-894e-45cf-8c51-3f1a65fb785e",
+              "name": "Data",
+              "value": "={{ $json.data }}",
+              "type": "string"
+            },
+            {
+              "id": "f34f0ad5-5beb-4941-a1be-d63c2f099f22",
+              "name": "Hora",
+              "value": "={{ $json.hora }}",
+              "type": "string"
+            },
+            {
+              "id": "80f689ee-d4ec-4b52-ad1d-e1e710f72420",
+              "name": "=URL PDF",
+              "value": "={{ $('IF PDF').item.json.FileUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "7c7fe4c7-5f91-4a5c-af93-3104c80aab4c",
+              "name": "Origem Consulta",
+              "value": "={{ $('Webhook').item.json.body.Webhook }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        8520,
+        3740
+      ],
+      "id": "e7e06714-fd47-436f-b935-d50f376cff5f",
+      "name": "Dados Histórico"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agora = new Date().toLocaleString(\"pt-BR\", { timeZone: \"America/Sao_Paulo\" });\n\n// Divide data e hora\nconst [dataStrRaw, horaStr] = agora.split(' ');\nconst dataStr = dataStrRaw.replace(',', '');\n\n// Extrai dia, mês e ano\nconst [dia, mes, ano] = dataStr.split('/');\nconst dataFormatada = `${dia}/${mes}/${ano}`;\n\n// Novo formato ISO (YYYY-MM-DD)\nconst dataISO = `${ano}-${mes}-${dia}`;\n\n// Monta a URL da execução\nconst executionId = $execution.id;\nconst workflowId = $workflow.id;\nconst baseUrl = \"https://n8n.redequeroimoveis.com\";\nconst executionUrl = `${baseUrl}/workflow/${workflowId}/executions/${executionId}`;\n\n// Retorna tudo em um único objeto\nreturn [{\n  json: {\n    data: dataFormatada,\n    data_iso: dataISO,\n    hora: horaStr,\n    executionUrl: executionUrl\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8340,
+        3740
+      ],
+      "id": "b566e504-06e0-49b8-88b2-32f0bbdaad84",
+      "name": "Code4"
+    },
+    {
+      "parameters": {
+        "url": "=https://baserow.unisistemas.tech/api/database/rows/table/643/?user_field_names=true&filter__field_6200__contains={{ $('Webhook').item.json.body.Telefone }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_field_names",
+              "value": "true"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token UU2yIjUeFuKaWhvMc734TVS2oEOKWjp9"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4e6032b2-30f6-4a08-af3e-8d8761edcd16",
+      "name": "HTTP Request10",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6080,
+        2940
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "87ac1dec-3f72-4857-8884-a3cfde60d311",
+              "leftValue": "={{ $json.results[0].id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "60387208-f99b-49b3-a177-eedb897a94a5",
+              "leftValue": "={{ $json.results[0].id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6240,
+        2940
+      ],
+      "id": "79ba1b85-8c23-4f5a-ab8e-246e71eae7bd",
+      "name": "If27"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Definir o fuso horário de Brasília (GMT-3)\nconst timezoneOffset = -3 * 60; // Brasília está a GMT-3\n\n// Obter a hora atual em UTC e converter para o horário de Brasília\nconst now = new Date();\nconst brasiliaTime = new Date(now.getTime() + (timezoneOffset * 60000)); \n\n// Obter as horas e minutos do horário atual em Brasília\nconst currentHour = brasiliaTime.getHours();\nconst currentMinute = brasiliaTime.getMinutes();\nconst currentTime = brasiliaTime.toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit' }); // Formato 09:00\n\n// Definir o horário de início (09:00) e fim (21:00) em Brasília\nconst startHour = 8;\nconst endHour = 21;\n\n// Verificar se está dentro do horário definido\nlet result = 'Fora do horário';\n\nif ((currentHour > startHour || (currentHour === startHour && currentMinute >= 0)) && \n    (currentHour < endHour || (currentHour === endHour && currentMinute === 0))) {\n    result = 'Dentro do horário';\n}\n\n// Retornar o resultado com a hora\nreturn {\n  result,\n  currentTime\n};\n"
+      },
+      "id": "26f76127-4cb4-483c-b2bf-adf8c17ed81d",
+      "name": "Code12",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4900,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## CONTINUAÇÃO",
+        "height": 251.51571340885795,
+        "width": 571.376359106563,
+        "color": 6
+      },
+      "id": "cfa03f88-bd17-4896-bb86-00211863cdcb",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -5000,
+        940
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "96c2cdb4-8887-4ad3-acc7-33158a0f63d9",
+      "name": "Limit2",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -4920,
+        1000
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.redequeroimoveis.com/webhook/dividas-cnpj_4-2",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "CPF",
+              "value": "={{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}"
+            },
+            {
+              "name": "Telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Webhook",
+              "value": "={{ $('Webhook').item.json.body.Webhook }}"
+            },
+            {
+              "name": "URL_LogoPDF",
+              "value": "={{ $('Webhook').item.json.body.URL_LogoPDF }}"
+            },
+            {
+              "name": " Tipo consulta",
+              "value": "Completa"
+            },
+            {
+              "name": "Prompt Resumo IA",
+              "value": "={{ $('Dados N8N1').item.json['Prompt Resumo IA'] }}"
+            },
+            {
+              "name": "Prompt PDF",
+              "value": "={{ $('Dados N8N1').item.json['Prompt PDF'] }}"
+            },
+            {
+              "name": "URL-LOGO",
+              "value": "={{ $('Dados N8N1').item.json['URL-LOGO'] }}"
+            },
+            {
+              "name": "RequestToken",
+              "value": "={{ $('Webhook').item.json.body.RequestToken }}"
+            },
+            {
+              "name": "Informações",
+              "value": "={{ $('Webhook').item.json.body[\"Informações\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "55752e9b-b1c9-4d5f-883c-5ac7b2828084",
+      "name": "HTTP Request20",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -4760,
+        1000
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "afcc3e93-675c-4aa5-b623-82242a1f6c2d",
+              "leftValue": "={{ $json.result }}",
+              "rightValue": "Dentro do horário",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "00c875a1-9fe7-49fe-b3d4-8721f83c7fa9",
+      "name": "If28",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -4620,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "96ed38cc-d7c8-4733-8c0d-285e9043667d",
+      "name": "Respond to Webhook6",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -4600,
+        1000
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "consultasite44",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "aa3a49b7-1db7-49ae-9b29-482868ca07a2",
+      "name": "Se base44",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        8640,
+        1940
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "64530896-b254-4c99-991f-167b429c9304",
+              "name": "html",
+              "value": "={{ \n  (() => {\n    const html = $('Code Formatar HTML').item.json.htmlContent;\n    const urlImg = $('If27').item.json['URL PDF Imagem'];\n    const urlFallback = $('Dados N8N1').item.json['URL-LOGO'];\n    const url = urlImg && urlImg.trim() !== '' ? urlImg : urlFallback;\n    return html.replace(/LOGOARTHUR/g, url).replace(/URL-LOGO/g, url);\n  })()\n    .replace(/```html|```|Inicio HTML|Início HTML|Fim HTML/g, '')\n}}",
+              "type": "string"
+            },
+            {
+              "id": "842b2f23-b0c2-4713-a419-890e04377971",
+              "name": "urlpdf",
+              "value": "={{ $('IF PDF').item.json.FileUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "774d16d2-47c6-411a-8c78-78812c161e93",
+              "name": "resposta",
+              "value": "={{ $('CONSULTA _ TEXTO').item.json['CONSULTA _ TEXTO'].replace(/_ /g, '_').replace(/[*_]/g, '') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a8d5c6a7-6300-49df-bf4d-f86e5552b9b2",
+      "name": "resposta-base44",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        9020,
+        1920
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "apin8n",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "dado",
+              "keyValue": "={{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}"
+            },
+            {
+              "keyName": "consulta",
+              "keyValue": "ehmconsultas - dividas/multi/cnpj"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -3440,
+        560
+      ],
+      "id": "46ea1b4c-72d6-4a0f-8a76-1daa17ad6fe3",
+      "name": "Obter Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a2ba1813-65ee-4ce4-a393-8f658c12d43f",
+              "leftValue": "={{ $json.dado }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -3140,
+        560
+      ],
+      "id": "08db5c14-52e7-490e-8652-a1028b07ea81",
+      "name": "Se Supabase"
+    },
+    {
+      "parameters": {
+        "content": "## BASE 44",
+        "height": 222,
+        "width": 635,
+        "color": 2
+      },
+      "id": "841c2cc3-dbbf-432f-81c5-020e5206bf96",
+      "name": "Sticky Note12",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        8580,
+        1860
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Typebot",
+        "height": 222,
+        "width": 635,
+        "color": 2
+      },
+      "id": "9a675fde-9fcd-49b6-b467-e1c4b3284832",
+      "name": "Sticky Note13",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        8580,
+        2120
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Whatsapp (Botconversa)",
+        "height": 222,
+        "width": 635,
+        "color": 2
+      },
+      "id": "0a4a7bca-bffe-47c9-b61f-d9b25575c346",
+      "name": "Sticky Note14",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        8580,
+        2380
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Site",
+        "height": 222,
+        "width": 635,
+        "color": 2
+      },
+      "id": "34793e84-17ee-46c9-b0d1-3f1c62fbf223",
+      "name": "Sticky Note15",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        8580,
+        2640
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "historico",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Telefone",
+              "fieldValue": "={{ $json.Telefone }}"
+            },
+            {
+              "fieldId": "Dado Consultado",
+              "fieldValue": "={{ $json[\"Dado consultado\"] }}"
+            },
+            {
+              "fieldId": "Tipo Consulta",
+              "fieldValue": "={{ $json[\"Tipo Consulta\"] }}"
+            },
+            {
+              "fieldId": "Créditos",
+              "fieldValue": "={{ $json[\"Créditos\"] }}"
+            },
+            {
+              "fieldId": "Data",
+              "fieldValue": "={{ $json.Data }}"
+            },
+            {
+              "fieldId": "Hora",
+              "fieldValue": "={{ $json.Hora }}"
+            },
+            {
+              "fieldId": "URL PDF",
+              "fieldValue": "={{ $json[\"URL PDF\"] }}"
+            },
+            {
+              "fieldId": "Origem Consulta",
+              "fieldValue": "={{ $json[\"Origem Consulta\"] }}"
+            },
+            {
+              "fieldId": "Opção Consulta",
+              "fieldValue": "={{ $json[\"Opção Consulta\"] }}"
+            },
+            {
+              "fieldId": "exec",
+              "fieldValue": "={{ $('Code4').item.json.executionUrl }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        8740,
+        3740
+      ],
+      "id": "bd00d637-18c7-4260-bd0b-9515d062f80c",
+      "name": "Histórico Supabse",
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://base44.app/api/apps/6819f5703086936c581632c2/entities/Historico",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "876ed4d9d16b40b3b54ab5da6d49a0a4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.Telefone }}"
+            },
+            {
+              "name": "dado_consultado",
+              "value": "={{ $json[\"Dado consultado\"] }}"
+            },
+            {
+              "name": "tipo_consulta",
+              "value": "={{ $json['Tipo Consulta'] }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json['Créditos'] }}"
+            },
+            {
+              "name": "data",
+              "value": "={{ $('Code4').item.json.data_iso }}"
+            },
+            {
+              "name": "hora",
+              "value": "={{ $json.Hora }}"
+            },
+            {
+              "name": "url_pdf",
+              "value": "={{ $json['URL PDF'] }}"
+            },
+            {
+              "name": "origem",
+              "value": "={{ $json['Origem Consulta'] }}"
+            },
+            {
+              "name": "opcao",
+              "value": "={{ $json['Opção Consulta'] }}"
+            },
+            {
+              "name": "exec",
+              "value": "={{ $('Code4').item.json.executionUrl }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        8740,
+        3340
+      ],
+      "id": "6e871aa1-9d0b-452a-8294-fb2242c35d85",
+      "name": "Base44 API - Histórico",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://base44.app/api/apps/6810f69b135122c2415c3aa4/entities/RetornoConsulta",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "876ed4d9d16b40b3b54ab5da6d49a0a4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "requestToken",
+              "value": "={{ $('Webhook').item.json.body.RequestToken }}"
+            },
+            {
+              "name": "html",
+              "value": "={{ \n  (() => {\n    const html = $('Code Formatar HTML').item.json.htmlContent;\n    const urlImg = $('If27').item.json['URL PDF Imagem'];\n    const urlFallback = $('Dados N8N1').item.json['URL-LOGO'];\n    const url = urlImg && urlImg.trim() !== '' ? urlImg : urlFallback;\n    return html.replace(/LOGOARTHUR/g, url).replace(/URL-LOGO/g, url);\n  })()\n    .replace(/```html|```|Inicio HTML|Início HTML|Fim HTML/g, '')\n}}"
+            },
+            {
+              "name": "urlpdf",
+              "value": "={{ $('IF PDF').item.json.FileUrl }}"
+            },
+            {
+              "name": "resposta",
+              "value": "={{ $('CONSULTA _ TEXTO').item.json['CONSULTA _ TEXTO'].replace(/_ /g, '_').replace(/[*_]/g, '') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        8820,
+        1920
+      ],
+      "id": "21314864-0a57-4b74-b1db-43a4e256ec2c",
+      "name": "Base44 API - RetornoConsulta",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://base44.app/api/apps/6810f69b135122c2415c3aa4/entities/UltimaConsulta",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "876ed4d9d16b40b3b54ab5da6d49a0a4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "html",
+              "value": "={{ \n  (() => {\n    const html = $('Code Formatar HTML').item.json.htmlContent;\n    const urlImg = $('If27').item.json['URL PDF Imagem'];\n    const urlFallback = $('Dados N8N1').item.json['URL-LOGO'];\n    const url = urlImg && urlImg.trim() !== '' ? urlImg : urlFallback;\n    return html.replace(/LOGOARTHUR/g, url).replace(/URL-LOGO/g, url);\n  })()\n    .replace(/```html|```|Inicio HTML|Início HTML|Fim HTML/g, '')\n}}"
+            },
+            {
+              "name": "urlpdf",
+              "value": "={{ $('IF PDF').item.json.FileUrl }}"
+            },
+            {
+              "name": "resposta",
+              "value": "={{ $('CONSULTA _ TEXTO').item.json['CONSULTA _ TEXTO'].replace(/_ /g, '_').replace(/[*_]/g, '') }}"
+            },
+            {
+              "name": "telefone",
+              "value": "={{ $json.Telefone }}"
+            },
+            {
+              "name": "dado_consultado",
+              "value": "={{ $json[\"Dado consultado\"] }}"
+            },
+            {
+              "name": "data",
+              "value": "={{ $('Code4').item.json.data_iso }}"
+            },
+            {
+              "name": "hora",
+              "value": "={{ $json.Hora }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        8740,
+        3540
+      ],
+      "id": "31ad0cfc-1a70-45f5-81ea-ba6fe33ad6af",
+      "name": "Base44 API - Última Consulta",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3db00fee-081d-4b19-99dd-cbc4ab4a0e0e",
+              "name": "Tipo Consulta",
+              "value": "Consulta Serasa Pendências + SCPC Boa Vista + Protestos + Resumo IA (5 créditos)",
+              "type": "string"
+            },
+            {
+              "id": "ac5a7a11-a016-4827-a7ae-88a6490e25ec",
+              "name": "URL Consulta Padrão",
+              "value": "-",
+              "type": "string"
+            },
+            {
+              "id": "c166d2b9-681c-4216-8f4d-0d1737c888dd",
+              "name": "Credito consulta",
+              "value": 5,
+              "type": "number"
+            },
+            {
+              "id": "bcebf250-2d5f-4971-927c-55f5fa8d3a4f",
+              "name": "Prompt Resumo IA",
+              "value": "=Você receberá dados financeiros e de pendências relacionadas a um CPF ou CNPJ, incluindo informações como dívidas, protestos, status de crédito e score. Sua tarefa é organizar essas informações de maneira clara e objetiva, estruturando-as em seções e terminando com um breve resumo da situação financeira da pessoa física ou jurídica.\n\nInstruções para a Estrutura e Redação:\nEstrutura dos Dados:\nInicie apresentando as principais informações do CPF ou CNPJ, como nome, data de nascimento, nome da mãe e situação na Receita Federal, se disponível.\nCrie uma seção que apresente, de forma resumida, todas as pendências financeiras, dívidas e protestos identificados.\nApresente o score de crédito e a probabilidade de inadimplência, se forem disponibilizados.\n\nResumo da Situação Financeira:\nElabore um parágrafo resumindo a situação financeira geral do CPF ou CNPJ.\nUse uma linguagem neutra e clara, apontando os riscos de crédito, quantidade de dívidas ou protestos e qualquer outra informação relevante que possa impactar a análise do perfil financeiro.\n\nObservações Importantes:\nNÃO exiba ou informe nenhum dado de contato, incluindo telefones, endereços ou e-mails.\nNÃO invente dados que não foram explicitamente fornecidos.\nSiga rigorosamente as normas de proteção de dados pessoais (LGPD), respeitando a privacidade do consultado.\n\nSegue abaixo um breve exemplo de resumo\n\"### Resumo da Situação Financeira\nRafael dos Santos Nogueira apresenta um histórico financeiro com múltiplas pendências, incluindo dívidas com instituições educacionais e um protesto registrado. O total das pendências varia, mas a principal dívida se destaca no valor de R$ 1.467,62. Essas ocorrências podem impactar negativamente seu acesso ao crédito. A situação atual sugere um certo risco de inadimplência e é recomendável que Rafael busque regularizar suas pendências para evitar complicações financeiras futuras.\"\n\nFaça um breve resumo com no máximo 700 caracteres de forma simples explicando a situação financeira utilizando todas as informações fornecidas. Não ignore nenhum dado. No resumo você não precisa escrever ou listar todas as pendências. Apenas resumir com um total e quantidade dos titulos abaixo.\nO titulo do resumo precisa ser exatamente \"### RESUMO DA SITUAÇÃO FINANCEIRA\" (EM LETRAS MAIÚSCULAS)\nUma observação. O titulo dos menus estão entre ##\nRetorne apenas os dados a partir de \"## RESUMO DA SITUAÇÃO FINANCEIRA\"\n\nSegue abaixo os dados para formatar:",
+              "type": "string"
+            },
+            {
+              "id": "e91bebb7-5a96-4254-adef-d41486ba471e",
+              "name": "Prompt PDF",
+              "value": "=Objetivo: Formatar os dados da consulta de crédito de forma estruturada e organizada, seguindo o modelo de análise de crédito do Serasa, retornando exclusivamente um código HTML.\nInstruções:\n* Retornar apenas o HTML, sem nenhum outro texto no output.\n* Seguir a estrutura de tabelas para organizar os dados.\n* Usar fontes de até 11px para informações dentro das tabelas.\n* Remover o título <h1>, mas adicionar duas quebras de linha (<br><br>) após a logo para espaçamento.\n* Não alterar o campo \"URL-LOGO\", pois ele será substituído dinamicamente.\n* Adicionar \"Resumo através de IA\" no final, com um resumo dos dados recebidos.\n* Incluir um rodapé com informações de confidencialidade e LGPD, usando fonte de 9px e alinhado à esquerda.\n* Nunca utilizar a expressão \"Dados do Cotista\", apenas \"Dados\".\nFormato esperado:\n* HTML bem estruturado, com seções claras.\n* Uso de <div> para blocos de informações e <table> para dados tabulares.\n* Listas <ul> para e-mails, telefones e parentes.\n* Footer fixo no final do relatório.\n* Caso a frase inicie e termine com _ pode remover. Ex: _Sem pendências registradas._ fica Sem pendências registradas.\n* É obrigatório que todas as informações fornecidas abaixo conste no HTML.\n* Se tiver \"_Sem pendências registradas._\", \"_Sem pendências._\" ou algo que comece e termine com \"_\", remova o \"_\".\n* Se o dados como telefone, email ou parentes não existir nos dados para serem formatados, não crie a div class=\"section\". Você vai criar somente se existir informações.\n* Se não existir nenhum email, não adicione no html Email\n* Se não existir nenhum telefone, não adicione no html Telefone\n* Se não existir nenhum Possíveis Parentes, não adicione no html Possíveis Parentes\n* Se email estiver vazio ou não existir, não crie no html <strong>Email:</strong>\n* Se telefone estiver vazio ou não existir, não crie no html <strong>Telefone:</strong>\n\nAdicione um texto no final com os dados recebidos de \"RESUMO ATRAVÉS DE IA\"\"\n\nAdicione também um rodapé na página com fonte tamanho 9 alinhado a esquerda da página com os seguintes dados:\n\"INFORMAÇÕES IMPORTANTES\nESTAS INFORMAÇÕES SÃO CONFIDENCIAIS E DEVERÃO SER UTILIZADAS, ÚNICA E EXCLUSIVAMENTE, PARA ORIENTAÇÃO DAS TRANSAÇÕES COMERCIAIS DO USUÁRIO , RESPONSABILIZANDO-SE CIVIL E CRIMINALMENTE POR DANOS QUE OCASIONAR A TERCEIROS, QUANDO UTILIZADAS EM DESACORDO COM A LEGISLAÇÃO EM VIGOR.\n\nMINUTA DE DECLARAÇÃO LGPD\nDECLARO QUE A UTILIZAÇÃO DOS DADOS RESPEITARÁ AS FINALIDADES E PROCEDIMENTOS LEGALMENTE ADMITIDOS PELA LEI GERAL DE PROTEÇÃO DE DADOS DIVULGADOS EM MINHA PÁGINA INICIAL DE ACESSO.\"\n\nHTML DE EXEMPLO 1:\n<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Consulta de Análise de Crédito</title>\n    <style>\n        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #eef2f7; }\n        .container { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }\n        .banner { width: 100%; height: auto; display: block; margin-bottom: 20px; }\n        .section { margin-bottom: 20px; padding: 20px; border-radius: 8px; background: #f9f9f9; border-left: 5px solid #181d3e; }\n        .section-header { font-size: 18px; font-weight: bold; color: #181d3e; margin-bottom: 15px; }\n        p, ul { margin: 5px 0; line-height: 1.6; }\n        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }\n        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }\n        th { background-color: #181d3e; color: #fff; }\n        .highlight { font-weight: bold; color: #dc3545; }\n        .info { font-weight: bold; color: #495057; }\n        .score-box { text-align: center; padding: 20px; background: #e9ecef; border-radius: 8px; font-size: 20px; font-weight: bold; color: #28a745; }\n        .footer { font-size: 9px; padding: 10px; background: #f1f1f1; border-radius: 8px; text-align: left; }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <img src=\"URL-LOGO\" alt=\"Logo\" class=\"banner\"><br><br>\n        \n        <div class=\"section\">\n            <h2 class=\"section-header\">Dados</h2>\n            <p><span class=\"info\">Nome:</span> A&C LIMA HOLDING LTDA</p>\n            <p><span class=\"info\">CNPJ:</span> 34484128000190</p>\n            <p><span class=\"info\">Situação Cadastral:</span> Ativa</p>\n            <p><span class=\"info\">Porte:</span> Demais</p>\n            <p><span class=\"info\">Natureza Jurídica:</span> Sociedade Empresária Limitada</p>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Telefone</h2>\n            <p><span class=\"info\">Telefone:</span> (15)32110164</p><br>\n            <h2 class=\"section-header\">Email</h2>\n            <p><span class=\"info\">Email:</span> legalizacao1@net-rosario.com.br</p><br>\n            <h2 class=\"section-header\">Endereço</h2>\n            <p><span class=\"info\">Endereço:</span> AVENIDA AGAMENON MAGALHAES, Número 1019, PAVMTO5                   SALA  505 - MAURICIO DE NASSAU</p>\n            <p><span class=\"info\">Cidade:</span> Caruaru</p>\n            <p><span class=\"info\">Estado:</span> PE</p>\n            <p><span class=\"info\">CEP:</span> 55014000</p>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Atividade Principal</h2>\n            <p><span class=\"info\">Atividade Principal:</span> Construção de edifícios</p>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Atividade Secundária</h2>\n            <p><span class=\"info\">Atividade Secundária:</span> Incorporação de empreendimentos imobiliários</p>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Sócios</h2>\n            <ul>\n                <li>AUGUSTO CEZAR LIMA JACINTO</li>\n            </ul>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Pendências</h2>\n            <table>\n                <tr>\n                    <th>Data</th>\n                    <th>Contrato</th>\n                    <th>Origem</th>\n                    <th>Valor</th>\n                </tr>\n                <tr>\n                    <td>11/01/2024</td>\n                    <td>02401289250315</td>\n                    <td>R-EE  - OUTR</td>\n                    <td>R$115,96</td>\n                </tr>\n                <tr>\n                    <td>09/02/2024</td>\n                    <td>02402293463909</td>\n                    <td>R-EE  - OUTR</td>\n                    <td>R$114,96</td>\n                </tr>\n                <tr>\n                    <td>12/03/2024</td>\n                    <td>02403297718281</td>\n                    <td>R-EE  - OUTR</td>\n                    <td>R$115,20</td>\n                </tr>\n                <tr>\n                    <td>30/08/2024</td>\n                    <td>37/2561</td>\n                    <td>P-DUPLICATA</td>\n                    <td>R$3.861,00</td>\n                </tr>\n                <tr>\n                    <td>05/09/2024</td>\n                    <td>47/2567</td>\n                    <td>P-DUPLICATA</td>\n                    <td>R$3.861,00</td>\n                </tr>\n                <tr>\n                    <td>31/10/2024</td>\n                    <td>02410330628074</td>\n                    <td>R-EE  - OUTR</td>\n                    <td>R$22,09</td>\n                </tr>\n            </table>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">SCPC</h2>\n            <p><span class=\"info\">SCPC:</span> Sem pendências registradas.</p>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Protestos</h2>\n            <table>\n                <tr>\n                    <th>Cidade</th>\n                    <th>Data</th>\n                    <th>Cartório</th>\n                    <th>Valor</th>\n                </tr>\n                <tr>\n                    <td>Caruaru - PE</td>\n                    <td>30/01/2025</td>\n                    <td>1</td>\n                    <td>R$4.127,41</td>\n                </tr>\n                <tr>\n                    <td>Caruaru - PE</td>\n                    <td>07/02/2025</td>\n                    <td>2</td>\n                    <td>R$4.119,69</td>\n                </tr>\n            </table>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Resumo através de IA</h2>\n            <p>A&C LIMA HOLDING LTDA apresenta um histórico financeiro com pendências registradas, com um total de R$ 4.246,10. Embora não existam protestos, a presença de dívidas pode impactar negativamente seu acesso ao crédito. Além disso, é importante lembrar que a situação financeira da empresa pode ser afetada por fatores como a natureza jurídica e o porte da empresa.</p>\n        </div>\n\n        <div class=\"section\">\n            <h2 class=\"section-header\">Sugestões para Regularização em caso de Débitos</h2>\n            <ul>\n                <li>📞 <strong>Negociar débitos:</strong> Contate os credores para verificar opções de parcelamento.</li>\n                <li>🔍 <strong>Acompanhar o CPF:</strong> Mantenha um monitoramento constante para evitar novas restrições.</li>\n                <li>📑 <strong>Remover protestos quitados:</strong> Após o pagamento, solicite a retirada do registro.</li>\n                <li>📝 <strong>Realizar pagamentos:</strong> Aumente a frequência e os valores dos pagamentos para reduzir a dívida.</li>\n            </ul>\n        </div>\n\n        <div class=\"footer\">\n            <p><strong>INFORMAÇÕES IMPORTANTES:</strong> ESTAS INFORMAÇÕES SÃO CONFIDENCIAIS E DEVERÃO SER UTILIZADAS, ÚNICA E EXCLUSIVAMENTE, PARA ORIENTAÇÃO DAS TRANSAÇÕES COMERCIAIS DO USUÁRIO, RESPONSABILIZANDO-SE CIVIL E CRIMINALMENTE POR DANOS QUE OCASIONAR A TERCEIROS, QUANDO UTILIZADAS EM DESACORDO COM A LEGISLAÇÃO EM VIGOR.<br><br></p>\n            <p><strong>MINUTA DE DECLARAÇÃO LGPD:</strong> DECLARO QUE A UTILIZAÇÃO DOS DADOS RESPEITARÁ AS FINALIDADES E PROCEDIMENTOS LEGALMENTE ADMITIDOS PELA LEI GERAL DE PROTEÇÃO DE DADOS DIVULGADOS EM MINHA PÁGINA INICIAL DE ACESSO.</p>\n        </div>\n    </div>\n</body>\n</html>\n\nImportante, escreva \"Inicio HTML\" e \"Fim HTML\" no inicio e no final. Somente isso. Não escreva mais nenhum dados fora do código.\nQuando for exatamente começar o código HTML, escreva da seguinte maneira: Inicio HTML\\n<!DOCTYPE html>\\n\nEscreva no código html todas as informações fornecidas. Não ignore nenhum dado.\nUma observação. O titulo dos menus entrão entre <>\nCaso a frase comece e termine com \"_\", pode remover o \"_\"\nSempre formate no html utilizando TODOS os dados fornecidos abaixo como informações, valores, dados, tudo sem exceção.\nVocê vai adicionar na formatação somente os dados existentes e informados abaixo.\nImportante. Se o dados como telefone, email ou parentes não estiver disponível e não for fornecido, você não precisa adicionar a \"div class\" no html.\nAdicione \"Sugestões para Regularização em caso de Débitos\"\nSempre adicione <br> entre uma \"div class\" e outra.\nÉ obrigatório que pendências, scpc, débitos, refin e pefin e protestos sejam sempre em tabela.\nSiga fielmente o layout do exemplo de html acima.\nCaso a frase inicie e termine com _ pode remover. Ex: _Sem pendências registradas._ fica Sem pendências registradas.\nSe o dados como telefone, email ou parentes não existir nos dados para serem formatados, não crie a div class=\"section\". Você vai criar somente se existir informações.\nÉ importante que você adicione no HTML somente os dados fornecidos abaixo que são para formatar. Os dados dos HTML de exemplo servem somente para seguir o layout do HTML (Nunca utilize as informações de exemplo ou invente dados para adicionar no html formatado).\nÉ obrigatório que todas as informações fornecidas abaixo conste no HTML.\nRemova todos os _ do html exceto de email.\nImportante, você vai formatar em pendências, somente o que está em pendências, você vai formatar em scpc, somente o que está em scpc e vai formatar em protestos, somente o que está em protestos. E assim por diante.\n\nAtenção, todos os dados e informações acima server exclusivamente como exemplo para você estruturar o HTML.\nAs informações na formatação do HTML precisam estar na mesma ordem dos dados para formatar.\nUtilize somente os dados abaixo para formatar o HTML:",
+              "type": "string"
+            },
+            {
+              "id": "b84bfcda-a2c7-433c-93e8-8f6c51cdcc00",
+              "name": "URL-LOGO",
+              "value": "=https://i.imgur.com/g0gImpK.jpeg",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3699ae6b-e604-4164-bf8a-1af391d06734",
+      "name": "Dados N8N2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -7240,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Retornar Créditos1').item.json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e75122ab-81bc-4051-9184-740080b22a4d",
+      "name": "Retirar Créditos Se Menor",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        10880,
+        2600
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "tableId": "apin8n",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "fieldId": "dado",
+              "fieldValue": "={{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}"
+            },
+            {
+              "fieldId": "data",
+              "fieldValue": "={{ $('If').item.json.data }}"
+            },
+            {
+              "fieldId": "opcao",
+              "fieldValue": "=CNPJ 4-1"
+            },
+            {
+              "fieldId": "consulta",
+              "fieldValue": "ehmconsultas - dividas/multi/cnpj"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1400,
+        620
+      ],
+      "id": "de1d5074-742d-4105-86fb-ac93590467f4",
+      "name": "Salvar Supabase1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a2ba1813-65ee-4ce4-a393-8f658c12d43f",
+              "leftValue": "={{ $json.dado }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1580,
+        600
+      ],
+      "id": "0f43a377-cb04-4971-855d-967367d4675b",
+      "name": "Se Supabase1",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -1800,
+        600
+      ],
+      "id": "2cf0773c-a9af-44f2-8e0f-4db5f1b6e2dd",
+      "name": "Limit4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e5c78911-1718-4e18-9728-fe15eaa93c45",
+              "name": "Informações",
+              "value": "={{ $('Webhook').item.json.body[\"Informações\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "49d69fb6-815b-43e9-81b5-429a90abbe44",
+      "name": "Informações47",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        2440,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "66e45b04-cb18-48c5-abd2-d26c45a53280",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "api",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "40e632b9-9472-49fb-9b8b-d30f9a88e868",
+      "name": "se typebot5",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -6800,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "api",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "9bcfd8ff-0ea6-4f23-9e17-a117ad7d7934",
+      "name": "Se base",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        8740,
+        1640
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## API",
+        "height": 222,
+        "width": 635,
+        "color": 2
+      },
+      "id": "0fb16ed5-8054-422a-82d2-9085d2272353",
+      "name": "Sticky Note20",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        8580,
+        1580
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "url-pdf",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "keyValue": "={{ $('Webhook').item.json.body.Telefone.startsWith('+') ? $('Webhook').item.json.body.Telefone : '+' + $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        6080,
+        2740
+      ],
+      "id": "caa2005d-6a30-48e7-8770-a76d73e9e08b",
+      "name": "Obter Logo Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "id": "feb51025-5f88-4ec2-9d8e-4c1bbe8ad2bd",
+      "name": "Limit6",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        6460,
+        2940
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "keyName": "ehmconsultas"
+      },
+      "type": "n8n-nodes-datastore.datastore",
+      "typeVersion": 1,
+      "position": [
+        -4340,
+        780
+      ],
+      "id": "02ccabdb-347b-4229-ab79-92c1c004580f",
+      "name": "Datastore"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a993da6e-d17e-4366-a4d8-9a533252a1c9",
+              "name": "value",
+              "value": "={{ $json.value.split(\"\\n\") }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -4120,
+        780
+      ],
+      "id": "db071afd-a186-4935-9ba1-a21bc11f014e",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "id": "920caa29-3f13-44e6-b799-392a8641d61b",
+      "name": "Limit7",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -3920,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f2c0042a-c6de-4c2c-8529-5f2e9d87593d",
+              "leftValue": "={{ $json.value[0].split(':')[1].trim() }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -3700,
+        780
+      ],
+      "id": "2845fa35-868f-44e2-99d9-78f3c8d5809f",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37111169-e67b-43ee-856e-7deb5fa193ab",
+              "name": "resposta",
+              "value": "=*UniConsultas*\nTodas as consultas em um só lugar!\n\n------- / / -------\n\n## Consulta Financeira CNPJ\n\n{{ $('CONSULTA _ TEXTO').item.json['CONSULTA _ TEXTO']}}",
+              "type": "string"
+            },
+            {
+              "id": "e298fd1f-2f1c-4140-bf94-7c782ced4329",
+              "name": "urlpdf",
+              "value": "={{ $('IF PDF').item.json.FileUrl }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        8980,
+        2160
+      ],
+      "id": "4aa2e8ca-1af9-4084-a076-9389543edb1c",
+      "name": "resposta typebot"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8cc86a13-85cf-4301-a6ce-34881ad480c6",
+              "leftValue": "={{ $('If4').item.json.urlpdf }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        10600,
+        3000
+      ],
+      "id": "492186e5-0f14-46f3-9ee7-7d7e7a411e49",
+      "name": "Se URLPDF"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a4ea19e9-6167-473d-ad80-c739ad364aa5",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "typebot",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        10080,
+        3020
+      ],
+      "id": "32aa10ec-1924-455d-8976-549fd1e763ce",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://evolution.unisistemas.tech/message/sendText/{{ $('Webhook').item.json.body.Webhook.split('_')[1] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Webhook').item.json.body.Webhook.split('_').pop() }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "text",
+              "value": "=Atenção: O link para download do PDF estará disponível por apenas 1 minuto. Após esse período, ele será deletado automaticamente.\n\n### PDF\n{{ $('If4').item.json.urlpdf }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        10780,
+        2980
+      ],
+      "id": "82cd48c9-da33-4d9a-b0a1-0cdd3a41072b",
+      "name": "EvolutionAPI - Resposta2",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://evolution.unisistemas.tech/message/sendText/{{ $('Webhook').item.json.body.Webhook.split('_')[1] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Webhook').item.json.body.Webhook.split('_').pop() }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.resposta\n  .replace(/_ /g, '_')\n  .replace(/---------+/g, '------- / / -------') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        10420,
+        3000
+      ],
+      "id": "833c1126-92a3-483f-b7d7-9fd868c8695d",
+      "name": "EvolutionAPI - Resposta3",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## Resposta Typebot",
+        "height": 260,
+        "width": 940,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        10020,
+        2920
+      ],
+      "typeVersion": 1,
+      "id": "968e7516-a0c4-4249-affa-3993b78de443",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        10260,
+        3000
+      ],
+      "id": "524db207-fcc7-420b-96e1-b47913973525",
+      "name": "Limit8"
+    }
+  ],
+  "connections": {
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Mapa - Pendencias2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Mapa - SCPC2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Mapa - Protesto2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Limit4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Créditos a retirar1": {
+      "main": [
+        [
+          {
+            "node": "Se crédito existe1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Maior ou igual1": {
+      "main": [
+        [
+          {
+            "node": "Retirar Créditos1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retirar Créditos Se Menor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar saldo": {
+      "main": [
+        [
+          {
+            "node": "If20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos1": {
+      "main": [
+        [
+          {
+            "node": "Créditos a retirar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se crédito existe1": {
+      "main": [
+        [
+          {
+            "node": "Maior ou igual1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retirar Créditos1": {
+      "main": [
+        [
+          {
+            "node": "Verificar saldo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If20": {
+      "main": [
+        []
+      ]
+    },
+    "Dados N8N": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate6": {
+      "main": [
+        [
+          {
+            "node": "If9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados N8N1": {
+      "main": [
+        [
+          {
+            "node": "Dados N8N",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If15": {
+      "main": [
+        [
+          {
+            "node": "Obter Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "se typebot5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "If15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request7": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If14": {
+      "main": [
+        [
+          {
+            "node": "Erro1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If16": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook3": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Retornar Créditos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request19": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "se typebot": {
+      "main": [
+        [
+          {
+            "node": "Resposta Typebot CNPJ Errado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "typebot": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "se typebot1": {
+      "main": [
+        [
+          {
+            "node": "resposta typebot",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If16",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If19": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Erro": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request6": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time1": {
+      "main": [
+        [
+          {
+            "node": "Code Horário funcionamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Horário funcionamento": {
+      "main": [
+        [
+          {
+            "node": "Verificar Horário funcionamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Horário funcionamento1": {
+      "main": [
+        [
+          {
+            "node": "se typebot2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Horário funcionamento": {
+      "main": [
+        [
+          {
+            "node": "Horário funcionamento1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fora do horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fora do horário": {
+      "main": [
+        [
+          {
+            "node": "se typebot2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If21": {
+      "main": [
+        [
+          {
+            "node": "Erro",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "se typebot2": {
+      "main": [
+        [
+          {
+            "node": "Resposta Typebot Erro",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If21",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "typebot2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If42": {
+      "main": [
+        [
+          {
+            "node": "Informações47",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Informações",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If9": {
+      "main": [
+        [
+          {
+            "node": "CONSULTA _ TEXTO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CONSULTA _ TEXTO": {
+      "main": [
+        [
+          {
+            "node": "Obter Logo Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait4": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If22": {
+      "main": [
+        [
+          {
+            "node": "Code Formatar HTML",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Formatar HTML": {
+      "main": [
+        [
+          {
+            "node": "Gerar PDF API1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Limit3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF PDF": {
+      "main": [
+        [
+          {
+            "node": "Limit3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit3": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Se base",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resposta Typebot Erro": {
+      "main": [
+        [
+          {
+            "node": "typebot2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resposta Typebot CNPJ Errado": {
+      "main": [
+        [
+          {
+            "node": "typebot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Erro1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Informações": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar PDF API1": {
+      "main": [
+        [
+          {
+            "node": "IF PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "if timeout",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Merge60",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Dados N8N1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "If22",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "if timeout1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If23": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if timeout": {
+      "main": [
+        [
+          {
+            "node": "If19",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if timeout1": {
+      "main": [
+        [
+          {
+            "node": "If23",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge60": {
+      "main": [
+        [
+          {
+            "node": "Merge78",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SCPC - 49": {
+      "main": [
+        [
+          {
+            "node": "Merge60",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Mapa - SCPC2": {
+      "main": [
+        [
+          {
+            "node": "Code5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Protesto - 49": {
+      "main": [
+        [
+          {
+            "node": "Merge78",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "SE Protesto - 50": {
+      "main": [
+        [
+          {
+            "node": "Protesto - 52",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Protesto - 49",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Protesto - 52": {
+      "main": [
+        [
+          {
+            "node": "Merge78",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Mapa - Protesto2": {
+      "main": [
+        [
+          {
+            "node": "Code6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SCPC - 53": {
+      "main": [
+        [
+          {
+            "node": "Merge60",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "SE SCPC - 50": {
+      "main": [
+        [
+          {
+            "node": "SCPC - 53",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SCPC - 49",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "SE SCPC - 50",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code6": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "SE Protesto - 50",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mapa - Pendencias2": {
+      "main": [
+        [
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pendencias - 83": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "SE Pendencias - 82": {
+      "main": [
+        [
+          {
+            "node": "Pendencias - 87",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pendencias - 83",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pendencias - 87": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "SE Pendencias - 82",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code7": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge78": {
+      "main": [
+        [
+          {
+            "node": "Aggregate6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados Histórico": {
+      "main": [
+        [
+          {
+            "node": "Histórico Supabse",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Base44 API - Histórico",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Base44 API - Última Consulta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "Dados Histórico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request10": {
+      "main": [
+        [
+          {
+            "node": "If27",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If27": {
+      "main": [
+        [
+          {
+            "node": "Limit6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code12": {
+      "main": [
+        [
+          {
+            "node": "If28",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request20": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If28": {
+      "main": [
+        [
+          {
+            "node": "Datastore",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Limit2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se base44": {
+      "main": [
+        [
+          {
+            "node": "Base44 API - RetornoConsulta",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "se typebot1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "resposta-base44": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obter Supabase": {
+      "main": [
+        [
+          {
+            "node": "Se Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se Supabase": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Base44 API - RetornoConsulta": {
+      "main": [
+        [
+          {
+            "node": "resposta-base44",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retirar Créditos Se Menor": {
+      "main": [
+        [
+          {
+            "node": "Verificar saldo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook1": {
+      "main": [
+        []
+      ]
+    },
+    "Se Supabase1": {
+      "main": [
+        [
+          {
+            "node": "If42",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Salvar Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit4": {
+      "main": [
+        [
+          {
+            "node": "Se Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar Supabase1": {
+      "main": [
+        [
+          {
+            "node": "If42",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Informações47": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "se typebot5": {
+      "main": [
+        [
+          {
+            "node": "typebot",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "se typebot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se base": {
+      "main": [
+        [
+          {
+            "node": "resposta-base44",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Se base44",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obter Logo Supabase": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit6": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datastore": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Limit7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit7": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "resposta typebot": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se URLPDF": {
+      "main": [
+        [
+          {
+            "node": "EvolutionAPI - Resposta2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Limit8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EvolutionAPI - Resposta3": {
+      "main": [
+        [
+          {
+            "node": "Se URLPDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit8": {
+      "main": [
+        [
+          {
+            "node": "EvolutionAPI - Resposta3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "HTTP Request1": [
+      {
+        "json": {
+          "data": {
+            "Version": "2.0",
+            "Status": 200,
+            "SCPC": [],
+            "Protesto": [
+              {
+                "Data": "30/01/2025",
+                "Valor Protesto": "4.127,41",
+                "Cartório": "1",
+                "Cidade": "CARUARU",
+                "UF": "PE"
+              },
+              {
+                "Data": "07/02/2025",
+                "Valor Protesto": "4.119,69",
+                "Cartório": "2",
+                "Cidade": "CARUARU",
+                "UF": "PE"
+              }
+            ],
+            "Pendências REFIN/PEFIN": [
+              {
+                "Dt Ocorr": "11/01/2024",
+                "Tipo": "R-EE  - OUTR",
+                "Avalista": "N",
+                "Vr Dívida": "115,96",
+                "Contrato": "02401289250315",
+                "Instituição": "010835932000108"
+              },
+              {
+                "Dt Ocorr": "09/02/2024",
+                "Tipo": "R-EE  - OUTR",
+                "Avalista": "N",
+                "Vr Dívida": "114,96",
+                "Contrato": "02402293463909",
+                "Instituição": "010835932000108"
+              },
+              {
+                "Dt Ocorr": "12/03/2024",
+                "Tipo": "R-EE  - OUTR",
+                "Avalista": "N",
+                "Vr Dívida": "115,20",
+                "Contrato": "02403297718281",
+                "Instituição": "010835932000108"
+              },
+              {
+                "Dt Ocorr": "30/08/2024",
+                "Tipo": "P-DUPLICATA",
+                "Avalista": "N",
+                "Vr Dívida": "3.861,00",
+                "Contrato": "37/2561",
+                "Instituição": "032917836000141"
+              },
+              {
+                "Dt Ocorr": "05/09/2024",
+                "Tipo": "P-DUPLICATA",
+                "Avalista": "N",
+                "Vr Dívida": "3.861,00",
+                "Contrato": "47/2567",
+                "Instituição": "032917836000141"
+              },
+              {
+                "Dt Ocorr": "31/10/2024",
+                "Tipo": "R-EE  - OUTR",
+                "Avalista": "N",
+                "Vr Dívida": "22,09",
+                "Contrato": "02410330628074",
+                "Instituição": "010835932000108"
+              }
+            ],
+            "SERASA": {
+              "Dados Gerais": [
+                {
+                  "Data Primeira Ocorrência": "",
+                  "Data Última Ocorrência": "",
+                  "Quantidade Ocorrências": 6
+                }
+              ]
+            },
+            "CADIN": [],
+            "SICCF": [
+              {
+                "Banco": "104",
+                "Agência": "3016",
+                "Tp Conta": "2",
+                "Alinea": "12",
+                "Qte Ocor": "8",
+                "Data Ocor": "07/03/2025"
+              }
+            ],
+            "Cheque sem Fundos": [
+              {
+                "Data Ocor": "05/03/2025",
+                "Qte Ocor": "0",
+                "Banco": "104",
+                "Alinea": "",
+                "Agência": "3016",
+                "Cidade": "CARUARU",
+                "UF": "PE"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "versionId": "44964da5-cdb2-4d4c-b67b-f383b95a4893",
+  "triggerCount": 1,
+  "tags": []
+}
