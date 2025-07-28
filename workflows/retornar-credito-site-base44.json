@@ -1,0 +1,298 @@
+{
+  "createdAt": "2025-07-25T02:49:12.460Z",
+  "updatedAt": "2025-07-25T02:49:13.000Z",
+  "id": "3daw3zHqdRYtzELj",
+  "name": "retornar-credito-site-base44",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "retornar-credito-site-base44",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "ba10e89d-0992-4131-ae19-ff36550e9c20",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        40
+      ],
+      "webhookId": "b73cf1dd-c75e-4526-85b4-327cefd2cc3a"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtém o telefone da string dinâmica\nlet telefone = $('Webhook1').item.json.body.telefone;\n\n// Remove quaisquer espaços em branco ao redor do telefone\ntelefone = telefone.trim();\n\n// Remove caracteres não numéricos, caso existam\ntelefone = telefone.replace(/[^0-9]/g, '');\n\n// Extrai o código do país, o DDD e o número\nconst codigoPais = telefone.slice(0, 2); // Primeiro e segundo dígito\nconst ddd = telefone.slice(2, 4); // Terceiro e quarto dígito\nlet numero = telefone.slice(4); // O restante é o número\n\n// Verifica se o número começa com '9' adicional e ajusta para 8 dígitos\nif (numero.length === 9 && numero.startsWith('9')) {\n  numero = numero.slice(1);\n}\n\n// Retorna os dados formatados\nreturn [\n  {\n    codigoPais: `+${codigoPais}`, // Código do país com o \"+\" incluído\n    ddd,\n    numero\n  }\n];\n"
+      },
+      "id": "dcefa0da-b567-4446-b19c-b40564159f14",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -680,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}{{ $('Code').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "feb978ff-feb2-44d2-9867-9c9bce0c7818",
+      "name": "Retornar Créditos Disponíveis9",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -480,
+        40
+      ],
+      "retryOnFail": false,
+      "maxTries": 5,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2aabcce7-cd00-4f35-a80f-b0037c607db6",
+              "leftValue": "={{ $json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -260,
+        40
+      ],
+      "id": "6354cc92-8ef1-4414-aa6c-db15608118b2",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}9{{ $('Code').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5dd560b7-58e0-4d18-99ab-2328232f97d8",
+      "name": "Retornar Créditos Disponíveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -260,
+        200
+      ],
+      "retryOnFail": false,
+      "maxTries": 5,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "77c6f208-d4de-4db1-8345-a934ef169722",
+              "name": "creditos",
+              "value": "={{ $json.creditos }}",
+              "type": "string"
+            },
+            {
+              "id": "a8fdfd3d-a3fd-440f-a2e9-5fa7f445e2ce",
+              "name": "telefone",
+              "value": "={{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}{{ $('Code').item.json.numero }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6e1b1e25-b126-4d46-be5b-107992618983",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "77c6f208-d4de-4db1-8345-a934ef169722",
+              "name": "creditos",
+              "value": "={{ $json.creditos }}",
+              "type": "string"
+            },
+            {
+              "id": "a8fdfd3d-a3fd-440f-a2e9-5fa7f445e2ce",
+              "name": "telefone",
+              "value": "={{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}9{{ $('Code').item.json.numero }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        200
+      ],
+      "id": "66af57f2-d82a-4539-9918-3b5732afd3c8",
+      "name": "Edit Fields1"
+    }
+  ],
+  "connections": {
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos Disponíveis9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis9": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar Créditos Disponíveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.unisistemas.tech",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
+            "content-length": "29",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+            "content-type": "application/json",
+            "origin": "https://app--uni-consultas-5f7e4048.base44.app",
+            "priority": "u=1, i",
+            "referer": "https://app--uni-consultas-5f7e4048.base44.app/",
+            "sec-ch-ua": "\"Google Chrome\";v=\"135\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"135\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "179.179.196.244",
+            "x-forwarded-host": "n8n.unisistemas.tech",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "01c7467648af",
+            "x-real-ip": "179.179.196.244"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "telefone": "+5537999781110"
+          },
+          "webhookUrl": "https://webhook.unisistemas.tech/webhook-test/retornar-credito-site-base44",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "aee07e86-6ced-4dbc-9c37-413e651ccc2e",
+  "triggerCount": 1,
+  "tags": []
+}
