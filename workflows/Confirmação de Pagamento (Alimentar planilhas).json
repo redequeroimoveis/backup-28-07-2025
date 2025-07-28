@@ -1,0 +1,1230 @@
+{
+  "createdAt": "2025-07-25T01:33:21.725Z",
+  "updatedAt": "2025-07-25T01:33:22.000Z",
+  "id": "fjO1zqbYMuCSRzDr",
+  "name": "Confirmação de Pagamento (Alimentar planilhas)",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "23b70ce3-2744-4726-a767-7c385b9e8f6b",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        400,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "confirmacao-pagamento",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "4fa1b58b-1e9a-4b13-b8b6-09151a24347b",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2160,
+        480
+      ],
+      "webhookId": "b37811fe-8d91-4574-9194-b5d1b2df770a"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1yIA73PcVO-i5ljYxPlJL1eAvOYhs86vOvxJ7pMiJEfk/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Integração",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yIA73PcVO-i5ljYxPlJL1eAvOYhs86vOvxJ7pMiJEfk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Telefone": "={{ $('Validar Telefone (Code)').item.json.whatsapp_formatado.replace('+', '') }} - {{ $('Code').item.json.data }} {{ $('Code').item.json.hora }}",
+            "Pacote": "={{ $('Webhook').item.json.body.Pacote }}",
+            "Data": "={{ $('Code').item.json.data }}",
+            "Empresa": "={{ $('Webhook').item.json.body.Empresa }}",
+            "Nome": "={{ $('Webhook').item.json.body.Nome }}",
+            "Valor": "={{ $('Webhook').item.json.body.Valor }}",
+            "Email": "={{ $('Webhook').item.json.body.Email }}",
+            "Data E Hora": "={{ $('Code').item.json.data }} {{ $('Code').item.json.hora }}",
+            "Tipo Pagamento": "={{ $('Webhook').item.json.body['Tipo Pagamento'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Pacote",
+              "displayName": "Pacote",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Empresa",
+              "displayName": "Empresa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Valor",
+              "displayName": "Valor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data E Hora",
+              "displayName": "Data E Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tipo Pagamento",
+              "displayName": "Tipo Pagamento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "c1ea7753-0301-440d-a2e7-f2df6a792adc",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        -1540,
+        480
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1nferT6JZZU8pm6YoT9DBhsTecC6SruHAWIpHOCIZV1s/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nferT6JZZU8pm6YoT9DBhsTecC6SruHAWIpHOCIZV1s/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Telefone": "={{ $('Validar Telefone (Code)').item.json.whatsapp_formatado.replace('+', '') }}",
+            "Pacote": "={{ $('Webhook').item.json.body.Pacote }}",
+            "Data": "={{ $('Code').item.json.data }}",
+            "Empresa": "={{ $('Webhook').item.json.body.Empresa }}",
+            "Nome": "={{ $('Webhook').item.json.body.Nome }}",
+            "Valor": "={{ $('Webhook').item.json.body.Valor }}",
+            "Email": "={{ $('Webhook').item.json.body.Email }}",
+            "Data E Hora": "={{ $('Code').item.json.data }} {{ $('Code').item.json.hora }}",
+            "Tipo Pagamento": "={{ $('Webhook').item.json.body['Tipo Pagamento'] }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Pacote",
+              "displayName": "Pacote",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Empresa",
+              "displayName": "Empresa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Valor",
+              "displayName": "Valor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data E Hora",
+              "displayName": "Data E Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tipo Pagamento",
+              "displayName": "Tipo Pagamento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "e4a20b7a-b658-4c0f-babe-13b50802f7cf",
+      "name": "Google Sheets1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        -1320,
+        480
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Converte a data atual para string no fuso de São Paulo\nconst dataStr = new Date().toLocaleString(\"en-US\", { timeZone: \"America/Sao_Paulo\" });\n\n// Cria um novo objeto Date a partir da string já no fuso\nconst dataSaoPaulo = new Date(dataStr);\n\n// Formata a data como dd-mm-yyyy\nconst dia = String(dataSaoPaulo.getDate()).padStart(2, '0');\nconst mes = String(dataSaoPaulo.getMonth() + 1).padStart(2, '0');\nconst ano = dataSaoPaulo.getFullYear();\nconst dataFormatada = `${dia}-${mes}-${ano}`;\n\n// Formata a hora como HH:MM\nconst hora = String(dataSaoPaulo.getHours()).padStart(2, '0');\nconst minutos = String(dataSaoPaulo.getMinutes()).padStart(2, '0');\nconst horaFormatada = `${hora}:${minutos}`;\n\n// Novo formato: yyyy-mm-dd\nconst dataISO = `${ano}-${mes}-${dia}`;\n\nreturn [\n  {\n    json: {\n      data: dataFormatada,\n      hora: horaFormatada,\n      data_iso: dataISO,\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1940,
+        480
+      ],
+      "id": "e0a1c76d-d35e-4f38-815b-4b4f9620dc21",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1yIA73PcVO-i5ljYxPlJL1eAvOYhs86vOvxJ7pMiJEfk/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Integração",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yIA73PcVO-i5ljYxPlJL1eAvOYhs86vOvxJ7pMiJEfk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Telefone": "={{ $json.body.Telefone.replace('+', '') }} - {{ $json.body['Data E Hora'] }}",
+            "Pacote": "={{ $json.body.Pacote }}",
+            "Data": "={{ $json.body.Data }}",
+            "Empresa": "={{ $json.body.Empresa }}",
+            "Nome": "={{ $json.body.Nome }}",
+            "Valor": "={{ $json.body.Valor }}",
+            "Email": "={{ $json.body.Email }}",
+            "Data E Hora": "={{ $json.body['Data E Hora'] }}",
+            "Tipo Pagamento": "={{ $json.body['Tipo Pagamento'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Pacote",
+              "displayName": "Pacote",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Empresa",
+              "displayName": "Empresa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Valor",
+              "displayName": "Valor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data E Hora",
+              "displayName": "Data E Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tipo Pagamento",
+              "displayName": "Tipo Pagamento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "30b09513-15f3-470a-8c32-9b33fc91cfe0",
+      "name": "Google Sheets2",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        -1540,
+        280
+      ],
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1nferT6JZZU8pm6YoT9DBhsTecC6SruHAWIpHOCIZV1s/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nferT6JZZU8pm6YoT9DBhsTecC6SruHAWIpHOCIZV1s/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Telefone": "={{ $('Webhook').item.json.body.Telefone.replace('+', '') }}",
+            "Pacote": "={{ $('Webhook').item.json.body.Pacote }}",
+            "Data": "={{ $('Webhook').item.json.body.Data }}",
+            "Empresa": "={{ $('Webhook').item.json.body.Empresa }}",
+            "Nome": "={{ $('Webhook').item.json.body.Nome }}",
+            "Valor": "={{ $('Webhook').item.json.body.Valor }}",
+            "Email": "={{ $('Webhook').item.json.body.Email }}",
+            "Data E Hora": "={{ $('Webhook').item.json.body['Data E Hora'] }}",
+            "Tipo Pagamento": "={{ $('Webhook').item.json.body['Tipo Pagamento'] }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Pacote",
+              "displayName": "Pacote",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Empresa",
+              "displayName": "Empresa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Valor",
+              "displayName": "Valor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data E Hora",
+              "displayName": "Data E Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tipo Pagamento",
+              "displayName": "Tipo Pagamento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d0fe3c68-6273-4e7a-856f-bfda2975a585",
+      "name": "Google Sheets3",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        -1320,
+        280
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = new Date();\n\n// Ajusta para o fuso horário de São Paulo\nconst dataSaoPaulo = new Date(data.toLocaleString(\"pt-BR\", { timeZone: \"America/Sao_Paulo\" }));\n\n// Formata a data como dd-mm-yyyy\nconst dia = String(dataSaoPaulo.getDate()).padStart(2, '0');\nconst mes = String(dataSaoPaulo.getMonth() + 1).padStart(2, '0');\nconst ano = dataSaoPaulo.getFullYear();\nconst dataFormatada = `${dia}-${mes}-${ano}`;\n\n// Formata a hora como HH:MM\nconst hora = String(dataSaoPaulo.getHours()).padStart(2, '0');\nconst minutos = String(dataSaoPaulo.getMinutes()).padStart(2, '0');\nconst horaFormatada = `${hora}:${minutos}`;\n\nreturn [\n  {\n    json: {\n      data: dataFormatada,\n      hora: horaFormatada,\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1780,
+        280
+      ],
+      "id": "66ff829c-5b99-477c-abec-9950f72095b9",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://base44.app/api/apps/6819f5703086936c581632c2/entities/Compra",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "876ed4d9d16b40b3b54ab5da6d49a0a4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Validar Telefone (Code)').item.json.whatsapp_formatado.replace('+', '') }}"
+            },
+            {
+              "name": "nome",
+              "value": "={{ $('Webhook').item.json.body.Nome }}"
+            },
+            {
+              "name": "pacote",
+              "value": "={{ $('Webhook').item.json.body.Pacote }}"
+            },
+            {
+              "name": "valor",
+              "value": "={{ (parseInt($('Webhook').item.json.body.Valor) / 100).toFixed(2) }}"
+            },
+            {
+              "name": "data",
+              "value": "={{ $('Code').item.json.data_iso }}"
+            },
+            {
+              "name": "hora",
+              "value": "={{ $('Code').item.json.hora }}:00"
+            },
+            {
+              "name": "empresa",
+              "value": "={{ $('Webhook').item.json.body.Empresa }}"
+            },
+            {
+              "name": "tipo_pagamento",
+              "value": "={{ $('Webhook').item.json.body['Tipo Pagamento'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1100,
+        480
+      ],
+      "id": "d8c0bc47-1c3e-4d18-8ff2-c6c7bade3700",
+      "name": "Base44 API - Compra"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "var whatsapp = $('Webhook').item.json.body.Telefone.replace('+', '').replaceAll(/[^0-9]/g, '');\nvar ddd = whatsapp.slice(2,4);\nvar ddi = whatsapp.charAt(0);\nvar ddx = whatsapp.slice(0,2);\nvar length = whatsapp.length;\nif (length >= 12){\n  if (ddi == '+'){\n    ddi = whatsapp.slice(0,3);\n    whatsapp = parseInt(whatsapp.slice(3)).toString();\n  } else {\n    if (ddx == '55'){\n      whatsapp = parseInt(whatsapp.slice(2)).toString();\n      ddi = \"+55\";\n    } else {\n      whatsapp = parseInt(whatsapp).toString();\n      ddi = 'não informado';\n    }\n  }\n} else {\n  whatsapp = parseInt(whatsapp).toString();\n  ddi = 'não informado';\n}\n\nddd = whatsapp.slice(0,2);\nwhatsapp = whatsapp.slice(2);\nif (ddd > 28){\n  whatsapp = whatsapp.slice(-8);\n} else {\n  whatsapp = '9'+whatsapp.slice(-8);\n}\nvar whatsapp_formatado = '+55'+ddd+whatsapp;\n\nreturn {json: {\"whatsapp_formatado\": whatsapp_formatado,\n              \"ddd\": ddd,\n              \"ddi\": ddi}};\n"
+      },
+      "id": "56b36c49-a62d-45bc-9166-d387da39f19c",
+      "name": "Validar Telefone (Code)",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -1740,
+        480
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/10_Yu4uO1jpeHSUyR4iwHKQznOoLyYdXMzq5joO9vpWw/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10_Yu4uO1jpeHSUyR4iwHKQznOoLyYdXMzq5joO9vpWw/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "telefone_indicado",
+              "lookupValue": "=55{{ $json.ddd }}{{ $json.telefone }}"
+            },
+            {
+              "lookupColumn": "status",
+              "lookupValue": "Válido"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -720,
+        480
+      ],
+      "id": "c2975564-e2c8-4e62-9085-e88d98a4a557",
+      "name": "Obter Planilha",
+      "alwaysOutputData": true,
+      "retryOnFail": false,
+      "maxTries": 5,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const telefoneRaw = $('Webhook').item.json.body.Telefone.replace(/\\D/g, '');\n\n// Garante que tenha o código do país\nlet telefone = telefoneRaw;\nif (!telefone.startsWith('55')) {\n  telefone = '55' + telefone;\n}\n\nconst codigoPais = '55';\nconst ddd = telefone.substring(2, 4);\nlet numero = telefone.substring(4);\n\n// Remove o nono dígito se ele existir\nif (numero.length >= 9 && numero.startsWith('9')) {\n  numero = numero.substring(1);\n}\n\nreturn {\n  codigoPais,\n  ddd,\n  telefone: numero\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -900,
+        480
+      ],
+      "id": "b01e7bef-c436-4717-8050-b41876a2a8fb",
+      "name": "Formatar Telefone Indicado"
+    },
+    {
+      "parameters": {
+        "content": "## INDICAÇÃO",
+        "height": 260,
+        "width": 360
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -940,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "e8fa471b-3be9-4b58-af78-2266888c929a",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4f0bd307-9742-4b13-9356-cb0893e238c5",
+              "leftValue": "={{ $('Obter Planilha').item.json.row_number }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -100,
+        480
+      ],
+      "id": "dad86d67-cee5-4e1c-8348-9d4bb380d4d9",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.unisistemas.tech/webhook/pagina-indique-ganhe",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone-que-comprou",
+              "value": "={{ $('Validar Telefone (Code)').item.json.whatsapp_formatado.replace('+', '') }}"
+            },
+            {
+              "name": "telefone-que-indicou",
+              "value": "={{ $json.telefone_cod }}"
+            },
+            {
+              "name": "Pacote",
+              "value": "={{ $('Webhook').item.json.body.Pacote }}"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ (parseInt($('Webhook').item.json.body.Valor) / 100).toFixed(2) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "58f0d0e4-3c58-4ab8-bc0d-cb38a0c94082",
+      "name": "Enviar Indicação",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        160,
+        380
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d5410cdc-32c6-4c68-a94d-807838f693e6",
+              "name": "telefone_cod",
+              "value": "={{ $json.telefone_cod }}",
+              "type": "string"
+            },
+            {
+              "id": "a9fc2b70-6a86-407c-b0ee-9f4effb8e9b0",
+              "name": "telefone_indicado",
+              "value": "={{ $json.telefone_indicado }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -500,
+        480
+      ],
+      "id": "1cee3d04-3f06-4a7f-a8ac-e4784fb49db8",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7952be32-bbba-41f2-a9f1-57b2ce34d780",
+              "leftValue": "={{ $('telefone_cod').item.json.telefone }}",
+              "rightValue": "={{ $json.telefone }}",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -300,
+        480
+      ],
+      "id": "7ce400b8-4f68-4b9c-8ebb-4158ebb9d549",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "060f8540-6028-4e83-b9bb-89f67ed29e7a",
+              "name": "telefone_cod",
+              "value": "={{ $('Obter Planilha').item.json.telefone_cod }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7e6824f0-526f-4fd6-88da-2680535a77c2",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Garante que é string e remove caracteres não numéricos\nconst telefoneRaw = String($('Obter Planilha').item.json.telefone_cod || '').replace(/\\D/g, '');\n\n// Garante que tenha o código do país\nlet telefone = telefoneRaw;\nif (!telefone.startsWith('55')) {\n  telefone = '55' + telefone;\n}\n\nconst codigoPais = '55';\nconst ddd = telefone.substring(2, 4);\nlet numero = telefone.substring(4);\n\n// Remove o nono dígito se ele existir\nif (numero.length >= 9 && numero.startsWith('9')) {\n  numero = numero.substring(1);\n}\n\nreturn {\n  codigoPais,\n  ddd,\n  telefone: numero\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -320,
+        200
+      ],
+      "id": "309e4700-147a-4935-907b-4cd5774a8364",
+      "name": "telefone_cod"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Garante que é string e remove caracteres não numéricos\nconst telefoneRaw = String($('Obter Planilha').item.json.telefone_indicado || '').replace(/\\D/g, '');\n\n// Garante que tenha o código do país\nlet telefone = telefoneRaw;\nif (!telefone.startsWith('55')) {\n  telefone = '55' + telefone;\n}\n\nconst codigoPais = '55';\nconst ddd = telefone.substring(2, 4);\nlet numero = telefone.substring(4);\n\n// Remove o nono dígito se ele existir\nif (numero.length >= 9 && numero.startsWith('9')) {\n  numero = numero.substring(1);\n}\n\nreturn {\n  codigoPais,\n  ddd,\n  telefone: numero\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -100,
+        200
+      ],
+      "id": "9d29e382-5df6-467a-ab85-f901edab9b30",
+      "name": "telefone_indicado"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Base44 API - Compra",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Validar Telefone (Code)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Base44 API - Compra": {
+      "main": [
+        [
+          {
+            "node": "Formatar Telefone Indicado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Telefone (Code)": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatar Telefone Indicado": {
+      "main": [
+        [
+          {
+            "node": "Obter Planilha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obter Planilha": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Enviar Indicação",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Indicação": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "telefone_cod",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "telefone_cod": {
+      "main": [
+        [
+          {
+            "node": "telefone_indicado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "telefone_indicado": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "233",
+            "sentry-trace": "998a350060b048759ff290b42024949b-83fdd90b68fcb9ed-0",
+            "baggage": "sentry-trace_id=998a350060b048759ff290b42024949b,sentry-environment=production_new,sentry-release=2d4cf0e4efd8e6f43f7e4d0b382c61e021c3290a,sentry-public_key=af3c6636fa6e4f89948eaa4e575b3286,sentry-transaction=/api/v1/pipelines/user_card/%7Buser_id%7D/send_flow/,sentry-sample_rate=0.01,sentry-sampled=false",
+            "user-agent": "python-requests/2.32.3",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "Data": "24-03-2025",
+            "Nome": "Arthur ",
+            "Email": "",
+            "Valor": "19900",
+            "Pacote": "Compartilhado 300 créditos",
+            "Empresa": "UniConsultas",
+            "Telefone": "+553799781110",
+            "Data E Hora": "24-03-2025 11:32",
+            "Tipo Pagamento": "PIX"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/confirmacao-pagamento",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Google Sheets": [
+      {
+        "json": {
+          "Telefone": "553799781110 - 24-03-2025 11:32",
+          "Pacote": "Compartilhado 300 créditos",
+          "Data": "24-03-2025",
+          "Empresa": "UniConsultas",
+          "Nome": "Arthur ",
+          "Valor": "19900",
+          "Email": "",
+          "Data E Hora": "24-03-2025 11:32",
+          "Tipo Pagamento": "PIX"
+        }
+      }
+    ],
+    "Google Sheets2": [
+      {
+        "json": {
+          "Telefone": "553799781110 - 24-03-2025 11:32",
+          "Pacote": "Compartilhado 300 créditos",
+          "Data": "24-03-2025",
+          "Empresa": "UniConsultas",
+          "Nome": "Arthur ",
+          "Valor": "19900",
+          "Email": "",
+          "Data E Hora": "24-03-2025 11:32",
+          "Tipo Pagamento": "PIX"
+        }
+      }
+    ],
+    "Google Sheets1": [
+      {
+        "json": {
+          "Telefone": "553799781110",
+          "Pacote": "Compartilhado 300 créditos",
+          "Data": "07-05-2025",
+          "Empresa": "UniConsultas",
+          "Nome": "Arthur ",
+          "Valor": "19900",
+          "Email": "",
+          "Data E Hora": "07-05-2025 03:06",
+          "Tipo Pagamento": "PIX"
+        }
+      }
+    ],
+    "Obter Planilha": [
+      {
+        "json": {
+          "row_number": 2,
+          "telefone_cod": 553799781110,
+          "telefone_indicado": 3799781110,
+          "data": "2025-05-15",
+          "hora": "10:42:10",
+          "status": "Válido"
+        }
+      }
+    ],
+    "Base44 API - Compra": [
+      {
+        "json": {
+          "telefone": "553799781110",
+          "nome": "Arthur ",
+          "pacote": "Compartilhado 300 créditos",
+          "valor": 199,
+          "data": "2025-05-27",
+          "hora": "06:49:00",
+          "status": "pendente",
+          "dias_restantes": null,
+          "empresa": "UniConsultas",
+          "tipo_pagamento": "PIX",
+          "id": "68358a8e163d1308c5e0c7be",
+          "created_date": "2025-05-27T09:49:02.645882Z",
+          "updated_date": "2025-05-27T09:49:02.645886Z",
+          "created_by": "redequeroimoveis@gmail.com",
+          "is_sample": false
+        }
+      }
+    ]
+  },
+  "versionId": "01fad935-a46d-48a9-8769-fd06cbbc65c9",
+  "triggerCount": 1,
+  "tags": []
+}
