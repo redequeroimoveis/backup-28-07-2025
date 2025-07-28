@@ -1,0 +1,18 @@
+{
+  "createdAt": "2025-07-25T16:22:45.323Z",
+  "updatedAt": "2025-07-25T16:22:45.323Z",
+  "id": "oN9TxBZE9w35TnkR",
+  "name": "Fluxo teste",
+  "active": false,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "697e5107-0ba7-4fce-ba36-d396c1f6dd3b",
+  "triggerCount": 0,
+  "tags": []
+}
