@@ -1,0 +1,1317 @@
+{
+  "createdAt": "2025-07-25T03:39:26.911Z",
+  "updatedAt": "2025-07-25T03:39:32.000Z",
+  "id": "rp6md5JxuZ38XeJc",
+  "name": "Cobranças Asaas",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://api.asaas.com/v3/customers/{{ $('Pagamento confirmado').item.json.body.payment.customer }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "access_token",
+              "value": "$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDA1MTE5MTk6OiRhYWNoX2U5NjAzZjI4LWZlY2YtNDdkYi04MjhkLWQyOTgzODE5NmRjNA=="
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7f50b042-015d-4680-b7eb-aeeb9184e388",
+      "name": "Recuperar cliente único",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        420,
+        1380
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "ea416bb3-7b13-470e-8aa0-5fd9a8ac4e6f",
+              "leftValue": "={{ $json.mobilePhone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "12f7bb75-22c1-4745-9d55-fb0f755fc0dc",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        620,
+        1380
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "57b4d2a9-894a-4e6b-961f-ab9c1cc313e8",
+              "leftValue": "={{ $json.body.event }}",
+              "rightValue": "PAYMENT_RECEIVED",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "0bedd01b-876c-469e-ad9b-186c3b5333af",
+              "leftValue": "={{ $json.body.payment.billingType }}",
+              "rightValue": "CREDIT_CARD",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "631a1e73-e414-4c09-b3f1-5f4c74fc3a3a",
+      "name": "If1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        240,
+        1360
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "ea416bb3-7b13-470e-8aa0-5fd9a8ac4e6f",
+              "leftValue": "={{ $('Pagamento confirmado').item.json.body.payment.description }}",
+              "rightValue": "Quero",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f37d4d62-c166-41a7-a7be-76f7f5b45305",
+      "name": "If3",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        820,
+        1220
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/k8xFLIvcDf81/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=55{{ $json.mobilePhone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.billingType }}"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.value }}00"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "59f8747b-e076-425b-acf7-e75d6ac78ffe",
+      "name": "UniConsultas",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        1320
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/ZM3fZOcchJxm/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=55{{ $json.mobilePhone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.billingType }}"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.value }}00"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "16f3d3cb-3698-4eee-927c-50a9e27f06e1",
+      "name": "Rede Quero Imóveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1080,
+        1100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "ea416bb3-7b13-470e-8aa0-5fd9a8ac4e6f",
+              "leftValue": "={{ $('Pagamento confirmado').item.json.body.payment.description }}",
+              "rightValue": "Quero",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f9585f9b-759d-4241-83c9-93d4472eb106",
+      "name": "If4",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        820,
+        1580
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/k8xFLIvcDf81/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=55{{ $json.phone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.billingType }}"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.value }}00"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d206c284-bfdb-4be3-9ea1-6ad1b8fe1524",
+      "name": "UniConsultas1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        1680
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/ZM3fZOcchJxm/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=55{{ $json.phone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.billingType }}"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.value }}00"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3712ae8f-5135-436d-82be-ada6fc7d29ce",
+      "name": "Rede Quero Imóveis1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        1520
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## PRODUÇÃO",
+        "height": 816.1522977328572,
+        "width": 1323.0040613117585,
+        "color": 4
+      },
+      "id": "d1aac7d4-4e1d-48d5-84de-5e1a6344595c",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "asaas_pagamento-confirmado-sandbox",
+        "options": {}
+      },
+      "id": "4c2d02b4-e10c-49a0-9206-26dacd008ba6",
+      "name": "Pagamento confirmado1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        60,
+        440
+      ],
+      "webhookId": "b1e4ef7f-c0df-40a0-a371-8b16d2ba7d40",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://sandbox.asaas.com/api/v3/customers",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "access_token",
+              "value": "$aact_MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjBkMWM3ZjBkLTljZTktNGMwYy04MDBjLWI1NjQyZWU0NDM5ZDo6JGFhY2hfODQ4YTBlOGUtNjZiYS00ODQxLWI1N2UtNzgzYTZiOGQ2M2I4"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0319cff9-c737-4040-a211-0cb4ad42706f",
+      "name": "Recuperar cliente único1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        440
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "3e6ebff3-6e7e-4fee-a527-4eb77789b5f3",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://sandbox.asaas.com/api/v3/customers",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "mobilePhone",
+              "value": "37999781110"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "access_token",
+              "value": "$aact_MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjBkMWM3ZjBkLTljZTktNGMwYy04MDBjLWI1NjQyZWU0NDM5ZDo6JGFhY2hfODQ4YTBlOGUtNjZiYS00ODQxLWI1N2UtNzgzYTZiOGQ2M2I4"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8ce649a5-e836-4856-a500-b4d3b11d03b9",
+      "name": "Recuperar cliente único2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://sandbox.asaas.com/api/v3/pix/qrCodes/static",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "access_token",
+              "value": "$aact_MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjBkMWM3ZjBkLTljZTktNGMwYy04MDBjLWI1NjQyZWU0NDM5ZDo6JGFhY2hfODQ4YTBlOGUtNjZiYS00ODQxLWI1N2UtNzgzYTZiOGQ2M2I4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "value",
+              "value": 29
+            },
+            {
+              "name": "allowsMultiplePayments",
+              "value": false
+            },
+            {
+              "name": "description",
+              "value": "37999781110"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b62014e8-70d0-44af-a452-1813b9ddde5c",
+      "name": "Recuperar cliente único3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/zpXvYgE8hrue/",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "image/png"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "id": "b8038f46-dead-45af-9ce1-e14a5ff7dbaf",
+      "name": "TESTE QRCODE",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "780846dc-78a6-4eba-b7f1-80cf7c066947",
+              "name": "data",
+              "value": "={{ $json.encodedImage }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e83e4855-fe4d-42a6-b4f8-3bc2c3665dfb",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        920,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data",
+        "options": {}
+      },
+      "id": "1c670dec-65d6-4f08-aa32-20751b189087",
+      "name": "Convert to File",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "qrcode",
+        "options": {}
+      },
+      "id": "e9f9848b-b55f-4423-a153-1220d1249492",
+      "name": "Pagamento confirmado2",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        220
+      ],
+      "webhookId": "b1e4ef7f-c0df-40a0-a371-8b16d2ba7d40",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "qrcode",
+        "dataPropertyName": "=data",
+        "options": {}
+      },
+      "id": "35647b65-30c2-4a8b-8fa8-b79301a8f307",
+      "name": "Read/Write Files from Disk",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1300,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d7bc5512-60b5-4345-bdd4-becab1d8d38c",
+              "name": "imageUrl",
+              "value": "https://n8n.redequeroimoveis.com/data/qrcode.png",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "67992148-1802-48f2-973f-b24c8d3a3c05",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        1520,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "asaas_pagamento-confirmado",
+        "options": {}
+      },
+      "id": "e52da301-8a3e-4553-9e96-837a7f4a13dc",
+      "name": "Pagamento confirmado",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        60,
+        1360
+      ],
+      "webhookId": "b1e4ef7f-c0df-40a0-a371-8b16d2ba7d40"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.redequeroimoveis.com/webhook/retorno-confirmacao-pagamento",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=Webhook",
+              "value": "={{ $json.Webhook }}"
+            },
+            {
+              "name": "Telefone",
+              "value": "={{ $json.Telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $json.Nome }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "={{ $json['Tipo Pagamento'] }}"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $json.Valor }}"
+            },
+            {
+              "name": "Origem",
+              "value": "={{ $json.Origem }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "75084de3-11d9-457c-857d-4f2f4f855325",
+      "name": "HTTP Request19",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1640,
+        1440
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "7e04558b-3006-4b07-a593-f05952ae5511",
+      "name": "Respond to Webhook4",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1840,
+        1440
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e50cb44d-b4f7-41e8-9ba8-803fa87f581c",
+              "name": "Webhook",
+              "value": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/ZCb55SisIslA/",
+              "type": "string"
+            },
+            {
+              "id": "74b4c7c5-e1ef-456d-b385-884a908a531b",
+              "name": "Telefone",
+              "value": "=55{{ $json.mobilePhone }}",
+              "type": "string"
+            },
+            {
+              "id": "30009b44-440a-4d7d-91a0-f2552894270d",
+              "name": "Nome",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "1ad9454f-4710-4150-997c-d800775fc5bb",
+              "name": "Tipo Pagamento",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.billingType }}",
+              "type": "string"
+            },
+            {
+              "id": "678eaa98-7fb5-41e4-b972-2523053d9732",
+              "name": "Valor",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.value }}00",
+              "type": "string"
+            },
+            {
+              "id": "1bd3b1d4-024a-4e07-bfe7-b73f6f8424c8",
+              "name": "Origem",
+              "value": "UniConsultas",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1360,
+        1260
+      ],
+      "id": "dd0b8d9a-e994-4a07-a3c7-c99d1c447b1d",
+      "name": "uniconsultas"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e50cb44d-b4f7-41e8-9ba8-803fa87f581c",
+              "name": "Webhook",
+              "value": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/FLVRaminVUCH/",
+              "type": "string"
+            },
+            {
+              "id": "74b4c7c5-e1ef-456d-b385-884a908a531b",
+              "name": "Telefone",
+              "value": "=55{{ $json.mobilePhone }}",
+              "type": "string"
+            },
+            {
+              "id": "30009b44-440a-4d7d-91a0-f2552894270d",
+              "name": "Nome",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "1ad9454f-4710-4150-997c-d800775fc5bb",
+              "name": "Tipo Pagamento",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.billingType }}",
+              "type": "string"
+            },
+            {
+              "id": "678eaa98-7fb5-41e4-b972-2523053d9732",
+              "name": "Valor",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.value }}00",
+              "type": "string"
+            },
+            {
+              "id": "67fde576-a70b-450d-be1d-d3b7a17c67d0",
+              "name": "Origem",
+              "value": "Rede Quero Imóveis",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1360,
+        1100
+      ],
+      "id": "8d77dc8e-6d41-4672-ae31-df9c0ee9322f",
+      "name": "Rede Quero Imóveis2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e50cb44d-b4f7-41e8-9ba8-803fa87f581c",
+              "name": "Webhook",
+              "value": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/ZCb55SisIslA/",
+              "type": "string"
+            },
+            {
+              "id": "74b4c7c5-e1ef-456d-b385-884a908a531b",
+              "name": "Telefone",
+              "value": "=55{{ $json.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "30009b44-440a-4d7d-91a0-f2552894270d",
+              "name": "Nome",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "1ad9454f-4710-4150-997c-d800775fc5bb",
+              "name": "Tipo Pagamento",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.billingType }}",
+              "type": "string"
+            },
+            {
+              "id": "678eaa98-7fb5-41e4-b972-2523053d9732",
+              "name": "Valor",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.value }}00",
+              "type": "string"
+            },
+            {
+              "id": "1bd3b1d4-024a-4e07-bfe7-b73f6f8424c8",
+              "name": "Origem",
+              "value": "UniConsultas",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1360,
+        1680
+      ],
+      "id": "084fcb71-6437-4e84-8472-10b201bfbb9c",
+      "name": "uniconsultas1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e50cb44d-b4f7-41e8-9ba8-803fa87f581c",
+              "name": "Webhook",
+              "value": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/FLVRaminVUCH/",
+              "type": "string"
+            },
+            {
+              "id": "74b4c7c5-e1ef-456d-b385-884a908a531b",
+              "name": "Telefone",
+              "value": "=55{{ $json.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "30009b44-440a-4d7d-91a0-f2552894270d",
+              "name": "Nome",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "1ad9454f-4710-4150-997c-d800775fc5bb",
+              "name": "Tipo Pagamento",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.billingType }}",
+              "type": "string"
+            },
+            {
+              "id": "678eaa98-7fb5-41e4-b972-2523053d9732",
+              "name": "Valor",
+              "value": "={{ $('Pagamento confirmado').item.json.body.payment.value }}00",
+              "type": "string"
+            },
+            {
+              "id": "67fde576-a70b-450d-be1d-d3b7a17c67d0",
+              "name": "Origem",
+              "value": "Rede Quero Imóveis",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1360,
+        1520
+      ],
+      "id": "54de307a-0c8b-4707-ab0e-fcea88fe38b4",
+      "name": "Rede Quero Imóveis3"
+    }
+  ],
+  "connections": {
+    "If": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Recuperar cliente único",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Rede Quero Imóveis2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "uniconsultas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Rede Quero Imóveis3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "uniconsultas1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pagamento confirmado1": {
+      "main": [
+        [
+          {
+            "node": "Recuperar cliente único1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Recuperar cliente único2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recuperar cliente único2": {
+      "main": [
+        [
+          {
+            "node": "Recuperar cliente único3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recuperar cliente único3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pagamento confirmado2": {
+      "main": [
+        [
+          {
+            "node": "Recuperar cliente único2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recuperar cliente único": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pagamento confirmado": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request19": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "uniconsultas": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rede Quero Imóveis2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rede Quero Imóveis": {
+      "main": [
+        [
+          {
+            "node": "Rede Quero Imóveis2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UniConsultas": {
+      "main": [
+        [
+          {
+            "node": "uniconsultas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rede Quero Imóveis3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "uniconsultas1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Recuperar cliente único1": [
+      {
+        "json": {
+          "object": "list",
+          "hasMore": false,
+          "totalCount": 2,
+          "limit": 10,
+          "offset": 0,
+          "data": [
+            {
+              "object": "customer",
+              "id": "cus_000006370762",
+              "dateCreated": "2024-11-28",
+              "name": "Arthur Baldiotti",
+              "email": "arthurbaldiotti@hotmail.com",
+              "company": null,
+              "phone": null,
+              "mobilePhone": "37999781110",
+              "address": "Rua Francisco Sales",
+              "addressNumber": "129",
+              "complement": "Apto 602",
+              "province": "Centro",
+              "postalCode": "35660017",
+              "cpfCnpj": "11383223696",
+              "personType": "FISICA",
+              "deleted": false,
+              "additionalEmails": null,
+              "externalReference": null,
+              "notificationDisabled": false,
+              "observations": null,
+              "municipalInscription": null,
+              "stateInscription": null,
+              "canDelete": true,
+              "cannotBeDeletedReason": null,
+              "canEdit": true,
+              "cannotEditReason": null,
+              "city": 10064,
+              "cityName": "Pará de Minas",
+              "state": "MG",
+              "country": "Brasil"
+            },
+            {
+              "object": "customer",
+              "id": "cus_000006368575",
+              "dateCreated": "2024-11-26",
+              "name": "Arthur",
+              "email": "arthurbaldiotti@hotmail.com",
+              "company": null,
+              "phone": null,
+              "mobilePhone": "37999781110",
+              "address": "Rua Francisco Sales",
+              "addressNumber": "129",
+              "complement": "Apto 602",
+              "province": "Centro",
+              "postalCode": "35660017",
+              "cpfCnpj": "11383223696",
+              "personType": "FISICA",
+              "deleted": false,
+              "additionalEmails": null,
+              "externalReference": null,
+              "notificationDisabled": false,
+              "observations": null,
+              "municipalInscription": null,
+              "stateInscription": null,
+              "canDelete": true,
+              "cannotBeDeletedReason": null,
+              "canEdit": true,
+              "cannotEditReason": null,
+              "city": 10064,
+              "cityName": "Pará de Minas",
+              "state": "MG",
+              "country": "Brasil"
+            }
+          ]
+        }
+      }
+    ],
+    "Recuperar cliente único3": [
+      {
+        "json": {
+          "id": "REDEQUER00000000552280ASA",
+          "encodedImage": "iVBORw0KGgoAAAANSUhEUgAAAcIAAAHCAQAAAABUY/ToAAADbUlEQVR4Xu2WQW7kQAwDffP/f7TP6pvXLErtSYBgguwhWoBtj92iWMxBPYMc1w/Xn+Oz8t0V8t0K+W79E7kO1qly3c+l/Tq15bUoX7p2h5xKliqN1jbeNQn0PrZCDiZtwat+7V8YCYVtd8jhJLIRnQncJTWCK+T/QcpwNFN8FaB+hJxPumWnNlz26aveYJG1CzmVFMF0v3WVO+SX1y+Tz5Ku+5n5ItHjp/uYQw4lme2Jx53CrDdVbwXpCjmZ1BbxQpWCSw/kgkjWc/VvQsh5ZBvwP56PdYU9pyPkVPJu1HVLYnDsA8B2KzhkCjmUdNdA01UeDL2semPeJyHkRNJmNd33EfCri8OZzYecTHrsdu4joCAuWgbZX7VCDiXd2awHbu9l1dRLVsjJpGTsZBi7P/x8Vxw7OTkjsoYcS1rnAgfWvWSTa2e9tEOOJU/78GBQEu4XwZrjZQ05laQrqXoHoxYIv9/a9Z8JOZakJ5aIYkkqyMndVUtVyKFkNWCEadQyWdwklDvEhZxKerg+D23maX+J3tefuULOJdWy1lxX+JQrvuJrH3IqqdqrKHrYDoYOw6ZE5JBzSY9XH7ZSuqaJpZHyhhxKevi+XHSSFYH6yndH0Wf9UoccSDJuO2mW0BTbPhJ2hJxMVuOwa9skYeIm8UUMOZV0T+OvpypOg5QutuZ2yLkkhrJ1Qd/zb/iWdEmVEHIs6a56fXehJLV3yM4MOZaUTwuHXoW2Xwb5kdoTcipZhoVzw5yBziu/A8sYcii5VG83IW6T2bHsLFGEnEzSqMG3i7jOvDgDjgg5miyLdFvKrqk/G7MOCDmaVAcCpzoFCbONOBL15C+EnEsCGRZyYtcDtXIcUSF9EkIOJLFtbVd4i6mi38f+HyzkNHI7rBAkj57CMDS4xZBTSfy3eKhLs1LkcK/DRLjpMxRyILnUx0ZXTAN8MJNizaaQU0k51UfC4RiMC6IB6w4OOZWU2PhGzTsD2VEt+CSEnEmylpWeOw5N37IlNIeEHEpKkLYQOkMkXOf0AfGrfuNDDiSx40alUUgrjlWanVfIwaQUPW0Fa0YuFMft5W92yMmkXDJi2vcOVaeyZQ05nsQrq90aeL17XwZFhhxLMmV4FdRP0K5I/HQSQg4ke9C69/BPdJyFdjp8yLHkD1fIdyvku/Ur5F9kd6xIkjlUKwAAAABJRU5ErkJggg==",
+          "payload": "00020126730014br.gov.bcb.pix0136fc2505af-7542-4b05-b4b8-0498af6cbeab021137999781110520400005303986540529.005802BR5923REDE QUERO IMOVEIS LTDA6013Para de Minas62290525REDEQUER00000000552280ASA6304893B",
+          "allowsMultiplePayments": false,
+          "expirationDate": null,
+          "externalReference": null
+        }
+      }
+    ],
+    "Pagamento confirmado2": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "1173",
+            "accept": "application/json",
+            "content-type": "application/json",
+            "accept-encoding": "gzip",
+            "x-datadog-trace-id": "2707824299294133444",
+            "x-datadog-parent-id": "5205823669290442042",
+            "x-datadog-sampling-priority": "0",
+            "x-datadog-tags": "_dd.p.tid=6748824e00000000",
+            "traceparent": "00-6748824e0000000025941fda81990cc4-483ecd0bab609d3a-00",
+            "tracestate": "dd=s:0;p:483ecd0bab609d3a;t.tid:6748824e00000000",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "user-agent": "Java/1.8.0_282"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "id": "evt_d26e303b238e509335ac9ba210e51b0f&780199671",
+            "event": "PAYMENT_RECEIVED",
+            "dateCreated": "2024-11-28 11:46:39",
+            "payment": {
+              "object": "payment",
+              "id": "pay_s15ww3v9h5ab9vuz",
+              "dateCreated": "2024-11-28",
+              "customer": "cus_000103134735",
+              "installment": "9ba05f21-516d-40de-a195-3d08f459749e",
+              "paymentLink": "hu05wu96i9y5k9rs",
+              "value": 5,
+              "netValue": 5,
+              "originalValue": null,
+              "interestValue": null,
+              "description": "Parcela 1 de 1.",
+              "billingType": "PIX",
+              "pixTransaction": null,
+              "status": "RECEIVED_IN_CASH",
+              "dueDate": "2024-11-29",
+              "originalDueDate": "2024-11-29",
+              "paymentDate": "2024-11-28",
+              "clientPaymentDate": "2024-11-28",
+              "installmentNumber": 1,
+              "invoiceUrl": "https://www.asaas.com/i/s15ww3v9h5ab9vuz",
+              "invoiceNumber": "480344167",
+              "externalReference": null,
+              "deleted": false,
+              "anticipated": false,
+              "anticipable": false,
+              "creditDate": null,
+              "estimatedCreditDate": null,
+              "transactionReceiptUrl": null,
+              "nossoNumero": null,
+              "bankSlipUrl": null,
+              "lastInvoiceViewedDate": null,
+              "lastBankSlipViewedDate": null,
+              "discount": {
+                "value": 0,
+                "limitDate": null,
+                "dueDateLimitDays": 0,
+                "type": "FIXED"
+              },
+              "fine": {
+                "value": 0,
+                "type": "FIXED"
+              },
+              "interest": {
+                "value": 0,
+                "type": "PERCENTAGE"
+              },
+              "postalService": false,
+              "custody": null,
+              "refunds": null
+            }
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/asaas_pagamento-confirmado",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "0cc2edb2-d08b-46da-9087-ed5ad7464a59",
+  "triggerCount": 1,
+  "tags": []
+}
