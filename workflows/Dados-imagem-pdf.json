@@ -1,0 +1,750 @@
+{
+  "createdAt": "2025-07-25T01:34:18.740Z",
+  "updatedAt": "2025-07-25T01:34:19.000Z",
+  "id": "PheMjzsLrqjRMvhZ",
+  "name": "Dados-imagem-pdf",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1KJ6pes3i5NfUaBNLgor2iYMEHuG69uVDHS_X9xBzZu0/edit?gid=1608826247#gid=1608826247",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1608826247,
+          "mode": "list",
+          "cachedResultName": "Dados Novos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KJ6pes3i5NfUaBNLgor2iYMEHuG69uVDHS_X9xBzZu0/edit#gid=1608826247"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Telefone",
+              "lookupValue": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e05b647d-2510-404b-8564-db7c93a01b4b",
+      "name": "Retornar",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        880,
+        160
+      ],
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1KJ6pes3i5NfUaBNLgor2iYMEHuG69uVDHS_X9xBzZu0/edit?gid=1608826247#gid=1608826247",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1608826247,
+          "mode": "list",
+          "cachedResultName": "Dados Novos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KJ6pes3i5NfUaBNLgor2iYMEHuG69uVDHS_X9xBzZu0/edit#gid=1608826247"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Telefone": "={{ $('Webhook').item.json.body.Telefone }}",
+            "Titulo Consultas": "={{ $('Webhook').item.json.body['Titulo Consultas'] }}",
+            "URL PDF Imagem": "={{ $('Webhook').item.json.body['URL PDF Imagem'] }}",
+            "URL PDF": "={{ $('Webhook').item.json.body.URL_LogoPDF }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Titulo Consultas",
+              "displayName": "Titulo Consultas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "URL PDF",
+              "displayName": "URL PDF",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "URL PDF Imagem",
+              "displayName": "URL PDF Imagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ddd39281-97b8-451e-a0c8-6fc26f69a04e",
+      "name": "Atualizar",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        1080,
+        160
+      ],
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "899199da-0096-49c4-802e-9c949a09522b",
+              "leftValue": "={{ $json.body['Titulo Consultas'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "1b75f5c8-de77-4b11-8ebc-54a87529464c",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -860,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1KJ6pes3i5NfUaBNLgor2iYMEHuG69uVDHS_X9xBzZu0/edit?gid=1608826247#gid=1608826247",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1608826247,
+          "mode": "list",
+          "cachedResultName": "Dados Novos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KJ6pes3i5NfUaBNLgor2iYMEHuG69uVDHS_X9xBzZu0/edit#gid=1608826247"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Telefone",
+              "lookupValue": "={{ $json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1ff29745-690e-44e1-910c-a8563c1cd392",
+      "name": "Retornar1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -520,
+        660
+      ],
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      },
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Dados-imagem-pdf",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "c6a05d7b-8dfd-4efa-ad89-5771ce1e58e6",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1080,
+        160
+      ],
+      "webhookId": "9e0a20c1-dbef-4418-87c4-99d414620c8a"
+    },
+    {
+      "parameters": {
+        "url": "=https://baserow.unisistemas.tech/api/database/rows/table/643/?user_field_names=true&filter__field_6200__contains={{ $('Webhook').item.json.body.Telefone }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_field_names",
+              "value": "true"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token UU2yIjUeFuKaWhvMc734TVS2oEOKWjp9"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f526d889-e031-44f1-b4cb-ced83d5571e3",
+      "name": "HTTP Request10",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b670ecfa-bd47-4ba0-94eb-db58a01e4c0c",
+              "leftValue": "={{ $json.results[0].id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        180
+      ],
+      "id": "ab3e16a1-2ad4-46db-a0c1-45776da31873",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "url": "=https://baserow.unisistemas.tech/api/database/rows/table/643/?user_field_names=true&filter__field_6200__contains={{ $('Webhook').item.json.body.Telefone }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_field_names",
+              "value": "true"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token UU2yIjUeFuKaWhvMc734TVS2oEOKWjp9"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f97ec52e-31ba-46e8-9b9a-5e2fd4c44833",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -320,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c83dd2ed-73ac-44f4-a37e-d40a8882b5f1",
+              "leftValue": "={{ $('Webhook').item.json.body['URL PDF Imagem'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -640,
+        180
+      ],
+      "id": "04673f84-f4e7-4842-9d42-4b388c9549fa",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "url-pdf",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "keyValue": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -420,
+        180
+      ],
+      "id": "ee3aa902-8d75-48ed-ba46-ac2239f21ce0",
+      "name": "Obter",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b670ecfa-bd47-4ba0-94eb-db58a01e4c0c",
+              "leftValue": "={{ $json.Telefone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        180
+      ],
+      "id": "f02aec0d-5e24-4563-b4ea-9f3cf450ea3f",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "url-pdf",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Titulo Consultas",
+              "fieldValue": "={{ $('Webhook').item.json.body[\"Titulo Consultas\"] }}"
+            },
+            {
+              "fieldId": "URL PDF",
+              "fieldValue": "={{ $('Webhook').item.json.body.URL_LogoPDF }}"
+            },
+            {
+              "fieldId": "URL PDF Imagem",
+              "fieldValue": "={{ $('Webhook').item.json.body[\"URL PDF Imagem\"] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "28c440be-80a5-4044-a8ad-406f1e6677dd",
+      "name": "Atualizar2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "tableId": "url-pdf",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Telefone",
+              "fieldValue": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "fieldId": "Titulo Consultas",
+              "fieldValue": "={{ $('Webhook').item.json.body[\"Titulo Consultas\"] }}"
+            },
+            {
+              "fieldId": "URL PDF",
+              "fieldValue": "={{ $('Webhook').item.json.body.URL_LogoPDF }}"
+            },
+            {
+              "fieldId": "URL PDF Imagem",
+              "fieldValue": "={{ $('Webhook').item.json.body[\"URL PDF Imagem\"] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        0,
+        180
+      ],
+      "id": "7dbb90e6-1c7c-4178-8397-4a44d8c3543b",
+      "name": "Criar",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Retornar": {
+      "main": [
+        [
+          {
+            "node": "Atualizar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request10": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Retornar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Obter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obter": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Atualizar2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "HTTP Request10": [
+      {
+        "json": {
+          "count": 1,
+          "next": null,
+          "previous": null,
+          "results": [
+            {
+              "id": 1,
+              "order": "1.00000000000000000000",
+              "Telefone": "+553799781110",
+              "Titulo Consultas": "Teste",
+              "URL PDF": "11HQEpkA-HEprYtECt9loSst9Jdm3huIX1KfXnsSX_30",
+              "URL PDF Imagem": "https://i.imgur.com/g0gImpK.jpeg"
+            }
+          ]
+        }
+      }
+    ],
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "182",
+            "sentry-trace": "d3d836c737be488e8db43310d48226fb-a99e8e9d0dccbc61-0",
+            "baggage": "sentry-trace_id=d3d836c737be488e8db43310d48226fb,sentry-environment=production_new,sentry-release=e0dd7f253d78ba878747cd37ab25ee74e17ba1af,sentry-public_key=af3c6636fa6e4f89948eaa4e575b3286,sentry-transaction=/api/v1/blocks_integration/test_request/,sentry-sample_rate=0.01,sentry-sampled=false",
+            "user-agent": "python-requests/2.32.3",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "Telefone": "+553799781110",
+            "URL_LogoPDF": "11HQEpkA-HEprYtECt9loSst9Jdm3huIX1KfXnsSX_30",
+            "URL PDF Imagem": "https://i.imgur.com/vK314BL.jpeg",
+            "Titulo Consultas": "UniConsultas"
+          },
+          "webhookUrl": "https://n8n.redequeroimoveis.com:5678/webhook-test/Dados-imagem-pdf",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "HTTP Request": [
+      {
+        "json": {
+          "count": 1,
+          "next": null,
+          "previous": null,
+          "results": [
+            {
+              "id": 1,
+              "order": "1.00000000000000000000",
+              "Telefone": "+553799781110",
+              "Titulo Consultas": "Teste",
+              "URL PDF": "11HQEpkA-HEprYtECt9loSst9Jdm3huIX1KfXnsSX_30",
+              "URL PDF Imagem": "https://i.imgur.com/g0gImpK.jpeg"
+            }
+          ]
+        }
+      }
+    ],
+    "Obter": [
+      {
+        "json": {
+          "id": 1,
+          "Telefone": "+553799781110",
+          "Titulo Consultas": "UniConsultas",
+          "URL PDF": "11HQEpkA-HEprYtECt9loSst9Jdm3huIX1KfXnsSX_30",
+          "URL PDF Imagem": "https://i.imgur.com/g0gImpK.jpeg"
+        }
+      }
+    ]
+  },
+  "versionId": "fbd54033-aaff-45c5-9986-0f2f4f4ad00c",
+  "triggerCount": 1,
+  "tags": []
+}
