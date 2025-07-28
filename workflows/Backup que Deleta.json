@@ -1,0 +1,637 @@
+{
+  "createdAt": "2025-07-25T02:41:36.326Z",
+  "updatedAt": "2025-07-25T03:02:52.000Z",
+  "id": "1XuycsyLS4Cn8NDH",
+  "name": "Backup que Deleta",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "position": [
+        -1600,
+        -220
+      ],
+      "typeVersion": 1,
+      "id": "9c44223a-3196-42e7-bf3b-d376fd37fff7",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        120,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "ce9c3ee0-f5b3-42b9-8642-6ce4ac0c291a"
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{$json[\"github_status\"]}}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "same"
+            },
+            {
+              "value2": "different",
+              "output": 1
+            },
+            {
+              "value2": "new",
+              "output": 2
+            },
+            {
+              "value2": "deleted",
+              "output": 3
+            }
+          ]
+        }
+      },
+      "name": "github_status",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        420,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "59dc56da-9b69-429a-a952-46b64a4791e5"
+    },
+    {
+      "parameters": {},
+      "name": "same",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        620,
+        -100
+      ],
+      "typeVersion": 1,
+      "id": "e156c418-782e-45fa-928c-9d39dd4b6211"
+    },
+    {
+      "parameters": {},
+      "name": "different",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        620,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "be8f50d4-563a-4feb-944a-02c677d2c20b"
+    },
+    {
+      "parameters": {},
+      "name": "new",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        620,
+        240
+      ],
+      "typeVersion": 1,
+      "id": "629599e7-36b7-4da8-a3de-8199706510ef"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "edit",
+        "owner": "={{$node[\"Globals\"].json[\"repo\"][\"owner\"]}}",
+        "repository": "={{$node[\"Globals\"].json[\"repo\"][\"name\"]}}",
+        "filePath": "={{$node[\"Globals\"].json[\"repo\"][\"path\"]}}{{JSON.parse($node[\"Move Binary Data\"].json[\"data\"]).name}}.json",
+        "fileContent": "={{$node[\"isDiffOrNew\"].json[\"n8n_data_stringy\"]}}",
+        "commitMessage": "=[N8N Backup] {{JSON.parse($node[\"Move Binary Data\"].json[\"data\"]).name}}.json ({{$json[\"github_status\"]}})"
+      },
+      "name": "GitHub Edit",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        820,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "115e4013-ffb5-4825-a746-00ad630c86ae",
+      "credentials": {
+        "githubApi": {
+          "id": "4X9kXZWPjD3YaJrq",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": "={{$node[\"Globals\"].json[\"repo\"][\"owner\"]}}",
+        "repository": "={{$node[\"Globals\"].json[\"repo\"][\"name\"]}}",
+        "filePath": "={{$node[\"Globals\"].json[\"repo\"][\"path\"]}}{{JSON.parse($node[\"Move Binary Data\"].json[\"data\"]).name}}.json",
+        "fileContent": "={{$node[\"isDiffOrNew\"].json[\"n8n_data_stringy\"]}}",
+        "commitMessage": "=[N8N Backup] {{JSON.parse($node[\"Move Binary Data\"].json[\"data\"]).name}}.json ({{$json[\"github_status\"]}})"
+      },
+      "name": "GitHub Create",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        820,
+        240
+      ],
+      "typeVersion": 1,
+      "id": "afc4e071-a3da-4731-976f-ad93ba362473",
+      "credentials": {
+        "githubApi": {
+          "id": "4X9kXZWPjD3YaJrq",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "const currentWorkflow = items[0].json.currentWorkflow;\nconst githubWorkflow = items[0].json.githubWorkflow;\n\nlet github_status = '';\nlet workflowData = null;\n\nif (!currentWorkflow) {\n  // Workflow foi excluído do n8n\n  github_status = 'deleted';\n} else if (!githubWorkflow) {\n  // Workflow é novo (não está no GitHub)\n  github_status = 'new';\n  workflowData = currentWorkflow;\n} else {\n  // Comparar os dois\n  const normalize = (obj) => JSON.stringify(obj, Object.keys(obj).sort());\n  const currentString = normalize(currentWorkflow);\n  const githubString = normalize(githubWorkflow);\n\n  if (currentString !== githubString) {\n    github_status = 'update';\n    workflowData = currentWorkflow;\n  } else {\n    github_status = 'skip';\n  }\n}\n\nreturn [\n  {\n    json: {\n      github_status,\n      workflowData,\n      workflowId: currentWorkflow?.id || githubWorkflow?.id || null,\n      workflowName: currentWorkflow?.name || githubWorkflow?.name || null,\n    },\n  },\n];"
+      },
+      "name": "isDiffOrNew",
+      "type": "n8n-nodes-base.function",
+      "position": [
+        280,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "0ad0f12f-1e94-48fc-a763-6703a531f9c9"
+    },
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "hour": 3
+            }
+          ]
+        }
+      },
+      "name": "Every 2 hours",
+      "type": "n8n-nodes-base.cron",
+      "position": [
+        -1580,
+        100
+      ],
+      "typeVersion": 1,
+      "id": "c21284cb-bf3f-4034-8392-97e1841ec0cb",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "filePath": "={{$json[\"filename\"]}}"
+      },
+      "name": "Read Binary File",
+      "type": "n8n-nodes-base.readBinaryFile",
+      "position": [
+        -480,
+        100
+      ],
+      "typeVersion": 1,
+      "id": "37690c58-6f3b-4fb5-a61e-420eaab30c42"
+    },
+    {
+      "parameters": {
+        "setAllData": false,
+        "options": {}
+      },
+      "name": "Move Binary Data",
+      "type": "n8n-nodes-base.moveBinaryData",
+      "position": [
+        -280,
+        100
+      ],
+      "typeVersion": 1,
+      "id": "4ca7c2ab-2198-4874-bd9a-163e7416a2de"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "repo.owner",
+              "value": "redequeroimoveis"
+            },
+            {
+              "name": "repo.name",
+              "value": "backupn8n-6"
+            },
+            {
+              "name": "repo.path",
+              "value": "workflows/"
+            },
+            {
+              "name": "backupFolder",
+              "value": "/home/node/tmp/backups/"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Globals",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1400,
+        100
+      ],
+      "typeVersion": 1,
+      "id": "66ee6833-c630-4b80-a876-7d41d42e13bf"
+    },
+    {
+      "parameters": {
+        "command": "=n8n export:workflow --backup --output={{$json[\"backupFolder\"]}}"
+      },
+      "name": "Run CLI to export Workflows",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [
+        -1220,
+        100
+      ],
+      "typeVersion": 1,
+      "id": "ccd1baaf-5267-45a2-a636-cba3be8721c6"
+    },
+    {
+      "parameters": {
+        "command": "=ls -1 {{$node[\"Globals\"].json[\"backupFolder\"]}}"
+      },
+      "name": "List filenames",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [
+        -1040,
+        100
+      ],
+      "typeVersion": 1,
+      "id": "e09e93a0-1a99-4cc8-b331-944fb480387c"
+    },
+    {
+      "parameters": {
+        "functionCode": "const newItems = [];\nfor (file of items[0].json.stdout.split('\\n')) {\n  newItems.push({\n    json: {\n      filename: $node[\"Globals\"].json[\"backupFolder\"] + file\n    }\n  });\n}\nreturn newItems;"
+      },
+      "name": "Convert filenames to objects with path",
+      "type": "n8n-nodes-base.function",
+      "position": [
+        -860,
+        100
+      ],
+      "typeVersion": 1,
+      "id": "b9551527-21bb-4421-947c-89c99bd0fd8a"
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "name": "One at a time",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        -680,
+        100
+      ],
+      "typeVersion": 1,
+      "id": "8bf0eb40-b8dc-40da-be10-1a86a82e8a8d"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": "={{$node[\"Globals\"].json[\"repo\"][\"owner\"]}}",
+        "repository": "={{$node[\"Globals\"].json[\"repo\"][\"name\"]}}",
+        "filePath": "={{$node[\"Globals\"].json[\"repo\"][\"path\"]}}{{JSON.parse($json[\"data\"]).name}}.json",
+        "asBinaryProperty": false,
+        "additionalParameters": {}
+      },
+      "name": "GitHub",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        -80,
+        -100
+      ],
+      "typeVersion": 1,
+      "alwaysOutputData": true,
+      "id": "41dd76ba-3071-4a3a-9fdb-d1aac67d3801",
+      "credentials": {
+        "githubApi": {
+          "id": "4X9kXZWPjD3YaJrq",
+          "name": "GitHub account"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {},
+      "id": "00fb1dd0-db37-41cc-a125-b37077fa3eda",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1580,
+        300
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "delete",
+        "owner": "={{$node[\"Globals\"].json[\"repo\"][\"owner\"]}}",
+        "repository": "={{$node[\"Globals\"].json[\"repo\"][\"name\"]}}",
+        "filePath": "={{$node[\"Globals\"].json[\"repo\"][\"path\"]}}{{JSON.parse($node[\"Move Binary Data\"].json[\"data\"]).name}}.json",
+        "commitMessage": "=[N8N Backup] {{JSON.parse($node[\"Move Binary Data\"].json[\"data\"]).name}}.json ({{$json[\"github_status\"]}})"
+      },
+      "name": "GitHub Create1",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        820,
+        420
+      ],
+      "typeVersion": 1,
+      "id": "60b1b8be-56fb-4b01-9aee-742296fe9c54",
+      "credentials": {
+        "githubApi": {
+          "id": "4X9kXZWPjD3YaJrq",
+          "name": "GitHub account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "name": "deleted",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        620,
+        420
+      ],
+      "typeVersion": 1,
+      "id": "7ef1aead-b05d-49de-a917-c81e70091873"
+    }
+  ],
+  "connections": {
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "isDiffOrNew",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "github_status": {
+      "main": [
+        [
+          {
+            "node": "same",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "different",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "new",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "deleted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "same": {
+      "main": [
+        [
+          {
+            "node": "One at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "different": {
+      "main": [
+        [
+          {
+            "node": "GitHub Edit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "new": {
+      "main": [
+        [
+          {
+            "node": "GitHub Create",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "isDiffOrNew": {
+      "main": [
+        [
+          {
+            "node": "github_status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every 2 hours": {
+      "main": [
+        [
+          {
+            "node": "Globals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Binary File": {
+      "main": [
+        [
+          {
+            "node": "Move Binary Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Move Binary Data": {
+      "main": [
+        [
+          {
+            "node": "GitHub",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Globals": {
+      "main": [
+        [
+          {
+            "node": "Run CLI to export Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run CLI to export Workflows": {
+      "main": [
+        [
+          {
+            "node": "List filenames",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List filenames": {
+      "main": [
+        [
+          {
+            "node": "Convert filenames to objects with path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert filenames to objects with path": {
+      "main": [
+        [
+          {
+            "node": "One at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One at a time": {
+      "main": [
+        [
+          {
+            "node": "Read Binary File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Globals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub Edit": {
+      "main": [
+        [
+          {
+            "node": "One at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub Create": {
+      "main": [
+        [
+          {
+            "node": "One at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "deleted": {
+      "main": [
+        [
+          {
+            "node": "GitHub Create1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub Create1": {
+      "main": [
+        [
+          {
+            "node": "One at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Run CLI to export Workflows": [
+      {
+        "json": {
+          "exitCode": 0,
+          "stderr": "",
+          "stdout": "Permissions 0644 for n8n settings file /root/.n8n/config are too wide. This is ignored for now, but in the future n8n will attempt to change the permissions automatically. To automatically enforce correct permissions now set N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true (recommended), or turn this check off set N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false.\nUser settings loaded from: /root/.n8n/config\nError tracking disabled because this release is older than 6 weeks.\n\nThere is a deprecation related to your environment variables. Please take the recommended actions to update your configuration:\n - N8N_RUNNERS_ENABLED -> Running n8n without task runners is deprecated. Task runners will be turned on by default in a future version. Please set `N8N_RUNNERS_ENABLED=true` to enable task runners now and avoid potential issues in the future. Learn more: https://docs.n8n.io/hosting/configuration/task-runners/\n\nSuccessfully exported 76 workflows."
+        }
+      }
+    ]
+  },
+  "versionId": "06fb6ba9-086e-413c-b517-4052d65b1b0b",
+  "triggerCount": 0,
+  "tags": []
+}
