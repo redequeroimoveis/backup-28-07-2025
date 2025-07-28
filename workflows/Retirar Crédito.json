@@ -1,0 +1,901 @@
+{
+  "createdAt": "2025-07-25T02:51:57.534Z",
+  "updatedAt": "2025-07-25T02:51:58.000Z",
+  "id": "SC5Te3IoJoH86IBD",
+  "name": "Retirar Crédito",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "ad9c09c1-3aaf-4c42-ab43-9f8f30a12e99",
+              "leftValue": "={{ $('Retornar Créditos2').item.json.creditos }}",
+              "rightValue": "={{ $json.creditos }}",
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "621cf5a9-435e-4d1c-857a-2ceaf4b97bc2",
+      "name": "If1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "281aab8e-6c98-4596-9c2e-307bde973641",
+      "name": "Retornar Créditos Disponíveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        280
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "59757a14-6e95-4b78-98dc-9fb0970b3c98",
+      "name": "Retirar Créditos1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        280
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "6611ca4d-c98b-4930-bf78-78785d12378b",
+              "leftValue": "={{ $('Retornar Créditos2').item.json.creditos }}",
+              "rightValue": "={{ $('Créditos a retirar').item.json['Créditos a retirar'] }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "75d25550-7bed-4108-9f58-7c9afb57aa88",
+      "name": "Maior ou igual",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        680,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Retirar Créditos",
+        "height": 518.8039867109633,
+        "width": 1533.4713488372086
+      },
+      "id": "ef6d13fb-f873-4365-a131-d68f07c9c1d8",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "21491a8d-0e53-4ce1-91f6-b0385132e6a5",
+      "name": "Retornar Créditos2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        120
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "3a0d598a-3b82-480e-b95a-b760b969e9fe",
+              "leftValue": "={{ $('Retornar Créditos2').item.json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e4495fe8-eec7-45c3-8bd5-72cb7c80523e",
+      "name": "Se crédito existe2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        460,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Créditos a retirar').item.json['Créditos a retirar'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9311f54c-0c02-4db1-a783-1fc7191f323c",
+      "name": "Retirar Créditos4",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        80
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1723c147-4b69-415c-ba65-b03e3261b8fe",
+      "name": "Verificar saldo1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        80
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b4c4b8b4-ac50-4977-b5b7-22b2d88b5eed",
+              "name": "Créditos a retirar",
+              "value": 1,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "83b1c881-4c8e-4c74-af4d-e8dd88e4c3c3",
+      "name": "Créditos a retirar",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        280,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "retirar-credito",
+        "options": {}
+      },
+      "id": "cb8d8b4d-a778-4f40-a7d6-d6cd43ba2881",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -220,
+        740
+      ],
+      "webhookId": "b6b6a9e6-db40-40af-9f61-7709de6bb270"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2ccafc1c-57ec-4e18-9fb8-ef9c8a27a74e",
+      "name": "Retornar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        740
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "3a0d598a-3b82-480e-b95a-b760b969e9fe",
+              "leftValue": "={{ $('Retornar Créditos').item.json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a261267f-cfbc-448e-8cc2-788efaad1be6",
+      "name": "Se crédito existe",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        460,
+        740
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Créditos a retirar1').item.json['Créditos a retirar'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fbff0337-dc1b-4347-a361-f1ea02cb19bc",
+      "name": "Retirar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        700
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "ad9c09c1-3aaf-4c42-ab43-9f8f30a12e99",
+              "leftValue": "={{ $('Retornar Créditos').item.json.creditos }}",
+              "rightValue": "={{ $json.creditos }}",
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9afe9a63-8575-415b-b078-35c3d55651c3",
+      "name": "If3",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f069aca5-06c2-4e97-8a41-ba0a251fdf07",
+      "name": "Retornar Créditos Disponíveis1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        900
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d089c29b-573d-4e95-befd-3dc8df8cf33e",
+      "name": "Retirar Créditos2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        900
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+553799781110"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f15edb22-d93d-435b-b243-607ecf5cde00",
+      "name": "Verificar Crédito Arthur",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        1200
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/owwGmbohHVdp/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=+553799781110"
+            },
+            {
+              "name": "API Crédito",
+              "value": "Offline"
+            },
+            {
+              "name": "Telefone Consulta",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Tipo Consulta",
+              "value": "Financeiro BuscaSIX"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c217e307-012a-45d9-ac63-66d86c7bb61a",
+      "name": "API Crédito Offline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1340,
+        1220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "3a0d598a-3b82-480e-b95a-b760b969e9fe",
+              "leftValue": "={{ $('Verificar Crédito Arthur').item.json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "86efc2db-7049-42db-ac9e-cbc34f0ef152",
+      "name": "Se crédito existe3",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        1200
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b4c4b8b4-ac50-4977-b5b7-22b2d88b5eed",
+              "name": "Créditos a retirar",
+              "value": "=1",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "875d80b4-e0b1-408c-a0e9-b53ca671b810",
+      "name": "Créditos a retirar1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        280,
+        740
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "6611ca4d-c98b-4930-bf78-78785d12378b",
+              "leftValue": "={{ $('Retornar Créditos').item.json.creditos }}",
+              "rightValue": "={{ $('Créditos a retirar1').item.json['Créditos a retirar'] }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "2bb4b7e7-0490-4011-b5bb-9d0434cfda8c",
+      "name": "Maior ou igual1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        680,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Retirar Créditos",
+        "height": 832.0660667109632,
+        "width": 1533.4713488372086
+      },
+      "id": "369477de-dc58-444d-9993-8030a05b8ee0",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "aa24d498-537d-4018-ba60-1fb47e250062",
+      "name": "Verificar saldo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        700
+      ],
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis": {
+      "main": [
+        [
+          {
+            "node": "Retirar Créditos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Maior ou igual": {
+      "main": [
+        [
+          {
+            "node": "Retirar Créditos4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar Créditos Disponíveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos2": {
+      "main": [
+        [
+          {
+            "node": "Créditos a retirar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se crédito existe2": {
+      "main": [
+        [
+          {
+            "node": "Maior ou igual",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retirar Créditos4": {
+      "main": [
+        [
+          {
+            "node": "Verificar saldo1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar saldo1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Créditos a retirar": {
+      "main": [
+        [
+          {
+            "node": "Se crédito existe2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos": {
+      "main": [
+        [
+          {
+            "node": "Créditos a retirar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se crédito existe": {
+      "main": [
+        [
+          {
+            "node": "Maior ou igual1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Verificar Crédito Arthur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retirar Créditos": {
+      "main": [
+        [
+          {
+            "node": "Verificar saldo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis1": {
+      "main": [
+        [
+          {
+            "node": "Retirar Créditos2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Crédito Arthur": {
+      "main": [
+        [
+          {
+            "node": "Se crédito existe3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se crédito existe3": {
+      "main": [
+        [],
+        [
+          {
+            "node": "API Crédito Offline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Créditos a retirar1": {
+      "main": [
+        [
+          {
+            "node": "Se crédito existe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Maior ou igual1": {
+      "main": [
+        [
+          {
+            "node": "Retirar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar Créditos Disponíveis1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar saldo": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "477a4012-3941-4d78-9b4a-cec6e6e667ed",
+  "triggerCount": 1,
+  "tags": []
+}
