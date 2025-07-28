@@ -1,0 +1,327 @@
+{
+  "createdAt": "2025-07-25T01:22:10.224Z",
+  "updatedAt": "2025-07-25T01:22:17.000Z",
+  "id": "XXEsiqzOTFx7FIge",
+  "name": "Novos clientes whatsapp",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "novos-clientes",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "746d0bca-e50c-489c-ae1c-44a05decf9b9",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "c2a4a689-1038-4825-917a-db42a53464f5"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "08d2c77c-dadd-4be8-87e9-784069d98525",
+      "name": "Date & Time",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const agora = new Date().toLocaleString(\"pt-BR\", { timeZone: \"America/Sao_Paulo\" });\n\n// Divide data e hora\nconst [dataStrRaw, horaStr] = agora.split(' ');\nconst dataStr = dataStrRaw.replace(',', '');\n\n// Extrai dia, mês e ano\nconst [dia, mes, ano] = dataStr.split('/');\nconst dataFormatada = `${dia}/${mes}/${ano}`;\n\n// Novo formato ISO (YYYY-MM-DD)\nconst dataISO = `${ano}-${mes}-${dia}`;\n\n// Monta a URL da execução\nconst executionId = $execution.id;\nconst workflowId = $workflow.id;\nconst baseUrl = \"https://n8n.redequeroimoveis.com\";\nconst executionUrl = `${baseUrl}/workflow/${workflowId}/executions/${executionId}`;\n\n// Retorna tudo em um único objeto\nreturn [{\n  json: {\n    data: dataFormatada,\n    data_iso: dataISO,\n    hora: horaStr,\n    executionUrl: executionUrl\n  }\n}];\n"
+      },
+      "id": "8eb15f53-aa54-4f2f-a470-d4abd0db2674",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        380,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1gYV_nWl2YNB3D_J1aOE-vjMLA3-CenUT6sa8Jz9uFAc/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Novos clientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1gYV_nWl2YNB3D_J1aOE-vjMLA3-CenUT6sa8Jz9uFAc/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Telefone": "={{ $('Webhook').item.json.body.Telefone }}",
+            "Nome": "={{ $('Webhook').item.json.body.Nome }}",
+            "Campanha": "={{ $('Webhook').item.json.body.Campanha }}",
+            "Empresa": "={{ $('Webhook').item.json.body.Empresa }}",
+            "Data": "={{ $('Code').item.json.data }}",
+            "Hora": "={{ $('Code').item.json.hora }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Campanha",
+              "displayName": "Campanha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Empresa",
+              "displayName": "Empresa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "84a3c68f-5876-4c63-ba64-8233fe0c8f3b",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        560,
+        0
+      ],
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://base44.app/api/apps/6819f5703086936c581632c2/entities/NovoUsuario",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "876ed4d9d16b40b3b54ab5da6d49a0a4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "nome",
+              "value": "={{ $('Webhook').item.json.body.Nome }}"
+            },
+            {
+              "name": "empresa",
+              "value": "={{ $('Webhook').item.json.body.Empresa }}"
+            },
+            {
+              "name": "data_cadastro",
+              "value": "={{ $('Code').item.json.data_iso }}"
+            },
+            {
+              "name": "hora_cadastro",
+              "value": "={{ $('Code').item.json.hora }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        0
+      ],
+      "id": "52d14afc-6a87-498c-a647-921a2d440f0b",
+      "name": "Base44 API - Novos Usuários",
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Base44 API - Novos Usuários",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "97",
+            "sentry-trace": "ce63bab0486d40a3aac9fa5c846f8e3f-95b545520e4584c7-0",
+            "baggage": "sentry-trace_id=ce63bab0486d40a3aac9fa5c846f8e3f,sentry-environment=production_new,sentry-release=05db53e5ef28d80a44c0d17b3d9a7efe15fd78c8,sentry-public_key=af3c6636fa6e4f89948eaa4e575b3286,sentry-transaction=/api/v1/blocks_integration/test_request/,sentry-sample_rate=0.0025,sentry-sampled=false",
+            "user-agent": "python-requests/2.32.3",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "Telefone": "553799781110",
+            "Nome": "Arthur",
+            "Campanha": "Facebook",
+            "Empresa": "UniConsultas"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/novos-clientes",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Google Sheets": [
+      {
+        "json": {
+          "Telefone": "553799781110",
+          "Nome": "Arthur",
+          "Campanha": "Facebook",
+          "Empresa": "UniConsultas",
+          "Data": "12/05/2025",
+          "Hora": "17:56:25"
+        }
+      }
+    ],
+    "Base44 API - Novos Usuários": [
+      {
+        "json": {
+          "telefone": "553799781110",
+          "nome": "Arthur",
+          "empresa": "UniConsultas",
+          "data_cadastro": "12/05/2025",
+          "hora_cadastro": "18:00:28",
+          "id": "6822616de25403581cf23b1b",
+          "created_date": "2025-05-12T21:00:29.110022Z",
+          "updated_date": "2025-05-12T21:00:29.110025Z",
+          "created_by": "redequeroimoveis@gmail.com",
+          "is_sample": false
+        }
+      }
+    ]
+  },
+  "versionId": "26fcfe23-322e-4f9a-bbbf-8596227780d5",
+  "triggerCount": 1,
+  "tags": []
+}
