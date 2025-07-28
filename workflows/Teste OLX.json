@@ -1,0 +1,242 @@
+{
+  "createdAt": "2025-07-25T02:50:53.127Z",
+  "updatedAt": "2025-07-25T02:50:53.127Z",
+  "id": "IdoUnx490uF0k4cG",
+  "name": "Teste OLX",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "24f62f2e-e0fe-4ac1-ae96-9594baf7a7c6",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -600,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.zyte.com/v1/extract",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "authorization",
+              "value": "Basic ZjkyZjA3Mzg0YzBhNDAzOWE3NGQ5YTYxMTg2YzE5ODM="
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"url\": \"https://mg.olx.com.br/belo-horizonte-e-regiao/autos-e-pecas/carros-vans-e-utilitarios/bmw-320-m-sporte-1369655306?rec=a&lis=vi_web%7C2020%7Csimilar_ads%7C1\",\n  \"product\": true,\n  \"productOptions\": {\n    \"extractFrom\": \"httpResponseBody\",\n    \"ai\": true\n  }\n}\n",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "bc5d4dda-7ad0-45c5-af79-5a9d8b9c135d",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.zyte.com/v1/extract",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authorization",
+              "value": "Basic YWQ2NDA4Y2NlYTNjNGZmMzllOTVmMTJkOTRjY2IwZGQ="
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "url",
+              "value": "https://mg.olx.com.br/belo-horizonte-e-regiao/autos-e-pecas/carros-vans-e-utilitarios/bmw-320-m-sporte-1369655306?rec=a&lis=vi_web%7C2020%7Csimilar_ads%7C1"
+            },
+            {
+              "name": "httpResponseBody",
+              "value": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c8c850e1-960c-439f-ad85-e5f573b1987f",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.zyte.com/v1/extract",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"url\": \"https://mg.olx.com.br/belo-horizonte-e-regiao/autos-e-pecas/carros-vans-e-utilitarios/bmw-320-m-sporte-1369655306?rec=a&lis=vi_web%7C2020%7Csimilar_ads%7C1\",\n  \"product\": true,\n  \"productOptions\": {\n    \"extractFrom\": \"httpResponseBody\",\n    \"ai\": true\n  }\n}\n",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "caad125c-fa2d-46c2-bb90-0cfd1e3394b2",
+      "name": "HTTP Request3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.page2api.com/api/v1/scrape",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"api_key\": \"51b4639c1429de5f5ca1686058581c3597436ea5\",\n  \"url\": \"https://mg.olx.com.br/belo-horizonte-e-regiao/autos-e-pecas/carros-vans-e-utilitarios/bmw-320-m-sporte-1369655306?rec=a&lis=vi_web%7C2020%7Csimilar_ads%7C1\",\n  \"real_browser\": true,\n  \"parse\": {\n    \"titulo\": \"/html/body/div[1]/div/div[3]/div/div[3]/div[2]/div[1]/div/div[1]/span\",\n    \"valor_venda\": \"/html/body/div[1]/div/div[3]/div/div[4]/div[1]/div[1]/div[1]/span >> text\",\n    \"valor_medio\": \"/html/body/div[1]/div/div[3]/div/div[4]/div[2]/div/div[2]/div[1]/div[1]/span >> text\",\n    \"valor_fipe\": \"/html/body/div[1]/div/div[3]/div/div[4]/div[2]/div/div[2]/div[2]/div/span >> text\",\n    \"categoria\": \"/html/body/div[1]/div/div[3]/div/div[3]/div[2]/div[3]/div/div[2]/div[1]/div[2]/a >> text\",\n    \"modelo\": \"/html/body/div[1]/div/div[3]/div/div[3]/div[2]/div[3]/div/div[2]/div[2]/div[2]/a >> text\",\n    \"marca\": \"/html/body/div[1]/div/div[3]/div/div[3]/div[2]/div[3]/div/div[2]/div[3]/div[2]/a >> text\",\n    \"detalhes_geral\": \"/html/body/div[1]/div/div[3]/div/div[3]/div[2]/div[3]/div/div[2] >> text\",\n    \"link_href\": \"/html/body/div/p[2]/a >> href\"\n  }\n}",
+        "options": {}
+      },
+      "id": "53efc451-0700-44e7-ac3c-1944e9cb1d6d",
+      "name": "HTTP Request2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.scrapeowl.com/v1/scrape",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "rdnh0xmnhemd98zg05jx58sn"
+            },
+            {
+              "name": "url",
+              "value": "https://mg.olx.com.br/belo-horizonte-e-regiao/autos-e-pecas/carros-vans-e-utilitarios/bmw-320-m-sporte-1369655306?rec=a&lis=vi_web%7C2020%7Csimilar_ads%7C1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8b87e201-7c05-43f6-a4e2-71ddc83af603",
+      "name": "HTTP Request4",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.zyte.com/v1/extract",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Basic ZjkyZjA3Mzg0YzBhNDAzOWE3NGQ5YTYxMTg2YzE5ODM6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "url",
+              "value": "https://mg.olx.com.br/belo-horizonte-e-regiao/autos-e-pecas/carros-vans-e-utilitarios/bmw-320-m-sporte-1369655306?rec=a&lis=vi_web%7C2020%7Csimilar_ads%7C1"
+            },
+            {
+              "name": "product",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1b821675-12bd-4fcd-b1d6-588c32e0fe83",
+      "name": "HTTP Request5",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -380,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "5e1de19d-5759-49a7-abab-0488348dba0c",
+  "triggerCount": 0,
+  "tags": []
+}
