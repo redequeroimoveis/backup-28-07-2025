@@ -1,0 +1,1368 @@
+{
+  "createdAt": "2025-07-25T02:52:29.386Z",
+  "updatedAt": "2025-07-25T02:52:56.000Z",
+  "id": "UtUwohoFw07FanMf",
+  "name": "Criar Novo Usuário Site Revenda",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Webhook').item.json.body.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "709f6db8-cf9a-45b4-a7c0-56c73029ad13",
+      "name": "Adicionar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -980,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "237c0258-1b2c-4e0c-ae53-cd35515a5e6b",
+      "name": "Retornar Créditos Disponíveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1440,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ada4beab-7ea0-4181-856e-0384df12e744",
+      "name": "Zerar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1220,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/registeruniconsultas",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "name",
+              "value": "={{ $('Webhook').item.json.body.name }}"
+            },
+            {
+              "name": "sobrenome",
+              "value": "={{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "name": "password",
+              "value": "={{ $json.body.password }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fcd38fa3-6c6e-4ab0-8614-daa1b6ef2476",
+      "name": "Criar novo usuário",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3560,
+        680
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "aca42051-4353-4211-a643-015830a84b15",
+              "leftValue": "={{ $json.error.message }}",
+              "rightValue": "registrado",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9aa75de7-4a79-4ca5-96ba-8997ca683a46",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -3360,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Erro"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "Informações",
+              "value": "Email cadastrado"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bc0d7dd7-7935-4222-b903-aba7908b69ba",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1000,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "Informações",
+              "value": "=*Email:* {{ $('Webhook').item.json.body.email }}\n*Senha:* {{ $('Edit Fields').item.json.body.password }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9fd2d762-a34a-4e62-9ea8-eca06929ae94",
+      "name": "HTTP Request3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -60,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "58601bf5-c25d-4637-8540-700a1b254bca",
+              "name": "body.password",
+              "value": "=1{{ $json.formattedDate.replace(/\\D/g, '') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6776945e-32e3-47bb-a6d5-f3097a6319df",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -3760,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/BwDx5Q4YIlbX/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=553799781110"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            },
+            {
+              "name": "Nome",
+              "value": "=Nome Teste"
+            },
+            {
+              "name": "Informações",
+              "value": "=Informações Teste"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9e7ca9a1-d8a4-472d-95ca-21168d352003",
+      "name": "HTTP Request4",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -960,
+        -400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/register/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Webhook').item.json.body.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "801f1b28-6a48-44c7-9364-5634f0d97469",
+      "name": "Adicionar Créditos1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1720,
+        1780
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2f10307f-cdce-4100-aca4-20dfc243685c",
+      "name": "Retornar Créditos Disponíveis1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2180,
+        1780
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ee40bb92-ea12-4b51-980a-6f713e44da41",
+      "name": "Zerar Créditos1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1960,
+        1780
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/registeruniconsultas",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "name",
+              "value": "={{ $('Webhook').item.json.body.name }}"
+            },
+            {
+              "name": "sobrenome",
+              "value": "={{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "name": "password",
+              "value": "={{ $json.body.password }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7f152185-63d1-494c-b9d3-0ea595f38be1",
+      "name": "Criar novo usuário1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2860,
+        1760
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "aca42051-4353-4211-a643-015830a84b15",
+              "leftValue": "={{ $json.error.message }}",
+              "rightValue": "registrado",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c48c80cf-b575-4ac5-ab19-f36aad69a2ae",
+      "name": "If1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2660,
+        1760
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Erro"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "Informações",
+              "value": "Erro"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2734226a-a60d-4b58-b568-289496df5be1",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2400,
+        1740
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "Informações",
+              "value": "=*Email:* {{ $('Webhook').item.json.body.email }}\n*Senha:* {{ $('Edit Fields1').item.json.body.password }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a5f8dadf-60d6-4de0-9ded-af37248dcd64",
+      "name": "HTTP Request5",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1540,
+        1780
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/BwDx5Q4YIlbX/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=553799781110"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            },
+            {
+              "name": "Nome",
+              "value": "=Nome Teste"
+            },
+            {
+              "name": "Informações",
+              "value": "=Informações Teste"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a782ce2a-96f3-455f-a419-fac856bb5476",
+      "name": "HTTP Request6",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1320,
+        1800
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "58601bf5-c25d-4637-8540-700a1b254bca",
+              "name": "body.password",
+              "value": "={{$('Webhook').item.json.body.password.replace(/[:\\- ]/g, '')}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ff956944-b311-47af-b98a-7022a892f825",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -3060,
+        1760
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1bPpErnRcn6oXREVHotQ2U7w8JS74-5rDqC4WMtARM2U",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "1072723260",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nome": "={{ $('Webhook').item.json.body.name }}",
+            "Sobrenome": "={{ $('Webhook').item.json.body.sobrenome }}",
+            "Email": "={{ $('Webhook').item.json.body.email }}",
+            "Telefone": "={{ $('Webhook').item.json.body.telefone }}",
+            "Senha": "={{ $('Edit Fields').item.json.body.password }}",
+            "Crédito": "={{ $('Webhook').item.json.body.creditos }}",
+            "Data": "={{ $json.formattedDate }}",
+            "Status": "1"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Sobrenome",
+              "displayName": "Sobrenome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Senha",
+              "displayName": "Senha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Crédito",
+              "displayName": "Crédito",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "278b0b7e-26dc-4c1b-9c70-8dc1e8179334",
+      "name": "Alimentar Planilha",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        -2040,
+        940
+      ],
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      },
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "f68b8f3b-f0a1-449f-a970-972fddca73e0",
+      "name": "Date & Time",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        -2440,
+        940
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Captura a string de data\nconst originalDate = $json.currentDate;\n\n// Converte para um objeto de data ajustando o fuso horário\nconst date = new Date(originalDate);\n\n// Formata a data para o padrão brasileiro\nconst formattedDate = date.toLocaleDateString('pt-BR', {\n    timeZone: 'America/Sao_Paulo',\n});\n\n// Formata a hora para o padrão brasileiro\nconst formattedTime = date.toLocaleTimeString('pt-BR', {\n    timeZone: 'America/Sao_Paulo',\n    hour: '2-digit',\n    minute: '2-digit',\n    second: '2-digit',\n});\n\n// Retorna os campos separados\nreturn { \n    formattedDate, \n    formattedTime \n};\n"
+      },
+      "id": "19d3f724-3065-49d3-891a-b044ae7c6526",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2260,
+        940
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/23474/DVEB6akZFGRk/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "30dfcc03-f8d0-4ac0-b6e7-1bd3bf0a4532",
+      "name": "Companhia Compra",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -660,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/7wElvEsVQeP4/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "015bd1c7-d7c8-49eb-983e-b7199af3e51a",
+      "name": "UniConsultas",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -480,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/TbzDeXlShH2R/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "17743c1a-7aa8-4973-b698-aab33910e459",
+      "name": "Rede Quero Imóveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -300,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## CADASTRAR EM TODAS COMPANHIAS",
+        "height": 273.9104582250345,
+        "width": 561.0203822705516
+      },
+      "id": "c62ebe75-51b0-4c84-8968-723d1e4b579e",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "5caa25ee-2eef-4cbb-a721-3290a6c297fb",
+      "name": "Date & Time1",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        -4160,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Captura a string de data\nconst originalDate = $json.currentDate;\n\n// Converte para um objeto de data ajustando o fuso horário\nconst date = new Date(originalDate);\n\n// Formata para o padrão brasileiro\nconst formattedDate = date.toLocaleString('pt-BR', {\n    timeZone: 'America/Sao_Paulo',\n    year: 'numeric',\n    month: '2-digit',\n    day: '2-digit',\n    hour: '2-digit',\n    minute: '2-digit',\n    second: '2-digit',\n});\n\n// Retorna o resultado formatado\nreturn { formattedDate };\n"
+      },
+      "id": "a05a3c7a-eef3-43dd-9f7c-b65060526223",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3980,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "c56c452e-1c15-45ef-a46c-59ead49a3206",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -2500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c1dd057-4868-4f17-9c6c-a9145ecc3912",
+              "name": "resposta",
+              "value": "=Atenção, email não válido. Por favor digite um novo email!",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b3578b30-9eda-4507-83cd-c473f014d48e",
+      "name": "Edit Fields2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -2700,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "159b7cdf-8d6b-4731-8db6-9ec806421d58",
+      "name": "Respond to Webhook1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -1620,
+        940
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c1dd057-4868-4f17-9c6c-a9145ecc3912",
+              "name": "resposta",
+              "value": "=Parabéns, cliente cadastrado com sucesso!",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e7d8f865-7b1b-4a26-ad9e-97955cb561ef",
+      "name": "Edit Fields3",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1820,
+        940
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "criar-usuario-site-revenda",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "349aa2b3-e064-4d8b-a8fa-0b6354272b50",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -4360,
+        680
+      ],
+      "webhookId": "4b972c0d-172c-4c7b-8947-8ef1c49f1a2f"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1KJ6pes3i5NfUaBNLgor2iYMEHuG69uVDHS_X9xBzZu0/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 595284221,
+          "mode": "list",
+          "cachedResultName": "Dados trabalhados",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KJ6pes3i5NfUaBNLgor2iYMEHuG69uVDHS_X9xBzZu0/edit#gid=595284221"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Telefone",
+              "lookupValue": "={{ $json.Revendedor }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "41518327-c3da-48b9-970b-e3b0cd8f41e1",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -2840,
+        940
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.redequeroimoveis.com/webhook/Dados-imagem-pdf",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "URL_LogoPDF",
+              "value": "="
+            },
+            {
+              "name": "URL PDF Imagem",
+              "value": "={{ $json['URL PDF Imagem'] }}"
+            },
+            {
+              "name": "Titulo Consultas",
+              "value": "Consulta"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5ad13f09-42f1-47ea-bcc3-d97273652f2b",
+      "name": "Cadastrar Imagem PDF",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -2640,
+        940
+      ],
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Retornar Créditos Disponíveis": {
+      "main": [
+        [
+          {
+            "node": "Zerar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zerar Créditos": {
+      "main": [
+        [
+          {
+            "node": "Adicionar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar novo usuário": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adicionar Créditos": {
+      "main": [
+        [
+          {
+            "node": "Companhia Compra",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Criar novo usuário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adicionar Créditos1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis1": {
+      "main": [
+        [
+          {
+            "node": "Zerar Créditos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zerar Créditos1": {
+      "main": [
+        [
+          {
+            "node": "Adicionar Créditos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar novo usuário1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar Créditos Disponíveis1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Criar novo usuário1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Alimentar Planilha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alimentar Planilha": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Companhia Compra": {
+      "main": [
+        [
+          {
+            "node": "UniConsultas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UniConsultas": {
+      "main": [
+        [
+          {
+            "node": "Rede Quero Imóveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rede Quero Imóveis": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time1": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Date & Time1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Cadastrar Imagem PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cadastrar Imagem PDF": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Criar novo usuário": [
+      {
+        "json": {
+          "error": {
+            "message": "404 - \"<html>\\r\\n<head><title>404 Not Found</title></head>\\r\\n<body>\\r\\n<center><h1>404 Not Found</h1></center>\\r\\n<hr><center>nginx/1.18.0 (Ubuntu)</center>\\r\\n</body>\\r\\n</html>\\r\\n\"",
+            "name": "AxiosError",
+            "stack": "AxiosError: Request failed with status code 404\n    at settle (/usr/lib/node_modules/n8n/node_modules/axios/lib/core/settle.js:19:12)\n    at RedirectableRequest.handleResponse (/usr/lib/node_modules/n8n/node_modules/axios/lib/adapters/http.js:537:9)\n    at RedirectableRequest.emit (node:events:529:35)\n    at RedirectableRequest.emit (node:domain:489:12)\n    at RedirectableRequest._processResponse (/usr/lib/node_modules/n8n/node_modules/follow-redirects/index.js:398:10)\n    at ClientRequest.RedirectableRequest._onNativeResponse (/usr/lib/node_modules/n8n/node_modules/follow-redirects/index.js:91:12)\n    at Object.onceWrapper (node:events:632:26)\n    at ClientRequest.emit (node:events:517:28)\n    at ClientRequest.emit (node:domain:489:12)\n    at HTTPParser.parserOnIncomingClient (node:_http_client:700:27)\n    at Axios.request (/usr/lib/node_modules/n8n/node_modules/axios/lib/core/Axios.js:45:41)\n    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at requestFn (/usr/lib/node_modules/n8n/node_modules/n8n-core/src/NodeExecuteFunctions.ts:800:27)\n    at proxyRequestToAxios (/usr/lib/node_modules/n8n/node_modules/n8n-core/src/NodeExecuteFunctions.ts:804:20)\n    at Object.request (/usr/lib/node_modules/n8n/node_modules/n8n-core/src/NodeExecuteFunctions.ts:3127:4)",
+            "code": "ERR_BAD_REQUEST",
+            "status": 404
+          }
+        }
+      }
+    ],
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "184",
+            "content-type": "application/json",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "br, gzip, deflate"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "telefone": "+5537999812824",
+            "name": "Augusto",
+            "creditos": "",
+            "email": "augustobaldiotti1@hotmail.com",
+            "sobrenome": "Cliente Revenda (+553799781110)",
+            "telefone revendedor": "+553799781110"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/criar-usuario-site-revenda",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "7125bffd-9e21-4a8e-b6de-92f8a1a9590a",
+  "triggerCount": 1,
+  "tags": []
+}
