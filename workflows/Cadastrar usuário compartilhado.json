@@ -1,0 +1,318 @@
+{
+  "createdAt": "2025-07-25T09:37:54.219Z",
+  "updatedAt": "2025-07-25T09:38:32.000Z",
+  "id": "MbLFkPRygTdITR1i",
+  "name": "Cadastrar usuário compartilhado",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "68aae255-bc25-4923-adab-df6f5f6d836f",
+              "name": "body['Telefone-Consulta']",
+              "value": "={{ $json.body['Telefone Usuário Compartilhado'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "86e1b6f7-a300-4d2e-98db-1c6d34ef409e",
+      "name": "Edit Fields7",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -400,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obter os itens de entrada\nconst items = $input.all();\n\nreturn items.map(item => {\n  const telefoneCompleto = item.json.body['Telefone-Consulta'];\n\n  if (!telefoneCompleto) {\n    // Retorna o item original se o telefone estiver ausente\n    return item;\n  }\n\n  // Remover caracteres não numéricos\n  const telefoneSomenteNumeros = telefoneCompleto.replace(/[^0-9]/g, '');\n\n  let codigoPais = null;\n  let ddd = null;\n  let numero = null;\n\n  if (telefoneSomenteNumeros.length > 10) {\n    // Quando há código do país (telefone com mais de 10 dígitos)\n    codigoPais = telefoneSomenteNumeros.slice(0, 2); // Os dois primeiros dígitos\n    ddd = telefoneSomenteNumeros.slice(2, 4);        // Os dois próximos dígitos\n    numero = telefoneSomenteNumeros.slice(4);        // O restante é o número\n  } else {\n    // Quando não há código do país (telefone com 10 ou menos dígitos)\n    ddd = telefoneSomenteNumeros.slice(0, 2);        // Os dois primeiros dígitos\n    numero = telefoneSomenteNumeros.slice(2);        // O restante é o número\n  }\n\n  // Se o número tiver 9 dígitos e começar com '9', remove o primeiro '9'\n  if (numero.length === 9 && numero.startsWith('9')) {\n    numero = numero.slice(1);\n  }\n\n  // Adiciona os campos processados no JSON do item\n  item.json['Codigo-Pais'] = codigoPais || 'N/A'; // Define 'N/A' se não houver código do país\n  item.json['DDD'] = ddd;\n  item.json['Numero'] = numero;\n\n  return item;\n});\n"
+      },
+      "id": "6afdad39-6761-4812-b610-453313cc2f7a",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Usuário Master",
+              "value": "={{ $('Webhook').item.json.body['Usuário Master'] }}"
+            },
+            {
+              "name": "Crédito Compartilhado",
+              "value": "={{ $('Webhook').item.json.body['Crédito Compartilhado'] }}"
+            },
+            {
+              "name": "Nome Usuário Compartilhado",
+              "value": "={{ $('Webhook').item.json.body['Nome Usuário Compartilhado'] }}"
+            },
+            {
+              "name": "Telefone Usuário Compartilhado",
+              "value": "={{ $('Validar Telefone (Code)').item.json.whatsapp_formatado }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5e15fa16-0b9f-4076-ae42-2d3fd484de01",
+      "name": "HTTP Request3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        0,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "id": "2e99f0db-294e-4ab4-918a-d6753cdebb7c",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        200,
+        220
+      ],
+      "webhookId": "fa26b4e2-b8cb-4ff9-acf9-ca0e62e2b678"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Usuário Master",
+              "value": "={{ $('Webhook').item.json.body['Usuário Master'] }}"
+            },
+            {
+              "name": "Crédito Compartilhado",
+              "value": "={{ $('Webhook').item.json.body['Crédito Compartilhado'] }}"
+            },
+            {
+              "name": "Nome Usuário Compartilhado",
+              "value": "={{ $('Webhook').item.json.body['Nome Usuário Compartilhado'] }}"
+            },
+            {
+              "name": "Telefone Usuário Compartilhado",
+              "value": "=+{{ $('Code').item.json['Codigo-Pais'] }}{{ $('Code').item.json.DDD }}9{{ $('Code').item.json.Numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e08db24f-5241-4145-94d7-fa1150ba7c95",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        420,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cadastrar-usuario-compartilhado",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "ae5baf6b-675c-424a-a04a-5c5af26f00b6",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        220
+      ],
+      "webhookId": "aeeda556-075f-4155-b581-192f94f71dae"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "00a12fc8-f79d-418d-b1d8-e1a0a761c697",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "whatsapp",
+              "value": "={{ $json.body[\"Telefone Usuário Compartilhado\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "46a76539-4afd-4a15-8e60-2901ce65f196",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "var whatsapp = $input.item.json.whatsapp.replaceAll(/[^0-9]/g, '');\nvar ddd = whatsapp.slice(2,4);\nvar ddi = whatsapp.charAt(0);\nvar ddx = whatsapp.slice(0,2);\nvar length = whatsapp.length;\nif (length >= 12){\n  if (ddi == '+'){\n    ddi = whatsapp.slice(0,3);\n    whatsapp = parseInt(whatsapp.slice(3)).toString();\n  } else {\n    if (ddx == '55'){\n      whatsapp = parseInt(whatsapp.slice(2)).toString();\n      ddi = \"+55\";\n    } else {\n      whatsapp = parseInt(whatsapp).toString();\n      ddi = 'não informado';\n    }\n  }\n} else {\n  whatsapp = parseInt(whatsapp).toString();\n  ddi = 'não informado';\n}\n\nddd = whatsapp.slice(0,2);\nwhatsapp = whatsapp.slice(2);\nif (ddd > 28){\n  whatsapp = whatsapp.slice(-8);\n} else {\n  whatsapp = '9'+whatsapp.slice(-8);\n}\nvar whatsapp_formatado = '+55'+ddd+whatsapp;\n\nreturn {json: {\"whatsapp_formatado\": whatsapp_formatado,\n              \"ddd\": ddd,\n              \"ddi\": ddi}};"
+      },
+      "id": "24b8be1e-d268-457c-ac95-b37b80908c9f",
+      "name": "Validar Telefone (Code)",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -620,
+        220
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Validar Telefone (Code)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Telefone (Code)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "280",
+            "sentry-trace": "5e6ba3c0114f4eaaaf7094338bb8183f-9b3f8ee3b4d24763-0",
+            "baggage": "sentry-trace_id=5e6ba3c0114f4eaaaf7094338bb8183f,sentry-environment=production_new,sentry-release=f90485b33829dc3ec85f6c34d03e93f9ed24ff6b,sentry-public_key=af3c6636fa6e4f89948eaa4e575b3286,sentry-transaction=/api/v1/blocks_integration/test_request/,sentry-sample_rate=0.00125,sentry-sampled=false",
+            "user-agent": "python-requests/2.32.3",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "Webhook": "https://backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/dR5q41p43jNR/",
+            "Usuário Master": "+5537999782222",
+            "Crédito Compartilhado": "20",
+            "Nome Usuário Compartilhado": "Arthur",
+            "Telefone Usuário Compartilhado": "5537999781110"
+          },
+          "webhookUrl": "https://n8n.redequeroimoveis.com:5678/webhook-test/cadastrar-usuario-compartilhado",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "3457f79d-7eef-463d-bae6-b92733b88590",
+  "triggerCount": 1,
+  "tags": []
+}
