@@ -1,0 +1,299 @@
+{
+  "createdAt": "2025-07-25T02:50:39.318Z",
+  "updatedAt": "2025-07-25T02:50:40.000Z",
+  "id": "WEaTwCVCf4jZODCJ",
+  "name": "Usuário e senha site",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1bPpErnRcn6oXREVHotQ2U7w8JS74-5rDqC4WMtARM2U/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bPpErnRcn6oXREVHotQ2U7w8JS74-5rDqC4WMtARM2U/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Telefone",
+              "lookupValue": "={{ $json.body.Telefone.replace('+', '') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6187336d-a7ad-4c2e-ba37-17dff51e86ee",
+      "name": "Google Sheets5",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -680,
+        120
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "id": "d27ff320-2e94-4732-8ea1-c645a156ab4e",
+      "name": "Limit",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "729f6827-b451-44b0-b758-50a3eeb5c3db",
+              "name": "resposta",
+              "value": "=Acesse nosso site através do link\nhttps://uniconsultas.io/dashboard/\n\n----------- / / -----------\n\nUsuário: {{ $json.Email }}\nSenha: {{ $json.Senha }}\n\n----------- / / -----------\n\n_Obs: Nosso site está em fase beta, e contamos com sua compreensão e feedback para que possamos aprimorá-lo continuamente._",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c2b4b66f-b43e-44c5-91c4-e2eba9dfafd7",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "4f5ef2c8-8c30-401f-a4d3-8821ddce5bd3",
+              "leftValue": "={{ $json.row_number }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "aecdef9e-c57c-453c-a96b-1fa54f45a8dd",
+      "name": "If2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -280,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "729f6827-b451-44b0-b758-50a3eeb5c3db",
+              "name": "resposta",
+              "value": "=Não encontrado",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "efcf3dfb-91d0-461f-b453-061f1ea1c524",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        0,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Informações",
+              "value": "={{ $json.resposta }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9409d652-5091-49a3-a4ec-677accb6b919",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        280,
+        120
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "usuário-senha-site",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "b8d265d8-9090-4b5a-bdd6-a1fd9004e683",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -900,
+        120
+      ],
+      "webhookId": "ef91077f-7a58-4ac3-a028-cec3337977c4"
+    }
+  ],
+  "connections": {
+    "Google Sheets5": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "135",
+            "sentry-trace": "67a7c07545ee4d0d9f3b0456961f9e52-b57c9a1860fe4c14-0",
+            "baggage": "sentry-trace_id=67a7c07545ee4d0d9f3b0456961f9e52,sentry-environment=production_new,sentry-release=5652deab06a886b8cbb2c025bdbfe97234261bd3,sentry-public_key=af3c6636fa6e4f89948eaa4e575b3286,sentry-transaction=/api/v1/bot/bot_answer/%7Bconnection_id%7D/,sentry-sample_rate=0.01,sentry-sampled=false",
+            "user-agent": "python-requests/2.32.3",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "Webhook": "https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/U4SeuskcchFz/",
+            "Telefone": "+553799781110"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/usuário-senha-site",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "7a9d5999-3c73-4ad8-bd78-a961dbbfb618",
+  "triggerCount": 1,
+  "tags": []
+}
