@@ -1,0 +1,263 @@
+{
+  "createdAt": "2025-07-25T01:34:45.697Z",
+  "updatedAt": "2025-07-25T01:34:46.000Z",
+  "id": "Qxiyy1v3TwVt52cu",
+  "name": "status_atendimento",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "status-consulta",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "e364bef1-f889-4e8e-b5b3-4477a8cdb713",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "98f06bb4-24d2-49ae-996c-ac49f659ae3f"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "55fb8741-cdea-49d9-94a2-4cca097d9663",
+              "name": "status",
+              "value": "={{ $json.query.Status }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ],
+      "id": "e3aef513-3ae2-48cf-ac4c-0847ab98a39f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/23474/wUcqYeI2AVQq/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=+553799781110"
+            },
+            {
+              "name": "status_atendimento",
+              "value": "={{ $('Edit Fields').item.json.status }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "636bf435-9d3c-4fcc-91e0-96bf4357dc8b",
+      "name": "UniConsultas - Reserva",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        460,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/vd1rGbPKcrHg/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=+553799781110"
+            },
+            {
+              "name": "status_atendimento",
+              "value": "={{ $('Edit Fields').item.json.status }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2e55d95c-50e7-466f-9420-a22de455b56f",
+      "name": "UniConsultas - Principal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        700,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/d09wQ6rsmqiy/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=+553799781110"
+            },
+            {
+              "name": "status_atendimento",
+              "value": "={{ $('Edit Fields').item.json.status }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c10acf19-0e11-47c8-8387-57eba676c97b",
+      "name": "Rede Quero Imóveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/5402/nBQondHnkUJP/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=+553799781110"
+            },
+            {
+              "name": "status_atendimento",
+              "value": "={{ $('Edit Fields').item.json.status }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "aaaf92a0-1ebd-4c2f-9111-d859b758a76b",
+      "name": "Pessoal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1140,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "UniConsultas - Reserva",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UniConsultas - Reserva": {
+      "main": [
+        [
+          {
+            "node": "UniConsultas - Principal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UniConsultas - Principal": {
+      "main": [
+        [
+          {
+            "node": "Rede Quero Imóveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rede Quero Imóveis": {
+      "main": [
+        [
+          {
+            "node": "Pessoal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "cache-control": "max-age=0",
+            "sec-ch-ua": "\"Google Chrome\";v=\"135\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"135\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\"",
+            "upgrade-insecure-requests": "1",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "sec-fetch-site": "none",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-user": "?1",
+            "sec-fetch-dest": "document",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+            "cookie": "rl_page_init_referrer=RudderEncrypt%3AU2FsdGVkX1%2BVzdWrosrTDAvFjIcq0mDEdO9ajPXfT8M%3D; rl_page_init_referring_domain=RudderEncrypt%3AU2FsdGVkX1%2FMZtn%2FMVEs%2Bdwr8QOSIg1Vi4Mh3g2uKO4%3D; n8n-auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0OWY5YzdhLTI0MDctNDY5OC04ZjBjLWU0YjU3MjBiYTdiYyIsImhhc2giOiJiMkJVU09iMEdzIiwiYnJvd3NlcklkIjoiUzZVOU5WVkUxYkRmc2JZcWIrcFM4UnVXQmZCeEkyUTlOZnF2dzhza1hjVT0iLCJpYXQiOjE3NDQ3MTk1NTgsImV4cCI6MTc0NTMyNDM1OH0.iP3HlVsJZpBoje3WTXoGB3hqV3jJjOQmh_x3b2bCnpM; rl_anonymous_id=RudderEncrypt%3AU2FsdGVkX19AxewFW2Ehc%2FwG127uMjJJk0MOjHP%2Fu7vLGMb%2FPCUfWAO0J2U9Z02OQ0wkJcIlCn%2FbfZ8IkZH5jQ%3D%3D; rl_user_id=RudderEncrypt%3AU2FsdGVkX1%2FNI4%2FpVWk%2Flt%2BfIX6VIPssfueWce1EGBhd6aMr177sXEVqj9T3YaA86%2BE1VEMReFU%2BPHOA2mtF%2BJkFZZJ4WotNI0re9FLaNg3kDrmH1U85nXfrLs0eOV%2B8JCnnODfU2cj7hIyExGHNALVl2MNsdoEeTsbS0IyLY7E%3D; rl_trait=RudderEncrypt%3AU2FsdGVkX1%2B9EGplr5Rrc5LcVlr7tqm%2Fcin2hqihRg0UB7lIiIsNVLlN5axNxEjpGBLqyh3ZxeenoP%2B6VxKEne0Jyyhzjrlhdq70BvmS5DiNKNEMW1HCwWA7tlZXMeQQH43UzOPPNWjZb%2Bs1uShuRw%3D%3D; ph_phc_4URIAm1uYfJO7j8kWSe0J8lc8IqnstRLS7Jx8NcakHo_posthog=%7B%22distinct_id%22%3A%229a3736da1161b67e58bf07cc38217f94b1535ad3ab3d8b8c861d34ebe03b82de%23149f9c7a-2407-4698-8f0c-e4b5720ba7bc%22%2C%22%24sesid%22%3A%5B1744848428680%2C%2201964107-6190-7d25-973f-d168544b2100%22%2C1744847724944%5D%2C%22%24epp%22%3Atrue%2C%22%24initial_person_info%22%3A%7B%22r%22%3A%22%24direct%22%2C%22u%22%3A%22https%3A%2F%2Fn8n.redequeroimoveis.com%2Fsignin%3Fredirect%3D%25252Fworkflows%22%7D%7D; rl_session=RudderEncrypt%3AU2FsdGVkX1%2FRA%2BAgWFUlEw3YxXTPzEx1bVG8serkfIRrd5CbUnXhYGFhKZZ%2F5oSkNgs9e13AQGvef4Ig6wFpm97efuma35g%2F5yjH2NpoLKpYe86r9J0uF%2FeCbFlPbIWHYTJ6sRUGyFTmt3GqbVbxYw%3D%3D"
+          },
+          "params": {},
+          "query": {
+            "Status": "online"
+          },
+          "body": {},
+          "webhookUrl": "https://n8n.redequeroimoveis.com:5678/webhook-test/status-consulta",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "UniConsultas - Reserva": [
+      {
+        "json": {}
+      }
+    ]
+  },
+  "versionId": "abe71afc-8201-4a3c-84e8-bf91a8686ca6",
+  "triggerCount": 1,
+  "tags": []
+}
