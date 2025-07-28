@@ -1,0 +1,245 @@
+{
+  "createdAt": "2025-07-25T01:35:20.226Z",
+  "updatedAt": "2025-07-25T01:35:21.000Z",
+  "id": "Ofhjk7GTw4XwppwJ",
+  "name": "status_ehmconsultas automático",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "keyName": "ehmconsultas",
+        "valueString": "=ehmconsultas_status: true\nehmconsultas_opcao: cpf_pros\niconsultei_status: true\nconsultpositivo_status: true\nvalidocadastro_status: true\nacessopositivo_status: true"
+      },
+      "type": "n8n-nodes-datastore.datastore",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ],
+      "id": "5906ddf5-495a-4b31-833a-f4ffd70f02c9",
+      "name": "Datastore"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "keyName": "ehmconsultas"
+      },
+      "type": "n8n-nodes-datastore.datastore",
+      "typeVersion": 1,
+      "position": [
+        660,
+        0
+      ],
+      "id": "55567ff6-1f79-4f58-a974-c83f10da601f",
+      "name": "Datastore1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "304ee548-f4cc-45d9-9eaf-ccdd79193c81",
+              "name": "ehmconsultas_status",
+              "value": "={{ $json.body.ehmconsultas_status }}",
+              "type": "string"
+            },
+            {
+              "id": "334b6269-7037-4676-8e3a-483e56650816",
+              "name": "ehmconsultas_opcao",
+              "value": "={{ $json.body.ehmconsultas_opcao }}",
+              "type": "string"
+            },
+            {
+              "id": "4c95d994-14e4-4396-bd96-27ef77acea43",
+              "name": "iconsultei_status",
+              "value": "={{ $json.body.iconsultei_status }}",
+              "type": "string"
+            },
+            {
+              "id": "0afaf2f2-cd9b-429a-90e3-d541a464fe6f",
+              "name": "consultpositivo_status",
+              "value": "={{ $json.body.consultpositivo_status }}",
+              "type": "string"
+            },
+            {
+              "id": "31a34e42-f535-4583-9e8a-dfdebb882c29",
+              "name": "validocadastro_status",
+              "value": "={{ $json.body.validocadastro_status }}",
+              "type": "string"
+            },
+            {
+              "id": "cf1fc1f3-1ff1-4479-af73-0b7f198703e9",
+              "name": "acessopositivo_status",
+              "value": "={{ $json.body.acessopositivo_status }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        200,
+        0
+      ],
+      "id": "bec6c2bb-0392-4ec5-96ea-077c64af911d",
+      "name": "Edit Fields",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3ba5def1-9a10-4bd7-8628-a428c2ca81fc",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "171fb57e-aea3-42b9-ad24-ee1267505319",
+              "name": "value",
+              "value": "={{ $json.value }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        940,
+        0
+      ],
+      "id": "f173bb69-4e6e-4a07-9608-0b98b02d6af6",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "keyName": "status-ehmconsultas",
+        "valueString": "=cpf_pros-on\ncpf_pros-on\ncpf_pros-on\ncpf_pros-on\ncpf_pros-on"
+      },
+      "type": "n8n-nodes-datastore.datastore",
+      "typeVersion": 1,
+      "position": [
+        440,
+        200
+      ],
+      "id": "5d1a3290-355e-450c-a84d-fc20f462159b",
+      "name": "Datastore2"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "keyName": "status-ehmconsultas"
+      },
+      "type": "n8n-nodes-datastore.datastore",
+      "typeVersion": 1,
+      "position": [
+        660,
+        200
+      ],
+      "id": "d956183e-b08f-4102-a1cc-144db71304b8",
+      "name": "Datastore3"
+    }
+  ],
+  "connections": {
+    "Datastore": {
+      "main": [
+        [
+          {
+            "node": "Datastore1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datastore1": {
+      "main": [
+        [
+          {
+            "node": "Datastore2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Datastore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datastore2": {
+      "main": [
+        [
+          {
+            "node": "Datastore3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datastore3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        18
+      ]
+    }
+  },
+  "meta": null,
+  "pinData": {},
+  "versionId": "9cc8e710-35d9-42af-bd22-b21b57903751",
+  "triggerCount": 1,
+  "tags": []
+}
