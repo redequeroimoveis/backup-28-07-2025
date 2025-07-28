@@ -1,0 +1,3356 @@
+{
+  "createdAt": "2025-07-25T01:09:53.064Z",
+  "updatedAt": "2025-07-25T16:53:18.000Z",
+  "id": "FsMzAqrGy1M2aJ60",
+  "name": "Consulta CADIN - (confere.link - CONS_DEVFED)",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3db00fee-081d-4b19-99dd-cbc4ab4a0e0e",
+              "name": "Nome Consulta",
+              "value": "Consulta CADIN",
+              "type": "string"
+            },
+            {
+              "id": "ac5a7a11-a016-4827-a7ae-88a6490e25ec",
+              "name": "Credito consulta",
+              "value": 2,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "af9eaf1c-d7e7-441e-b021-334a4cc87245",
+      "name": "Dados N8N",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -5920,
+        500
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d5313a7e-c53c-4edd-b717-b47649969e6c",
+      "name": "Retornar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1440,
+        400
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "3a0d598a-3b82-480e-b95a-b760b969e9fe",
+              "leftValue": "={{ $('Retornar Créditos').item.json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c206dadb-d0cd-4753-b243-4741315bf84f",
+      "name": "Se crédito existe",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1820,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Créditos a retirar1').item.json['Créditos a retirar'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "911d16d6-1354-4090-ad2d-1fce75e8253e",
+      "name": "Retirar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2280,
+        360
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ecac656a-0541-4560-9fd0-5edc4b959572",
+      "name": "Retornar Créditos Disponíveis1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2280,
+        560
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6f720c10-0614-427a-bf6b-430d22c2219a",
+      "name": "Retirar Créditos2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2480,
+        560
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+553799781110"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "734ad57b-5f00-4b7b-9faa-d6ef353df862",
+      "name": "Verificar Crédito Arthur",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2280,
+        860
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/owwGmbohHVdp/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=+553799781110"
+            },
+            {
+              "name": "API Crédito",
+              "value": "Offline"
+            },
+            {
+              "name": "Telefone Consulta",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Tipo Consulta",
+              "value": "Financeiro BuscaSIX"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "57389e1b-fd8d-4d9c-93e4-4e8b3ab9a8ac",
+      "name": "API Crédito Offline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2700,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "3a0d598a-3b82-480e-b95a-b760b969e9fe",
+              "leftValue": "={{ $('Verificar Crédito Arthur').item.json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "aa777a63-ad15-4551-87a4-220abcb8e87b",
+      "name": "Se crédito existe3",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2480,
+        860
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b4c4b8b4-ac50-4977-b5b7-22b2d88b5eed",
+              "name": "Créditos a retirar",
+              "value": "=2",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dc8369a1-85a5-4fbb-a94a-0682646a277b",
+      "name": "Créditos a retirar1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        1640,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "6611ca4d-c98b-4930-bf78-78785d12378b",
+              "leftValue": "={{ $('Retornar Créditos').item.json.creditos }}",
+              "rightValue": "={{ $('Créditos a retirar1').item.json['Créditos a retirar'] }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "6c7cd53f-6f84-4a3b-858f-638229ced79d",
+      "name": "Maior ou igual1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2040,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c5f3d4c6-7320-4890-9e29-a72d32e17188",
+      "name": "Verificar saldo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2480,
+        360
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "Retirar Créditos",
+        "height": 832.0660667109632,
+        "width": 1533.4713488372086
+      },
+      "id": "b87e1e0b-43f3-45cc-ad9c-3076e1ed3f68",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "ad9c09c1-3aaf-4c42-ab43-9f8f30a12e99",
+              "leftValue": "={{ $('Retornar Créditos').item.json.creditos }}",
+              "rightValue": "={{ $json.creditos }}",
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "45ce0137-578a-472d-8f0d-cea88c1bb573",
+      "name": "If11",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2680,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Erro"
+            },
+            {
+              "name": "Informações",
+              "value": "={{ $json['Consulta erro'] }}"
+            },
+            {
+              "name": "Nome Menu",
+              "value": "=_{{ $('Dados N8N').item.json['Nome Consulta'] }}_"
+            },
+            {
+              "name": "Nome Menu Status",
+              "value": "={{ $('Dados N8N').item.json['Nome Consulta'] }} - Online"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fa723560-1469-42d3-93f2-747fe47a12cf",
+      "name": "HTTP Request4",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -1940,
+        1700
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "botconversa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "228cc0d7-b0da-4007-9e40-9a0ba5c1a4d9",
+      "name": "If7",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2140,
+        1720
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "330db2f1-9a7c-4544-9ebc-bfcc7533f1c0",
+      "name": "Respond to Webhook1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -1940,
+        1880
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "TelefoneBC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "CPF",
+              "value": "={{ $('Webhook').item.json.body.CPF }}"
+            },
+            {
+              "name": "Consulta",
+              "value": "={{ $json['Consulta erro'] }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d07453e2-39b9-4c7e-a5be-171de7c2d453",
+      "name": "HTTP Request6",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2140,
+        1880
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## EROO CONSULTA",
+        "height": 650.7892342813853,
+        "width": 475.64076572957595,
+        "color": 3
+      },
+      "id": "567f01a9-943d-40f7-a88b-bdf8d55eede2",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2220,
+        1420
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "3a0d598a-3b82-480e-b95a-b760b969e9fe",
+              "leftValue": "={{ $json.creditos }}",
+              "rightValue": 2,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "24ecde32-c885-4f28-a664-37afbfd7e6a0",
+      "name": "Crédito maior ou igual",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -4560,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "botconversa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7601add0-1437-498f-8518-f7839003d45f",
+      "name": "Se site / bc",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -4940,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "TelefoneBC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "CPF",
+              "value": "={{ $('Webhook').item.json.body.CPF }}"
+            },
+            {
+              "name": "Consulta",
+              "value": "=Atenção: você não possui créditos suficientes para realizar esta consulta. Adquira mais créditos ou tente através de outro módulo."
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4684f33c-8bce-42b1-b91e-2f4c9df353e4",
+      "name": "Crédito inferior",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4740,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "767cfa23-9941-4e9a-916c-606c9a4b97f0",
+      "name": "Respond to Webhook2",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -4560,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## SE SITE VERIFICAR CRÉDITO",
+        "height": 618.9881218861381,
+        "width": 710.1829541272629,
+        "color": 4
+      },
+      "id": "d6909ab1-38fb-4bf8-b39b-afa262861c22",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -5020,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "46e45beb-702c-41bb-9337-7130372170d9",
+      "name": "Retornar Créditos Site",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4740,
+        600
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "bfac3c94-a23c-4008-aa6c-dd5fcb21c8e6",
+              "leftValue": "={{ $json.valido }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "0fcb9117-fb23-4f87-bb1f-9c379eaa4ca0",
+      "name": "If15",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -5460,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## CPF / CNPJ inválido",
+        "height": 925.9662968215096,
+        "width": 456.60627452732734,
+        "color": 3
+      },
+      "id": "f2e4c052-00b2-49d0-9e15-f1d811fb2ef7",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -5720,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Função para validar o CPF\nfunction validarCPF(cpf) {\n    cpf = cpf.replace(/[^\\d]+/g, ''); // Remove caracteres não numéricos\n    if (cpf.length !== 11 || /^(\\d)\\1+$/.test(cpf)) return false; // Verifica se possui 11 dígitos e não é uma sequência repetida\n\n    let soma = 0, resto;\n\n    // Validação do primeiro dígito verificador\n    for (let i = 1; i <= 9; i++) {\n        soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);\n    }\n    resto = (soma * 10) % 11;\n    if (resto === 10 || resto === 11) resto = 0;\n    if (resto !== parseInt(cpf.substring(9, 10))) return false;\n\n    // Validação do segundo dígito verificador\n    soma = 0;\n    for (let i = 1; i <= 10; i++) {\n        soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);\n    }\n    resto = (soma * 10) % 11;\n    if (resto === 10 || resto === 11) resto = 0;\n    if (resto !== parseInt(cpf.substring(10, 11))) return false;\n\n    return true;\n}\n\n// Função para validar o CNPJ\nfunction validarCNPJ(cnpj) {\n    cnpj = cnpj.replace(/[^\\d]+/g, ''); // Remove caracteres não numéricos\n    if (cnpj.length !== 14 || /^(\\d)\\1+$/.test(cnpj)) return false; // Verifica se possui 14 dígitos e não é uma sequência repetida\n\n    let tamanho = cnpj.length - 2;\n    let numeros = cnpj.substring(0, tamanho);\n    let digitos = cnpj.substring(tamanho);\n    let soma = 0;\n    let pos = tamanho - 7;\n\n    for (let i = tamanho; i >= 1; i--) {\n        soma += numeros.charAt(tamanho - i) * pos--;\n        if (pos < 2) pos = 9;\n    }\n\n    let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;\n    if (resultado != digitos.charAt(0)) return false;\n\n    tamanho = tamanho + 1;\n    numeros = cnpj.substring(0, tamanho);\n    soma = 0;\n    pos = tamanho - 7;\n\n    for (let i = tamanho; i >= 1; i--) {\n        soma += numeros.charAt(tamanho - i) * pos--;\n        if (pos < 2) pos = 9;\n    }\n\n    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;\n    if (resultado != digitos.charAt(1)) return false;\n\n    return true;\n}\n\n// Captura o CPF ou CNPJ diretamente do campo 'body.CPF' ou 'body.CNPJ' dentro do 'Webhook'\nconst numero = ($('Webhook').item.json.body.CPF || $('Webhook').item.json.body.CNPJ).replace(/[^\\d]+/g, '');\nconst tipo = numero.length === 11 ? 'CPF' : 'CNPJ';\nconst valido = tipo === 'CPF' ? validarCPF(numero) : validarCNPJ(numero);\n\nreturn [\n    {\n        json: {\n            numeroOriginal: numero,\n            tipo: tipo,\n            valido: valido // Retorna true ou false\n        }\n    }\n];\n"
+      },
+      "id": "9a3696fa-5c0a-4ee7-8746-998af876f1e7",
+      "name": "Code2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5660,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "CPF inválido"
+            },
+            {
+              "name": "Informações",
+              "value": "Atenção: o CPF informado é inválido. Por favor, digite o CPF corretamente 🚨"
+            },
+            {
+              "name": "Nome Menu",
+              "value": "=_{{ $('Dados N8N').item.json['Nome Consulta'] }}_"
+            },
+            {
+              "name": "Nome Menu Status",
+              "value": "={{ $('Dados N8N').item.json['Nome Consulta'] }} - Online"
+            },
+            {
+              "name": "URL PDF",
+              "value": "Erro"
+            },
+            {
+              "name": "Resumo IA",
+              "value": "Erro"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7ed6f4db-0f50-4322-b2e3-d535c48ceea2",
+      "name": "Consulta ERRO1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -5460,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "botconversa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9a9f8b9b-ad76-4035-8a8f-3f714f9cde03",
+      "name": "If8",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -5660,
+        980
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "TelefoneBC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "CPF",
+              "value": "={{ $('Webhook').item.json.body.CPF }}"
+            },
+            {
+              "name": "Consulta",
+              "value": "=Atenção: o CPF digitado é inválido. Digite apenas números, sem pontos, traços ou espaços.\nEx: 35145698712"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2af42efb-a2a6-4aff-b113-ea25251c05fd",
+      "name": "HTTP Request7",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -5660,
+        1180
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "b4fe8895-29a2-4ba9-b3e6-91ce47c3b0d0",
+      "name": "Respond to Webhook3",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -5460,
+        1180
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "84221e95-0525-4f40-8408-1d0f807d19c4",
+      "name": "Date & Time1",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        -2660,
+        1500
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtém a data e hora do campo\nconst currentDate = new Date($('Date & Time1').item.json.currentDate);\n\n// Converte para o horário de São Paulo (GMT-3)\nconst options = { timeZone: 'America/Sao_Paulo', hour12: false };\nconst brazilianTime = new Date(currentDate.toLocaleString('en-US', options));\n\n// Obtém o dia da semana (0 = Domingo, 1 = Segunda, ..., 6 = Sábado) e a hora\nconst dayOfWeek = brazilianTime.getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado\nconst hour = brazilianTime.getHours();\n\n// Verifica se a hora está entre 08:00 e 18:00 e se o dia é útil (segunda a sexta)\nif (hour >= 9 && hour < 18 && dayOfWeek >= 1 && dayOfWeek <= 5) {\n    return {\n        json: {\n            status: 'Horário funcionamento'\n        }\n    };\n} else {\n    return {\n        json: {\n            status: 'Fora do horário'\n        }\n    };\n}\n"
+      },
+      "id": "54eadd4c-c634-4721-a469-398cd3569a88",
+      "name": "Code Horário funcionamento",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2480,
+        1500
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "00cfe53f-c309-4404-87b3-de0a2064903a",
+              "name": "Consulta erro",
+              "value": "Tente novamente utilizando outra opção de consulta disponível.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "33537427-3c63-4f24-aba2-b582518810e8",
+      "name": "Horário funcionamento1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -2480,
+        1660
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "8ec90439-29cc-4f7e-9318-906539cd9a2d",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "funcionamento",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "984a5b71-acc7-41e9-9d28-d24cc4c6f434",
+      "name": "Verificar Horário funcionamento",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2660,
+        1660
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "00cfe53f-c309-4404-87b3-de0a2064903a",
+              "name": "Consulta erro",
+              "value": "🕗 Alguns birôs restringem as consultas ao horário comercial. Aguarde até o horário de funcionamento para realizar a consulta e melhor experiência ou tente novamente utilizando outra opção disponível.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "72d7fcf4-b771-42ab-b494-25b99f35d31c",
+      "name": "Fora do horário",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -2660,
+        1800
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Horário funcionamento",
+        "height": 578.2747827033502,
+        "width": 397.97803245596407,
+        "color": 3
+      },
+      "id": "9bdaffc8-70c0-4e67-aea1-536d6d19f992",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2720,
+        1420
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=http://confere.link/api/?acao=CONS_DEVFED&TK=IGGE-FAO-566021-PUN-4WT4&DADO={{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}&TIPO=XML",
+        "options": {
+          "timeout": 180000
+        }
+      },
+      "id": "191d5288-481e-4734-b2ae-ef8030ebf54c",
+      "name": "Consulta",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -3080,
+        460
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 1000,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "8f20d91e-3234-4c04-a94a-424dde7168f2",
+              "leftValue": "={{ $json.nome }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "32aa1074-8521-427a-8f26-0fffe22d40dc",
+              "leftValue": "={{ $json.cpfCnpj }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "4ebf7223-b5bd-4d8e-b426-b758e8eccc15",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2640,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9b896dba-70e6-4e2a-8a61-e1528323a73f",
+              "name": "Informações",
+              "value": "=*Valor Total Devido:* _R${{ $json.valorTotalDevido }}_\n\n------------ / / ------------\n\n*Inscrição:* _{{ $json.inscricoes[0].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[0].valor }}_\n\n*Inscrição:* _{{ $json.inscricoes[1].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[1].valor }}_\n\n*Inscrição:* _{{ $json.inscricoes[2].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[2].valor }}_\n\n*Inscrição:* _{{ $json.inscricoes[3].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[3].valor }}_\n\n*Inscrição:* _{{ $json.inscricoes[4].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[4].valor }}_",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "95111544-f023-46cc-8b2c-6f4b820a5041",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -2420,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "95e2f193-30e9-4d68-a7d8-01ab49ff6d76",
+              "leftValue": "={{ $json.inscricoes[4] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "57e38af1-1ee5-4b65-b0a4-8a93ee09a96a",
+      "name": "If1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2420,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0ae6a811-4e5d-44fa-bb03-fbab290cc4fe",
+              "name": "Informações",
+              "value": "=*Nome:* _{{ $('If').item.json.nome }}_\n*CPF:* _{{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}_\n\n{{ $json.naturezaFormatada }}\n\n{{ $('If6').item.json['Informações'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f69ce8ba-29ea-4aab-9573-72002153d0b6",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -740,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Capturando o valor da string retornada\nconst natureza = $('If').item.json.natureza;\n\n// Substituir caracteres especiais por \"a\"\nconst naturezaFormatada = natureza.replace(/�/g, 'a');\n\n// Retornar o valor formatado\nreturn {\n    naturezaFormatada\n};\n"
+      },
+      "id": "5e7d1af8-2eaa-4df0-98b7-1c00458b91ee",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -920,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9b896dba-70e6-4e2a-8a61-e1528323a73f",
+              "name": "Informações",
+              "value": "=*Valor Total Devido:* _R${{ $json.valorTotalDevido }}_\n\n------------ / / ------------\n\n*Inscrição:* _{{ $json.inscricoes[0].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[0].valor }}_\n\n*Inscrição:* _{{ $json.inscricoes[1].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[1].valor }}_\n\n*Inscrição:* _{{ $json.inscricoes[2].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[2].valor }}_\n\n*Inscrição:* _{{ $json.inscricoes[3].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[3].valor }}_",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8d97e99f-94fe-4fdb-922f-b0c9502b7b55",
+      "name": "Edit Fields2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -2200,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "95e2f193-30e9-4d68-a7d8-01ab49ff6d76",
+              "leftValue": "={{ $json.inscricoes[3] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "816bcbec-1a79-4f52-9ede-ddf46edc4b6a",
+      "name": "If2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2200,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9b896dba-70e6-4e2a-8a61-e1528323a73f",
+              "name": "Informações",
+              "value": "=*Valor Total Devido:* _R${{ $json.valorTotalDevido }}_\n\n------------ / / ------------\n\n*Inscrição:* _{{ $json.inscricoes[0].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[0].valor }}_\n\n*Inscrição:* _{{ $json.inscricoes[1].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[1].valor }}_\n\n*Inscrição:* _{{ $json.inscricoes[2].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[2].valor }}_",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "297a104c-8113-442f-b34d-ded75a06b484",
+      "name": "Edit Fields3",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -2000,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "95e2f193-30e9-4d68-a7d8-01ab49ff6d76",
+              "leftValue": "={{ $json.inscricoes[2] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a3ee4565-8f1c-4bb8-af74-0f0446656549",
+      "name": "If3",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2000,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9b896dba-70e6-4e2a-8a61-e1528323a73f",
+              "name": "Informações",
+              "value": "=*Valor Total Devido:* _R${{ $json.valorTotalDevido }}_\n\n------------ / / ------------\n\n*Inscrição:* _{{ $json.inscricoes[0].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[0].valor }}_\n\n*Inscrição:* _{{ $json.inscricoes[1].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[1].valor }}_",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8a2e6f60-0d45-4cd9-8040-a3e7367d6743",
+      "name": "Edit Fields4",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1800,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "95e2f193-30e9-4d68-a7d8-01ab49ff6d76",
+              "leftValue": "={{ $json.inscricoes[1] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d45c05d2-ee60-4828-92f4-3fade972d25f",
+      "name": "If4",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1800,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9b896dba-70e6-4e2a-8a61-e1528323a73f",
+              "name": "Informações",
+              "value": "=*Valor Total Devido:* _R${{ $json.valorTotalDevido }}_\n\n------------ / / ------------\n\n*Inscrição:* _{{ $json.inscricoes[0].inscricao }}_\n*Valor:* _R${{ $json.inscricoes[0].valor }}_",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6c3ae5fb-5816-4d0a-9b53-b1017f6fe733",
+      "name": "Edit Fields5",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1600,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "95e2f193-30e9-4d68-a7d8-01ab49ff6d76",
+              "leftValue": "={{ $json.inscricoes[0] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7e182809-e0bb-4ac8-8c62-d6aac885853b",
+      "name": "If5",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1600,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            },
+            {
+              "name": "Informações",
+              "value": "={{ $('If10').item.json['Informações'] }}"
+            },
+            {
+              "name": "Nome Menu",
+              "value": "=_{{ $('Dados N8N').item.json['Nome Consulta'] }}_"
+            },
+            {
+              "name": "Nome Menu Status",
+              "value": "={{ $('Dados N8N').item.json['Nome Consulta'] }} - Online"
+            },
+            {
+              "name": "Tipo consulta",
+              "value": "={{ $('Webhook').item.json.body['Tipo consulta'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d29b9136-a2e7-4e79-ac9b-6685168ccd24",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -20,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "TelefoneBC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "CPF",
+              "value": "={{ $('Webhook').item.json.body.CPF }}"
+            },
+            {
+              "name": "Consulta",
+              "value": "=\n\n{{ $('If10').item.json['Informações'].replace(/\\*/g, \"\").replace(/ _/g, \" \").replace(/_\\n/g, \"\\n\")}}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            },
+            {
+              "name": "URL PDF",
+              "value": "=-"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d8d0b86c-f944-4911-9ac2-601b2cbb4189",
+      "name": "HTTP Request5",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -20,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "botconversa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b6fba60c-a754-4df0-91a0-0c67d8c00325",
+      "name": "If16",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## ENVIAR RESULTADO CONSULTA SITE",
+        "height": 361.67176867158605,
+        "width": 575.2111830622312,
+        "color": 2
+      },
+      "id": "96a8587d-0932-4cea-8bee-791021eb0493",
+      "name": "Sticky Note12",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -260,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "db42dd07-8507-4721-9860-ee0f5bf107df",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        180,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "consulta-cadin",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "1a48eff1-ecef-433e-ad95-f5c2de12afaf",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -6120,
+        500
+      ],
+      "webhookId": "1a8c44f6-98ab-4182-8de6-2c36e1f353e4"
+    },
+    {
+      "parameters": {
+        "url": "=http://confere.link/api/?acao=CONS_DEVFED&TK=IGGE-FAO-566021-PUN-4WT4&DADO={{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}&TIPO=XML",
+        "options": {
+          "timeout": 180000
+        }
+      },
+      "id": "c35a10fb-e588-4f13-9c61-883ec7489bcf",
+      "name": "Consulta1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -3080,
+        280
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 1000,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "29fbcc12-6ea7-4448-b415-eb649b42fcc4",
+              "leftValue": "={{ $('Webhook').item.json.body.CPF }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "e6366a11-e78e-45a8-bd04-4df2edfa663d",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "aa9ea9cc-7b38-4cfc-82f9-a2809e389ead",
+      "name": "If6",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1280,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "typebot",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3b53607a-139a-4cf7-b23f-00fca6757c8d",
+      "name": "se typebot",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -5840,
+        740
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4523dbda-713f-421c-94d1-db6b52bbbe08",
+              "name": "resposta",
+              "value": "=Atenção: o CPF informado é inválido. Por favor, digite o CPF corretamente 🚨",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1ed73666-c9fd-4bb7-9e34-cd74c60dc1ba",
+      "name": "typebot",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -5460,
+        740
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "typebot",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c7914cfb-153d-4ebb-ba7d-e2cc424a389f",
+      "name": "se typebot1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2140,
+        1540
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4523dbda-713f-421c-94d1-db6b52bbbe08",
+              "name": "resposta",
+              "value": "={{ $('se typebot1').item.json['Consulta erro'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5e32df45-0262-4ab6-ac17-a066eaa9cb01",
+      "name": "typebot1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1940,
+        1520
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "typebot",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "dab696c8-303a-409a-b6bc-662dc1ca549f",
+      "name": "se typebot2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -200,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4523dbda-713f-421c-94d1-db6b52bbbe08",
+              "name": "resposta",
+              "value": "={{ $('If10').item.json['Informações'].replace(/\\*/g, \"\").replace(/ _/g, \" \").replace(/_\\n/g, \"\\n\")}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d392c086-579a-49e8-9762-cf9816d177e3",
+      "name": "typebot2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        0,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supondo que seu JSON de entrada esteja na variável $json\nconst data = $json.data;\n\n// Função para limpar tags HTML e capturar dados essenciais\nfunction extractData(html) {\n    const result = {};\n    \n    // Capturar Nome\n    const nomeMatch = html.match(/<strong>Nome:<\\/strong>\\s*(.+?)<\\/p>/);\n    result.nome = nomeMatch ? nomeMatch[1].trim() : null;\n\n    // Capturar CPF/CNPJ\n    const cpfMatch = html.match(/<strong>CPF\\/CNPJ:<\\/strong>\\s*(.+?)<\\/p>/);\n    result.cpfCnpj = cpfMatch ? cpfMatch[1].trim() : null;\n\n    // Capturar Domicílio\n    const domMatch = html.match(/<strong>Domic�lio:<\\/strong>\\s*(.+?)<\\/p>/);\n    result.domicilio = domMatch ? domMatch[1].trim() : null;\n\n    // Capturar Natureza\n    const naturezaMatch = html.match(/<strong>Natureza:<\\/strong>\\s*(.+?)<\\/p>/);\n    result.natureza = naturezaMatch ? naturezaMatch[1].trim() : null;\n\n    // Capturar Valor Total\n    const valorMatch = html.match(/<strong>Valor Total das Naturezas:<\\/strong>\\s*R\\$\\s*(.+?)<\\/p>/);\n    result.valorTotalNaturezas = valorMatch ? valorMatch[1].replace(/[^0-9,.-]/g, '').trim() : null;\n\n    // Capturar Data da Consulta\n    const dataConsultaMatch = html.match(/<strong>Data da Consulta:<\\/strong>\\s*(.+?)<\\/p>/);\n    result.dataConsulta = dataConsultaMatch ? dataConsultaMatch[1].trim() : null;\n\n    // Capturar Valor Total Devido\n    const valorDevidoMatch = html.match(/Valor total devido:\\s*R\\$\\s*(.+?)<\\/div>/);\n    result.valorTotalDevido = valorDevidoMatch ? valorDevidoMatch[1].replace(/[^0-9,.-]/g, '').trim() : null;\n\n    // Capturar Inscrições (ajustado para casos de encoding problemático)\n    const inscricoes = [];\n    const inscricaoMatches = [...html.matchAll(/<div class=\"inscricao-item\">([\\s\\S]*?)<\\/div>/g)];\n    for (const match of inscricaoMatches) {\n        const inscricaoHtml = match[1];\n\n        const inscricaoMatch = inscricaoHtml.match(/<strong>Inscri��o:<\\/strong>\\s*(.+?)<\\/p>/);\n        const valorMatch = inscricaoHtml.match(/<strong>Valor:<\\/strong>\\s*R\\$\\s*(.+?)<\\/p>/);\n\n        if (inscricaoMatch && valorMatch) {\n            inscricoes.push({\n                inscricao: inscricaoMatch[1].trim(),\n                valor: valorMatch[1].replace(/[^0-9,.-]/g, '').trim(),\n            });\n        }\n    }\n    result.inscricoes = inscricoes;\n\n    return result;\n}\n\n// Extrair dados do HTML\nconst extractedData = extractData(data);\n\n// Retornar os dados formatados como JSON\nreturn {\n    json: extractedData,\n};\n"
+      },
+      "id": "8373b326-9acf-46a3-ab24-e5825af0d99e",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2860,
+        460
+      ],
+      "retryOnFail": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "=http://confere.link/api/?acao=CONS_DEVFED&TK=IGGE-FAO-566021-PUN-4WT4&DADO=02626267309&TIPO=XML",
+        "options": {
+          "timeout": 180000
+        }
+      },
+      "id": "38ea8715-3533-4b9d-b61d-294380bb2e41",
+      "name": "Consulta2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -3080,
+        640
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 1000,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "8f20d91e-3234-4c04-a94a-424dde7168f2",
+              "leftValue": "={{ $json.nome }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "09ce4069-04e5-4b0e-8d1d-cbf5e17d31a2",
+              "leftValue": "={{ $json.cpfCnpj }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "165f56a1-0a1f-4e0a-a66e-6634acec8afb",
+      "name": "If9",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2640,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supondo que seu JSON de entrada esteja na variável $json\nconst data = $json.data;\n\n// Função para limpar tags HTML e capturar dados essenciais\nfunction extractData(html) {\n    const result = {};\n    \n    // Capturar Nome\n    const nomeMatch = html.match(/<strong>Nome:<\\/strong>\\s*(.+?)<\\/p>/);\n    result.nome = nomeMatch ? nomeMatch[1].trim() : null;\n\n    // Capturar CPF/CNPJ\n    const cpfMatch = html.match(/<strong>CPF\\/CNPJ:<\\/strong>\\s*(.+?)<\\/p>/);\n    result.cpfCnpj = cpfMatch ? cpfMatch[1].trim() : null;\n\n    // Capturar Domicílio\n    const domMatch = html.match(/<strong>Domic�lio:<\\/strong>\\s*(.+?)<\\/p>/);\n    result.domicilio = domMatch ? domMatch[1].trim() : null;\n\n    // Capturar Natureza\n    const naturezaMatch = html.match(/<strong>Natureza:<\\/strong>\\s*(.+?)<\\/p>/);\n    result.natureza = naturezaMatch ? naturezaMatch[1].trim() : null;\n\n    // Capturar Valor Total\n    const valorMatch = html.match(/<strong>Valor Total das Naturezas:<\\/strong>\\s*R\\$\\s*(.+?)<\\/p>/);\n    result.valorTotalNaturezas = valorMatch ? valorMatch[1].replace(/[^0-9,.-]/g, '').trim() : null;\n\n    // Capturar Data da Consulta\n    const dataConsultaMatch = html.match(/<strong>Data da Consulta:<\\/strong>\\s*(.+?)<\\/p>/);\n    result.dataConsulta = dataConsultaMatch ? dataConsultaMatch[1].trim() : null;\n\n    // Capturar Valor Total Devido\n    const valorDevidoMatch = html.match(/Valor total devido:\\s*R\\$\\s*(.+?)<\\/div>/);\n    result.valorTotalDevido = valorDevidoMatch ? valorDevidoMatch[1].replace(/[^0-9,.-]/g, '').trim() : null;\n\n    // Capturar Inscrições (ajustado para casos de encoding problemático)\n    const inscricoes = [];\n    const inscricaoMatches = [...html.matchAll(/<div class=\"inscricao-item\">([\\s\\S]*?)<\\/div>/g)];\n    for (const match of inscricaoMatches) {\n        const inscricaoHtml = match[1];\n\n        const inscricaoMatch = inscricaoHtml.match(/<strong>Inscri��o:<\\/strong>\\s*(.+?)<\\/p>/);\n        const valorMatch = inscricaoHtml.match(/<strong>Valor:<\\/strong>\\s*R\\$\\s*(.+?)<\\/p>/);\n\n        if (inscricaoMatch && valorMatch) {\n            inscricoes.push({\n                inscricao: inscricaoMatch[1].trim(),\n                valor: valorMatch[1].replace(/[^0-9,.-]/g, '').trim(),\n            });\n        }\n    }\n    result.inscricoes = inscricoes;\n\n    return result;\n}\n\n// Extrair dados do HTML\nconst extractedData = extractData(data);\n\n// Retornar os dados formatados como JSON\nreturn {\n    json: extractedData,\n};\n"
+      },
+      "id": "cfe24e4c-b76d-4f5e-99a9-2070b54cd86d",
+      "name": "Code3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2860,
+        640
+      ],
+      "retryOnFail": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9b896dba-70e6-4e2a-8a61-e1528323a73f",
+              "name": "Informações",
+              "value": "=CPF: _{{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}_\n\n--------- / / ---------\n\n- _Sem pendências registradas._",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f333ffb2-08c4-4d91-b8f8-5e816341a047",
+      "name": "Edit Fields6",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1400,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "ca62de73-d287-46b9-8a44-66ef1792df47",
+      "name": "If10",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -580,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const agora = new Date().toLocaleString(\"pt-BR\", { timeZone: \"America/Sao_Paulo\" });\n\n// Divide data e hora\nconst [dataStrRaw, horaStr] = agora.split(' ');\nconst dataStr = dataStrRaw.replace(',', '');\n\n// Extrai dia, mês e ano\nconst [dia, mes, ano] = dataStr.split('/');\nconst dataFormatada = `${dia}/${mes}/${ano}`;\n\n// Novo formato ISO (YYYY-MM-DD)\nconst dataISO = `${ano}-${mes}-${dia}`;\n\n// Monta a URL da execução\nconst executionId = $execution.id;\nconst workflowId = $workflow.id;\nconst baseUrl = \"https://n8n.redequeroimoveis.com\";\nconst executionUrl = `${baseUrl}/workflow/${workflowId}/executions/${executionId}`;\n\n// Retorna tudo em um único objeto\nreturn [{\n  json: {\n    data: dataFormatada,\n    data_iso: dataISO,\n    hora: horaStr,\n    executionUrl: executionUrl\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3080,
+        820
+      ],
+      "id": "0bc0d8a4-5c8b-41d7-991a-5cb7c49c7f64",
+      "name": "Code7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f8e5d1e6-feda-4373-8e50-936f54a48786",
+              "name": "Créditos",
+              "value": "=2",
+              "type": "string"
+            },
+            {
+              "id": "e83c4952-cefe-4e2e-accf-865e014c5c20",
+              "name": "Opção Consulta",
+              "value": "CADIN",
+              "type": "string"
+            },
+            {
+              "id": "b465d432-f3ad-4b56-8e49-81a06ca7db1a",
+              "name": "Tipo Consulta",
+              "value": "={{ $workflow.name }}",
+              "type": "string"
+            },
+            {
+              "id": "ccbdfb0b-45f1-40b2-b095-fcfefa698376",
+              "name": "Telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "41bac44d-098a-4889-ad47-0138194c7d6b",
+              "name": "Dado consultado",
+              "value": "={{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "5f0eaada-894e-45cf-8c51-3f1a65fb785e",
+              "name": "Data",
+              "value": "={{ $json.data }}",
+              "type": "string"
+            },
+            {
+              "id": "f34f0ad5-5beb-4941-a1be-d63c2f099f22",
+              "name": "Hora",
+              "value": "={{ $json.hora }}",
+              "type": "string"
+            },
+            {
+              "id": "7c7fe4c7-5f91-4a5c-af93-3104c80aab4c",
+              "name": "Origem Consulta",
+              "value": "={{ $('Webhook').item.json.body.Webhook }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3300,
+        900
+      ],
+      "id": "1513aab6-44d4-4167-b1f2-aaa5cce5cb1b",
+      "name": "Dados Histórico"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://base44.app/api/apps/6819f5703086936c581632c2/entities/Historico",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "876ed4d9d16b40b3b54ab5da6d49a0a4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.Telefone }}"
+            },
+            {
+              "name": "dado_consultado",
+              "value": "={{ $json[\"Dado consultado\"] }}"
+            },
+            {
+              "name": "tipo_consulta",
+              "value": "={{ $json['Tipo Consulta'] }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json['Créditos'] }}"
+            },
+            {
+              "name": "data",
+              "value": "={{ $('Code7').item.json.data_iso }}"
+            },
+            {
+              "name": "hora",
+              "value": "={{ $json.Hora }}"
+            },
+            {
+              "name": "origem",
+              "value": "={{ $json['Origem Consulta'] }}"
+            },
+            {
+              "name": "opcao",
+              "value": "={{ $json['Opção Consulta'] }}"
+            },
+            {
+              "name": "exec",
+              "value": "={{ $('Code7').item.json.executionUrl }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3520,
+        900
+      ],
+      "id": "0457172a-c73b-461b-8a32-a3a71180338c",
+      "name": "Base44 API - Histórico",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://base44.app/api/apps/6810f69b135122c2415c3aa4/entities/RetornoConsulta",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "876ed4d9d16b40b3b54ab5da6d49a0a4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "requestToken",
+              "value": "={{ $('Webhook').item.json.body.RequestToken }}"
+            },
+            {
+              "name": "resposta",
+              "value": "={{ $('se typebot2').item.json['Consulta erro'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1800,
+        1300
+      ],
+      "id": "17b81786-d72b-4fdb-a2c9-7e06d844bc5e",
+      "name": "Base44 API - Erro Consulta",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "typebot",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "60288151-e6eb-4293-b30b-a838e064013e",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "consultasite44",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "22439e7d-6bb9-45e0-a073-00af58b7385d",
+              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
+              "rightValue": "api",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "7d6f016b-a2c8-46af-8439-342168f92530",
+      "name": "If25",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -4960,
+        980
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4523dbda-713f-421c-94d1-db6b52bbbe08",
+              "name": "resposta",
+              "value": "=Atenção: você não possui créditos suficientes para realizar esta consulta. Adquira mais créditos ou tente através de outro módulo.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ea65f2bd-1d22-4772-b9d2-8685f3d26645",
+      "name": "Edit Fields7",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -4520,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://evolution.unisistemas.tech/message/sendText/{{ $('Webhook').item.json.body.Webhook.split('_')[1] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Webhook').item.json.body.Webhook.split('_').pop() }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "text",
+              "value": "=*UniConsultas*\nTodas as consultas em um só lugar!\n\n------- / / -------\n\n## Consulta CADIN\n\n{{ $('If10').item.json['Informações'].replace(/\\*/g, \"\").replace(/ _/g, \" \").replace(/_\\n/g, \"\\n\")}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        -180
+      ],
+      "id": "ab7e4052-8123-4caa-877c-fa766b9c2838",
+      "name": "EvolutionAPI - Consulta"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://evolution.unisistemas.tech/message/sendText/{{ $('Webhook').item.json.body.Webhook.split('_')[1] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Webhook').item.json.body.Webhook.split('_').pop() }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $('se typebot1').item.json['Consulta erro'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2080,
+        1260
+      ],
+      "id": "ab2f4f07-76a8-446c-949f-a6f989167c0e",
+      "name": "EvolutionAPI - Erro",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://evolution.unisistemas.tech/message/sendText/{{ $('Webhook').item.json.body.Webhook.split('_')[1] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Webhook').item.json.body.Webhook.split('_').pop() }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "text",
+              "value": "=Atenção: você não possui créditos suficientes para realizar esta consulta. Adquira mais créditos ou tente através de outro módulo."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4760,
+        960
+      ],
+      "id": "f19e59fb-a043-42b3-97ff-57b3b2d126cb",
+      "name": "EvolutionAPI - Sem credito",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://evolution.unisistemas.tech/message/sendText/{{ $('Webhook').item.json.body.Webhook.split('_')[1] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Webhook').item.json.body.Webhook.split('_').pop() }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "text",
+              "value": "=Atenção: O CPF informado é inválido. 🚨\nVerifique os números e digite corretamente."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -5640,
+        740
+      ],
+      "id": "258f9424-9a91-4836-ac8e-00df36e53cd4",
+      "name": "EvolutionAPI - CPF Invalido",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://evolution.unisistemas.tech/message/sendText/{{ $('Webhook').item.json.body.Webhook.split('_')[1] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Webhook').item.json.body.Webhook.split('_').pop() }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "text",
+              "value": "=Aguarde, realizando consulta..."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -5920,
+        320
+      ],
+      "id": "a0c47f22-7b55-45b0-a40e-b695f06709b0",
+      "name": "EvolutionAPI - Realizando consulta",
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Dados N8N": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos": {
+      "main": [
+        [
+          {
+            "node": "Créditos a retirar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se crédito existe": {
+      "main": [
+        [
+          {
+            "node": "Maior ou igual1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Verificar Crédito Arthur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retirar Créditos": {
+      "main": [
+        [
+          {
+            "node": "Verificar saldo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis1": {
+      "main": [
+        [
+          {
+            "node": "Retirar Créditos2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Crédito Arthur": {
+      "main": [
+        [
+          {
+            "node": "Se crédito existe3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se crédito existe3": {
+      "main": [
+        [
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "API Crédito Offline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Créditos a retirar1": {
+      "main": [
+        [
+          {
+            "node": "Se crédito existe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Maior ou igual1": {
+      "main": [
+        [
+          {
+            "node": "Retirar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar Créditos Disponíveis1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar saldo": {
+      "main": [
+        [
+          {
+            "node": "If11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If11": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If7": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request6": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crédito maior ou igual": {
+      "main": [
+        [
+          {
+            "node": "Consulta",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If25",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se site / bc": {
+      "main": [
+        [
+          {
+            "node": "Consulta",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar Créditos Site",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crédito inferior": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Site": {
+      "main": [
+        [
+          {
+            "node": "Crédito maior ou igual",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If15": {
+      "main": [
+        [
+          {
+            "node": "Se site / bc",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "se typebot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "If15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If8": {
+      "main": [
+        [
+          {
+            "node": "Consulta ERRO1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request7": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time1": {
+      "main": [
+        [
+          {
+            "node": "Code Horário funcionamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Horário funcionamento": {
+      "main": [
+        [
+          {
+            "node": "Verificar Horário funcionamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Horário funcionamento": {
+      "main": [
+        [
+          {
+            "node": "Horário funcionamento1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fora do horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Horário funcionamento1": {
+      "main": [
+        [
+          {
+            "node": "se typebot1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fora do horário": {
+      "main": [
+        [
+          {
+            "node": "se typebot1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retirar Créditos2": {
+      "main": [
+        [
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API Crédito Offline": {
+      "main": [
+        [
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consulta": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Consulta2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If16": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Dados N8N",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "EvolutionAPI - Realizando consulta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "If10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consulta ERRO1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If6": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "se typebot": {
+      "main": [
+        [
+          {
+            "node": "EvolutionAPI - CPF Invalido",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "typebot": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "se typebot1": {
+      "main": [
+        [
+          {
+            "node": "EvolutionAPI - Erro",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "typebot1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "se typebot2": {
+      "main": [
+        [
+          {
+            "node": "EvolutionAPI - Consulta",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If16",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "typebot2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consulta2": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "If9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If9": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Date & Time1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "If10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If10": {
+      "main": [
+        [
+          {
+            "node": "se typebot2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code7": {
+      "main": [
+        [
+          {
+            "node": "Dados Histórico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados Histórico": {
+      "main": [
+        [
+          {
+            "node": "Base44 API - Histórico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Base44 API - Erro Consulta": {
+      "main": [
+        [
+          {
+            "node": "typebot1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If25": {
+      "main": [
+        [
+          {
+            "node": "EvolutionAPI - Sem credito",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Crédito inferior",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EvolutionAPI - Consulta": {
+      "main": [
+        [
+          {
+            "node": "typebot2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EvolutionAPI - Erro": {
+      "main": [
+        [
+          {
+            "node": "typebot1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EvolutionAPI - Sem credito": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EvolutionAPI - CPF Invalido": {
+      "main": [
+        [
+          {
+            "node": "typebot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Consulta1": [
+      {
+        "json": {
+          "data": "<!DOCTYPE html>\r\n<html lang=\"pt-br\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Detalhamento</title>\r\n    <style>\r\n        body {\r\n            font-family: Arial, sans-serif;\r\n            margin: 0;\r\n            padding: 0;\r\n            background-color: #f4f4f4;\r\n        }\r\n        .container {\r\n            max-width: 700px;\r\n            margin: 20px auto;\r\n            background: white;\r\n            border-radius: 8px;\r\n            overflow: hidden;\r\n            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);\r\n        }\r\n        .header {\r\n            background-color: #e6e6e6;\r\n            padding: 20px;\r\n            border-bottom: 1px solid #ddd;\r\n        }\r\n        .header h2 {\r\n            margin: 0;\r\n            font-size: 18px;\r\n        }\r\n        .info {\r\n            padding: 20px;\r\n            background-color: #e0e8f0;\r\n        }\r\n        .info p {\r\n            margin: 5px 0;\r\n        }\r\n        .total-debt {\r\n            padding: 20px;\r\n            font-size: 18px;\r\n            font-weight: bold;\r\n            color: green;\r\n        }\r\n        .debt-item {\r\n            padding: 15px 20px;\r\n            border-top: 1px solid #ddd;\r\n        }\r\n        .debt-header {\r\n            font-weight: bold;\r\n            margin-bottom: 10px;\r\n        }\r\n        .inscricao-item {\r\n            display: flex;\r\n            padding: 10px;\r\n            margin-top: 10px;\r\n            border-left: 2px solid #ccc;\r\n            align-items: center;\r\n            gap: 20px;\r\n        }\r\n        .inscricao-item p {\r\n            margin: 0;\r\n            flex: 1;\r\n        }\r\n        .footer {\r\n            padding: 10px;\r\n            text-align: center;\r\n            background-color: #e6e6e6;\r\n            font-size: 14px;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n\r\n<div id=\"app\">\r\n                        <div class=\"container\">\r\n                <div class=\"header\">\r\n                    <h2>Detalhamento</h2>\r\n                </div>\r\n                <div class=\"info\">\r\n                    <p><strong>Nome:</strong> ARTHUR BALDIOTTI MENDONCA ALVARES</p>\r\n                    <p><strong>CPF/CNPJ:</strong> 11383223696</p>\r\n                    <p><strong>Domic�lio:</strong> MG</p>\r\n                    <p><strong>Natureza:</strong> Tribut�rio - Previdenci�rio (Uni�o), Tribut�rio - Simples Nacional (Uni�o)</p>\r\n                    <p><strong>Valor Total das Naturezas:</strong> R$�45.889,67</p>\r\n                    <p><strong>Data da Consulta:</strong> 11/12/2024 15:49</p>\r\n                </div>\r\n                <div class=\"total-debt\">\r\n                    Valor total devido: R$�45.889,67                </div>\r\n                                    <div class=\"debt-item\">\r\n                        <p class=\"debt-header\">Natureza: Tribut�rio - Previdenci�rio (Uni�o)</p>\r\n                        <p><strong>Valor:</strong> R$�744,71</p>\r\n                        <p><strong>Quantidade:</strong> 1</p>\r\n                                                    <div class=\"inscricao-item\">\r\n                                <p><strong>Inscri��o:</strong> 16.082.065-0</p>\r\n                                <p><strong>Valor:</strong> R$�744,71</p>\r\n                            </div>\r\n                                            </div>\r\n                                    <div class=\"debt-item\">\r\n                        <p class=\"debt-header\">Natureza: Tribut�rio - Simples Nacional (Uni�o)</p>\r\n                        <p><strong>Valor:</strong> R$�45.144,96</p>\r\n                        <p><strong>Quantidade:</strong> 4</p>\r\n                                                    <div class=\"inscricao-item\">\r\n                                <p><strong>Inscri��o:</strong> 60 4 21 024469-10</p>\r\n                                <p><strong>Valor:</strong> R$�10.659,99</p>\r\n                            </div>\r\n                                                    <div class=\"inscricao-item\">\r\n                                <p><strong>Inscri��o:</strong> 60 4 21 077394-51</p>\r\n                                <p><strong>Valor:</strong> R$�23.688,25</p>\r\n                            </div>\r\n                                                    <div class=\"inscricao-item\">\r\n                                <p><strong>Inscri��o:</strong> 60 4 21 126456-48</p>\r\n                                <p><strong>Valor:</strong> R$�2.894,76</p>\r\n                            </div>\r\n                                                    <div class=\"inscricao-item\">\r\n                                <p><strong>Inscri��o:</strong> 60 4 21 137326-68</p>\r\n                                <p><strong>Valor:</strong> R$�7.901,96</p>\r\n                            </div>\r\n                                            </div>\r\n                                <div class=\"footer\">\r\n                    <p>REGULARIZE - Acesse aqui o portal digital de servi�os da PGFN para regularizar ou questionar a d�vida.</p>\r\n                </div>\r\n            </div>\r\n            </div>\r\n\r\n</body>\r\n</html>\r\n"
+        }
+      }
+    ],
+    "Consulta": [
+      {
+        "json": {
+          "data": "Nenhum devedor encontrado."
+        }
+      }
+    ],
+    "Consulta2": [
+      {
+        "json": {
+          "data": "<!DOCTYPE html>\r\n<html lang=\"pt-br\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Detalhamento</title>\r\n    <style>\r\n        body {\r\n            font-family: Arial, sans-serif;\r\n            margin: 0;\r\n            padding: 0;\r\n            background-color: #f4f4f4;\r\n        }\r\n        .container {\r\n            max-width: 700px;\r\n            margin: 20px auto;\r\n            background: white;\r\n            border-radius: 8px;\r\n            overflow: hidden;\r\n            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);\r\n        }\r\n        .header {\r\n            background-color: #e6e6e6;\r\n            padding: 20px;\r\n            border-bottom: 1px solid #ddd;\r\n        }\r\n        .header h2 {\r\n            margin: 0;\r\n            font-size: 18px;\r\n        }\r\n        .info {\r\n            padding: 20px;\r\n            background-color: #e0e8f0;\r\n        }\r\n        .info p {\r\n            margin: 5px 0;\r\n        }\r\n        .total-debt {\r\n            padding: 20px;\r\n            font-size: 18px;\r\n            font-weight: bold;\r\n            color: green;\r\n        }\r\n        .debt-item {\r\n            padding: 15px 20px;\r\n            border-top: 1px solid #ddd;\r\n        }\r\n        .debt-header {\r\n            font-weight: bold;\r\n            margin-bottom: 10px;\r\n        }\r\n        .inscricao-item {\r\n            display: flex;\r\n            padding: 10px;\r\n            margin-top: 10px;\r\n            border-left: 2px solid #ccc;\r\n            align-items: center;\r\n            gap: 20px;\r\n        }\r\n        .inscricao-item p {\r\n            margin: 0;\r\n            flex: 1;\r\n        }\r\n        .footer {\r\n            padding: 10px;\r\n            text-align: center;\r\n            background-color: #e6e6e6;\r\n            font-size: 14px;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n\r\n<div id=\"app\">\r\n                        <div class=\"container\">\r\n                <div class=\"header\">\r\n                    <h2>Detalhamento</h2>\r\n                </div>\r\n                <div class=\"info\">\r\n                    <p><strong>Nome:</strong> MAYRA JULIANA SOUSA LEANDRO</p>\r\n                    <p><strong>CPF/CNPJ:</strong> 02626267309</p>\r\n                    <p><strong>Domic�lio:</strong> CE</p>\r\n                    <p><strong>Natureza:</strong> Tribut�rio - Simples Nacional (Uni�o)</p>\r\n                    <p><strong>Valor Total das Naturezas:</strong> R$�12.981,58</p>\r\n                    <p><strong>Data da Consulta:</strong> 26/03/2025 10:30</p>\r\n                </div>\r\n                <div class=\"total-debt\">\r\n                    Valor total devido: R$�12.981,58                </div>\r\n                                    <div class=\"debt-item\">\r\n                        <p class=\"debt-header\">Natureza: Tribut�rio - Simples Nacional (Uni�o)</p>\r\n                        <p><strong>Valor:</strong> R$�12.981,58</p>\r\n                        <p><strong>Quantidade:</strong> 1</p>\r\n                                                    <div class=\"inscricao-item\">\r\n                                <p><strong>Inscri��o:</strong> 30 4 21 004626-28</p>\r\n                                <p><strong>Valor:</strong> R$�12.981,58</p>\r\n                            </div>\r\n                                            </div>\r\n                                <div class=\"footer\">\r\n                    <p>REGULARIZE - Acesse aqui o portal digital de servi�os da PGFN para regularizar ou questionar a d�vida.</p>\r\n                </div>\r\n            </div>\r\n            </div>\r\n\r\n</body>\r\n</html>\r\n"
+        }
+      }
+    ],
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "243",
+            "sentry-trace": "c3ed3af9df244f20b4176ace72b304cc-a70a3af3d767dbed-0",
+            "baggage": "sentry-trace_id=c3ed3af9df244f20b4176ace72b304cc,sentry-environment=production_new,sentry-release=40ce2af6a6fb28c3d628d3eaf7733f2b3f92ead1,sentry-public_key=af3c6636fa6e4f89948eaa4e575b3286,sentry-transaction=/api/v1/blocks_integration/test_request/,sentry-sample_rate=1.953125e-05,sentry-sampled=false",
+            "user-agent": "python-requests/2.32.3",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "CPF": "02022193300",
+            "Webhook": "https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/ZPBOjePM9gpo/",
+            "Telefone": "553799781110",
+            "URL_LogoPDF": "11HQEpkA-HEprYtECt9loSst9Jdm3huIX1KfXnsSX_30",
+            "Tipo consulta": "CPF"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/consulta-cadin",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "753d3637-bf7b-4496-b142-97c51838756e",
+  "triggerCount": 1,
+  "tags": []
+}
