@@ -1,0 +1,882 @@
+{
+  "createdAt": "2025-07-25T02:53:10.878Z",
+  "updatedAt": "2025-07-25T02:53:12.000Z",
+  "id": "6zam3kIhhMP2HX0f",
+  "name": "Créditos Site",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a5f405f0-fb36-4bdd-a183-ed31ed044b0e",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1940,
+        120
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "52de1d6d-e198-48b7-b927-c53b54175345",
+              "leftValue": "={{ $json.body.Tipo }}",
+              "rightValue": "Atualizar Crédito",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3ec78a4e-6117-4cd3-9da3-b56ebd9fdaa4",
+      "name": "Atualizar Crédito",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1400,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "52de1d6d-e198-48b7-b927-c53b54175345",
+              "leftValue": "={{ $json.body.Tipo }}",
+              "rightValue": "Zerar",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3ae6859d-5b29-4f49-ad8b-6079f140282c",
+      "name": "Zerar",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1400,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "52de1d6d-e198-48b7-b927-c53b54175345",
+              "leftValue": "={{ $json.body.Tipo }}",
+              "rightValue": "Retirar",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "311e3ecf-af5a-41ec-a3a3-92395f89ea2d",
+      "name": "Retirar",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1400,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "52de1d6d-e198-48b7-b927-c53b54175345",
+              "leftValue": "={{ $json.body.Tipo }}",
+              "rightValue": "Adicionar",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "6852ab1a-5a3f-49dc-9251-ac56cbf00a4e",
+      "name": "Adicionar",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1400,
+        -380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/register/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.body['Crédito Alteração'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "806de99c-52fe-4df6-99c5-ef59f3222a91",
+      "name": "Adicionar Créditos2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        380,
+        -380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b0aaaf1d-4984-4be0-a5bd-9730a63131fd",
+      "name": "Retornar Créditos Disponíveis3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        380,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.body['Crédito Alteração'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9eff963d-a857-4108-965a-1d5467a0bfea",
+      "name": "Retirar Créditos3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        380,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook1').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3c0c60a7-eedb-4b17-b579-65af3ff1eb16",
+      "name": "Retirar Créditos4",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        580,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook1').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9fb7a087-34d6-407b-b30b-0a37de65bba9",
+      "name": "Retirar Créditos5",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        580,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/register/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook1').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Webhook1').item.json.body['Crédito Alteração'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "440a43fe-8791-4c48-8ddd-f191e7b07de3",
+      "name": "Adicionar Créditos3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d5704ccf-42aa-4503-9477-5f5134afa100",
+      "name": "Retornar Créditos Disponíveis4",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        380,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "18f67a4d-7e87-444e-a07a-890d6e3dade1",
+      "name": "Retornar Créditos Disponíveis5",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        180,
+        620
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook1').item.json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "acd7e8f8-3d9b-4acd-8c26-82ddf0acf984",
+      "name": "Retornar Créditos Disponíveis1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1580,
+        900
+      ],
+      "retryOnFail": false,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f73061d0-a076-4c12-bef8-16eb75b7acf3",
+      "name": "Retornar Créditos Disponíveis2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -960,
+        340
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e865d3ce-b8e6-4b88-8a8a-9ac12df0cac4",
+      "name": "Retornar Créditos Disponíveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -960,
+        80
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.body['Crédito Alteração'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "35f02a58-40e5-4b17-92ac-f58ac227d2ab",
+      "name": "Retirar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -960,
+        -180
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.body['Crédito Alteração'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2af5a4b5-a50a-4ed0-a195-1a43be69bc20",
+      "name": "Adicionar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -960,
+        -400
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook1').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "07893ae6-2c7c-4e88-83a1-d651b5cccc11",
+      "name": "Retirar Créditos1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -760,
+        80
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook1').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b1cb15a6-c151-444c-a864-a0dc02f0a4de",
+      "name": "Retirar Créditos2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -760,
+        340
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook1').item.json.body.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Webhook1').item.json.body['Crédito Alteração'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5837e409-ad06-426b-be14-02b8c809d577",
+      "name": "Adicionar Créditos1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -560,
+        340
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "creditos-banco-de-dados",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "90726c88-31a1-43c5-9059-cd07fb3eaa56",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1620,
+        -380
+      ],
+      "webhookId": "b73cf1dd-c75e-4526-85b4-327cefd2cc3a"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+553799781110"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c6ab48d4-8754-41b0-928a-bfdae7cc3359",
+      "name": "Retornar Créditos Disponíveis6",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1120,
+        880
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+553799781110"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bdb471c9-e186-4429-8b72-298ea341104f",
+      "name": "Retornar Créditos Disponíveis7",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1660,
+        660
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+553799781110"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5c59bb1d-1411-44e6-850f-5127d8551dbe",
+      "name": "Retornar Créditos Disponíveis8",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1760,
+        120
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.body.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5683f898-41f8-4b07-86b6-d933dc7226df",
+      "name": "Retornar Créditos Disponíveis9",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1160,
+        480
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    }
+  ],
+  "connections": {
+    "Atualizar Crédito": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos Disponíveis2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar Créditos Disponíveis9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zerar": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos Disponíveis",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Atualizar Crédito",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retirar": {
+      "main": [
+        [
+          {
+            "node": "Retirar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Zerar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adicionar": {
+      "main": [
+        [
+          {
+            "node": "Adicionar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retirar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis3": {
+      "main": [
+        [
+          {
+            "node": "Retirar Créditos4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retirar Créditos5": {
+      "main": [
+        [
+          {
+            "node": "Adicionar Créditos3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis4": {
+      "main": [
+        [
+          {
+            "node": "Retirar Créditos5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis2": {
+      "main": [
+        [
+          {
+            "node": "Retirar Créditos2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis": {
+      "main": [
+        [
+          {
+            "node": "Retirar Créditos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retirar Créditos2": {
+      "main": [
+        [
+          {
+            "node": "Adicionar Créditos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Adicionar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos Disponíveis8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "ecc50dee-2146-4b1b-b787-6d911b05a25e",
+  "triggerCount": 1,
+  "tags": []
+}
