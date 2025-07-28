@@ -1,0 +1,1087 @@
+{
+  "createdAt": "2025-07-25T02:53:41.549Z",
+  "updatedAt": "2025-07-25T02:53:46.000Z",
+  "id": "FYV4F8WX9V9E6WXa",
+  "name": "Crédito site typebot",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "e90c3295-e37e-403c-93fb-e7223bfb0ce4",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -780,
+        -700
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtém o telefone da string dinâmica\nlet telefone = $('Webhook1').item.json.body.Telefone;\n\n// Remove quaisquer espaços em branco ao redor do telefone\ntelefone = telefone.trim();\n\n// Remove caracteres não numéricos, caso existam\ntelefone = telefone.replace(/[^0-9]/g, '');\n\n// Extrai o código do país, o DDD e o número\nconst codigoPais = telefone.slice(0, 2); // Primeiro e segundo dígito\nconst ddd = telefone.slice(2, 4); // Terceiro e quarto dígito\nlet numero = telefone.slice(4); // O restante é o número\n\n// Verifica se o número começa com '9' adicional e ajusta para 8 dígitos\nif (numero.length === 9 && numero.startsWith('9')) {\n  numero = numero.slice(1);\n}\n\n// Retorna os dados formatados\nreturn [\n  {\n    codigoPais: `+${codigoPais}`, // Código do país com o \"+\" incluído\n    ddd,\n    numero\n  }\n];\n"
+      },
+      "id": "db246350-f4e8-4fca-9e07-d97f2ba8c59f",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3140,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "76a59f3e-ca26-40d8-8175-828aea153f3f",
+              "leftValue": "={{ $json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "8423c23f-dc60-45bd-970a-7c5673359557",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1380,
+        -680
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}{{ $('Code').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4da2fc2e-c6e1-45be-af24-1ba5efa0f889",
+      "name": "Retornar Créditos Disponíveis9",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2060,
+        -260
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c1dd057-4868-4f17-9c6c-a9145ecc3912",
+              "name": "creditos",
+              "value": "={{ $('Retornar Créditos Disponíveis9').item.json.creditos }}",
+              "type": "number"
+            },
+            {
+              "id": "28d778f0-ac37-4534-99b7-b86b2c384e06",
+              "name": "Telefone",
+              "value": "={{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}9{{ $('Code').item.json.numero }}",
+              "type": "string"
+            },
+            {
+              "id": "51017319-addc-48b9-9c2e-2be32b361c4f",
+              "name": "MenuPrincipal",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Consulta CPF\n\n2 - Consulta Dividas CPF\n\n3 - Consulta CNPJ\n\n4 - Consulta Dividas CNPJ\n\n5 - Consulta SCR BACEN\n\n6 - Consulta BACEN Cheques\n\n7 - Consulta SCORE\n\n8 - Consulta Placa Veículo\n\n9 - Consulta Telefone\n\n10 - Consulta Telefone por CPF\n\n11 - Consulta CEP\n\n12 - Consulta Participação Empresas\n\n13 - Consulta Sócios CNPJ\n\n14 - Consulta CADIN\n\n0 - Meus créditos",
+              "type": "string"
+            },
+            {
+              "id": "4add7993-d029-446a-aac3-b6416b6bc95b",
+              "name": "Menu2",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Consulta SCPC Boa Vista + Pendências + Resumo IA (2 créditos)\n\n2 - Consulta Serasa + Pendências + Resumo IA (2 créditos)\n\n3 - Consulta Serasa + SCPC Boa Vista + Protestos + Dados + Resumo IA (3 créditos)\n\n4 - Consulta Serasa REFIN/PEFIN + SCPC Boa Vista + Protestos + CADIN + Resumo IA (4 créditos)\n\n5 - Consulta SCPC + Score + Pendência +  Renda + Protesto + Resumo IA (5 créditos)\n\n6 - Consulta Serasa + SCPC Boa Vista + Protestos + Divida Federal + Participação Empresa + Dados + Resumo IA (5 créditos)\n\n------- / / -------\n\n9 - Menu principal",
+              "type": "string"
+            },
+            {
+              "id": "4a0b4fb4-4977-4cd4-b7ae-48626b3569b8",
+              "name": "Menu3",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Consulta Serasa REFIN/PEFIN + SCPC Boa Vista + Protestos + Resumo IA (4 créditos)\n\n2 - Consulta SCPC Boa Vista + Pendências Refin / Pefin + Resumo IA (4 créditos)\n\n3 - Consulta Serasa + Pendências Refin / Pefin + Resumo IA (5 créditos)\n\n4 - Consulta Serasa REFIN/PEFIN + SCPC Boa Vista + Protestos + Resumo IA (4 créditos)\n\n------- / / -------\n\n9 - Menu principal",
+              "type": "string"
+            },
+            {
+              "id": "46684073-893b-46f9-b80b-209113effc47",
+              "name": "dado1",
+              "value": "=Digite o número do CPF:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "0d2e0586-8407-4239-84d3-606ba7eed34c",
+              "name": "dado2",
+              "value": "=Digite o número do CNPJ:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "fde9db42-1b30-4345-9984-d86043401c00",
+              "name": "dado3",
+              "value": "=Digite o número da Placa:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "68caa036-7f20-4711-9d4d-96a935142025",
+              "name": "dado4",
+              "value": "=Digite o número do Telefone:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "2b4659c1-a9d0-49af-9574-be299a80bbbc",
+              "name": "dado5",
+              "value": "=Digite o Email:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "a37b07e9-fb67-476b-b1c6-8602f5d7e8cf",
+              "name": "dado6",
+              "value": "=Digite o nome completo:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "a74e9f12-e926-4db2-834e-c0e919655604",
+              "name": "MenuRevendedor",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Adicionar crédito cliente\n\n2 - Cadastrar novo cliente\n\n3 - Comprar / renovar revendedor",
+              "type": "string"
+            },
+            {
+              "id": "038edf4d-6aeb-429b-8796-327b834e549f",
+              "name": "Revendedor",
+              "value": "={{ $('Baserow').item.json.Revendedor.replace(/\\D/g, '') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a0df410c-4cae-431e-9bc6-425fcc8700b3",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -820,
+        -480
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}9{{ $('Code').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "800efd31-7f8a-4332-a6ef-29071747cf06",
+      "name": "Retornar Créditos Disponíveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1380,
+        -480
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "credito-typebot",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "456f1bda-5be8-48af-80db-1ef38a69a822",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -3360,
+        -160
+      ],
+      "webhookId": "b73cf1dd-c75e-4526-85b4-327cefd2cc3a"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "6990c2a0-7d48-449a-9a3a-7411e3b30db2",
+      "name": "Respond to Webhook1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -780,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c1dd057-4868-4f17-9c6c-a9145ecc3912",
+              "name": "creditos",
+              "value": "={{ $json.creditos }}",
+              "type": "number"
+            },
+            {
+              "id": "28d778f0-ac37-4534-99b7-b86b2c384e06",
+              "name": "Telefone",
+              "value": "={{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}9{{ $('Code').item.json.numero }}",
+              "type": "string"
+            },
+            {
+              "id": "51017319-addc-48b9-9c2e-2be32b361c4f",
+              "name": "MenuPrincipal",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Consulta CPF\n\n2 - Consulta Dividas CPF\n\n3 - Consulta CNPJ\n\n4 - Consulta Dividas CNPJ\n\n5 - Consulta SCR BACEN\n\n6 - Consulta BACEN Cheques\n\n7 - Consulta SCORE\n\n8 - Consulta Placa Veículo\n\n9 - Consulta Telefone\n\n10 - Consulta Telefone por CPF\n\n11 - Consulta CEP\n\n12 - Consulta Participação Empresas\n\n13 - Consulta Sócios CNPJ\n\n14 - Consulta CADIN\n\n0 - Meus créditos",
+              "type": "string"
+            },
+            {
+              "id": "4add7993-d029-446a-aac3-b6416b6bc95b",
+              "name": "Menu2",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Consulta SCPC Boa Vista + Pendências + Resumo IA (2 créditos)\n\n2 - Consulta Serasa + Pendências + Resumo IA (2 créditos)\n\n3 - Consulta Serasa + SCPC Boa Vista + Protestos + Dados + Resumo IA (3 créditos)\n\n4 - Consulta Serasa REFIN/PEFIN + SCPC Boa Vista + Protestos + CADIN + Resumo IA (4 créditos)\n\n5 - Consulta SCPC + Score + Pendência +  Renda + Protesto + Resumo IA (5 créditos)\n\n6 - Consulta Serasa + SCPC Boa Vista + Protestos + Divida Federal + Participação Empresa + Dados + Resumo IA (5 créditos)\n\n------- / / -------\n\n9 - Menu principal",
+              "type": "string"
+            },
+            {
+              "id": "4a0b4fb4-4977-4cd4-b7ae-48626b3569b8",
+              "name": "Menu3",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Consulta Serasa REFIN/PEFIN + SCPC Boa Vista + Protestos + Resumo IA (4 créditos)\n\n2 - Consulta SCPC Boa Vista + Pendências Refin / Pefin + Resumo IA (4 créditos)\n\n3 - Consulta Serasa + Pendências Refin / Pefin + Resumo IA (5 créditos)\n\n4 - Consulta Serasa REFIN/PEFIN + SCPC Boa Vista + Protestos + Resumo IA (4 créditos)\n\n------- / / -------\n\n9 - Menu principal",
+              "type": "string"
+            },
+            {
+              "id": "46684073-893b-46f9-b80b-209113effc47",
+              "name": "dado1",
+              "value": "=Digite o número do CPF:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "0d2e0586-8407-4239-84d3-606ba7eed34c",
+              "name": "dado2",
+              "value": "=Digite o número do CNPJ:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "fde9db42-1b30-4345-9984-d86043401c00",
+              "name": "dado3",
+              "value": "=Digite o número da Placa:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "68caa036-7f20-4711-9d4d-96a935142025",
+              "name": "dado4",
+              "value": "=Digite o número do Telefone:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "2b4659c1-a9d0-49af-9574-be299a80bbbc",
+              "name": "dado5",
+              "value": "=Digite o Email:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "a37b07e9-fb67-476b-b1c6-8602f5d7e8cf",
+              "name": "dado6",
+              "value": "=Digite o nome completo:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "a74e9f12-e926-4db2-834e-c0e919655604",
+              "name": "MenuRevendedor",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Adicionar crédito cliente\n\n2 - Cadastrar novo cliente\n\n3 - Comprar / renovar revendedor",
+              "type": "string"
+            },
+            {
+              "id": "038edf4d-6aeb-429b-8796-327b834e549f",
+              "name": "Revendedor",
+              "value": "=-",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2b8ab8f3-28a5-46b4-9436-e64e21746c46",
+      "name": "Edit Fields3",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -820,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}9{{ $('Code').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e5b4f091-d7c9-41d8-88ab-1bc7183a17fb",
+      "name": "Retornar Créditos Disponíveis1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1380,
+        60
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## COM BASEROW",
+        "height": 491.1929589652933,
+        "width": 888.4409512373109
+      },
+      "id": "7f512bcd-9370-4162-9f86-6f6a1805dfee",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1480,
+        -780
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## SEM BASEROW",
+        "height": 491.1929589652933,
+        "width": 888.4409512373109,
+        "color": 3
+      },
+      "id": "b43fdd04-c858-4249-9115-d8e2829e9261",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1480,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c1dd057-4868-4f17-9c6c-a9145ecc3912",
+              "name": "creditos",
+              "value": "={{ $('Retornar Créditos Disponíveis9').item.json.creditos }}",
+              "type": "number"
+            },
+            {
+              "id": "28d778f0-ac37-4534-99b7-b86b2c384e06",
+              "name": "Telefone",
+              "value": "={{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}{{ $('Code').item.json.numero }}",
+              "type": "string"
+            },
+            {
+              "id": "51017319-addc-48b9-9c2e-2be32b361c4f",
+              "name": "MenuPrincipal",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Consulta CPF\n\n2 - Consulta Dividas CPF\n\n3 - Consulta CNPJ\n\n4 - Consulta Dividas CNPJ\n\n5 - Consulta SCR BACEN\n\n6 - Consulta BACEN Cheques\n\n7 - Consulta SCORE\n\n8 - Consulta Placa Veículo\n\n9 - Consulta Telefone\n\n10 - Consulta Telefone por CPF\n\n11 - Consulta CEP\n\n12 - Consulta Participação Empresas\n\n13 - Consulta Sócios CNPJ\n\n14 - Consulta CADIN\n\n0 - Meus créditos",
+              "type": "string"
+            },
+            {
+              "id": "4add7993-d029-446a-aac3-b6416b6bc95b",
+              "name": "Menu2",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Consulta SCPC Boa Vista + Pendências + Resumo IA (2 créditos)\n\n2 - Consulta Serasa + Pendências + Resumo IA (2 créditos)\n\n3 - Consulta Serasa + SCPC Boa Vista + Protestos + Dados + Resumo IA (3 créditos)\n\n4 - Consulta Serasa REFIN/PEFIN + SCPC Boa Vista + Protestos + CADIN + Resumo IA (4 créditos)\n\n5 - Consulta SCPC + Score + Pendência +  Renda + Protesto + Resumo IA (5 créditos)\n\n6 - Consulta Serasa + SCPC Boa Vista + Protestos + Divida Federal + Participação Empresa + Dados + Resumo IA (5 créditos)\n\n------- / / -------\n\n9 - Menu principal",
+              "type": "string"
+            },
+            {
+              "id": "4a0b4fb4-4977-4cd4-b7ae-48626b3569b8",
+              "name": "Menu3",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Consulta Serasa REFIN/PEFIN + SCPC Boa Vista + Protestos + Resumo IA (4 créditos)\n\n2 - Consulta SCPC Boa Vista + Pendências Refin / Pefin + Resumo IA (4 créditos)\n\n3 - Consulta Serasa + Pendências Refin / Pefin + Resumo IA (5 créditos)\n\n4 - Consulta Serasa REFIN/PEFIN + SCPC Boa Vista + Protestos + Resumo IA (4 créditos)\n\n------- / / -------\n\n9 - Menu principal",
+              "type": "string"
+            },
+            {
+              "id": "46684073-893b-46f9-b80b-209113effc47",
+              "name": "dado1",
+              "value": "=Digite o número do CPF:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "0d2e0586-8407-4239-84d3-606ba7eed34c",
+              "name": "dado2",
+              "value": "=Digite o número do CNPJ:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "fde9db42-1b30-4345-9984-d86043401c00",
+              "name": "dado3",
+              "value": "=Digite o número da Placa:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "68caa036-7f20-4711-9d4d-96a935142025",
+              "name": "dado4",
+              "value": "=Digite o número do Telefone:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "2b4659c1-a9d0-49af-9574-be299a80bbbc",
+              "name": "dado5",
+              "value": "=Digite o Email:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "a37b07e9-fb67-476b-b1c6-8602f5d7e8cf",
+              "name": "dado6",
+              "value": "=Digite o nome completo:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "fdf22a99-915f-428d-8572-fb9046edaa52",
+              "name": "MenuRevenda",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Adicionar crédito cliente\n\n2 - Cadastrar novo cliente\n\n3 - Comprar / renovar revendedor",
+              "type": "string"
+            },
+            {
+              "id": "bd620539-a012-41d5-928b-3ad5481d104a",
+              "name": "Revendedor",
+              "value": "={{ $('Baserow').item.json.Revendedor.replace(/\\D/g, '') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2c2b6139-3e11-44b2-a1c2-d4d06d048604",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1020,
+        -700
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c4c4f349-c7a0-406d-8222-bf7396e19f93",
+              "name": "Baserow",
+              "value": "=Vazio",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bd108321-d17b-452c-97ba-417c35315572",
+      "name": "Edit Fields5",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -2780,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b835ccdd-8829-4e9c-aeec-36dca5ec435b",
+              "leftValue": "={{ $('If4').item.json.Baserow }}",
+              "rightValue": "Vazio",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "6d04c523-f203-4a5b-918c-2d02c95cdb02",
+      "name": "If3",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1860,
+        -260
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "76a59f3e-ca26-40d8-8175-828aea153f3f",
+              "leftValue": "={{ $('Retornar Créditos Disponíveis9').item.json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "72586712-1fc7-4c39-b4d9-adc73a872d49",
+      "name": "If2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1380,
+        -160
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "7c37552f-ff5d-438f-900a-fafdf453b392",
+              "leftValue": "={{ $('Webhook1').item.json.body.Telefone }}",
+              "rightValue": "whatsapp",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c5768fee-8d32-445d-9673-205cbbd166b9",
+      "name": "If1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2960,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c4c4f349-c7a0-406d-8222-bf7396e19f93",
+              "name": "Baserow",
+              "value": "={{ $('Baserow').item.json.Revendedor }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ef40df46-6957-4cea-af27-6d2ecfb67eee",
+      "name": "Edit Fields4",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -2600,
+        -260
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "98a2defa-59f7-4264-8ff2-700450b609df",
+              "leftValue": "={{ $json.Baserow }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "70aec17f-1897-4807-8cac-48b815bdc4d1",
+      "name": "If4",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2240,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c4c4f349-c7a0-406d-8222-bf7396e19f93",
+              "name": "Baserow",
+              "value": "=Vazio",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "76c17be4-98a7-442b-bb15-182feaaee46a",
+      "name": "Edit Fields6",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -2480,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "98a2defa-59f7-4264-8ff2-700450b609df",
+              "leftValue": "={{ $json.Baserow }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5baf043c-3ad1-4c96-bb5a-f429f862628a",
+      "name": "If5",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2440,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c1dd057-4868-4f17-9c6c-a9145ecc3912",
+              "name": "creditos",
+              "value": "={{ $json.creditos }}",
+              "type": "number"
+            },
+            {
+              "id": "28d778f0-ac37-4534-99b7-b86b2c384e06",
+              "name": "Telefone",
+              "value": "={{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}{{ $('Code').item.json.numero }}",
+              "type": "string"
+            },
+            {
+              "id": "51017319-addc-48b9-9c2e-2be32b361c4f",
+              "name": "MenuPrincipal",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Consulta CPF\n\n2 - Consulta Dividas CPF\n\n3 - Consulta CNPJ\n\n4 - Consulta Dividas CNPJ\n\n5 - Consulta SCR BACEN\n\n6 - Consulta BACEN Cheques\n\n7 - Consulta SCORE\n\n8 - Consulta Placa Veículo\n\n9 - Consulta Telefone\n\n10 - Consulta Telefone por CPF\n\n11 - Consulta CEP\n\n12 - Consulta Participação Empresas\n\n13 - Consulta Sócios CNPJ\n\n14 - Consulta CADIN\n\n0 - Meus créditos",
+              "type": "string"
+            },
+            {
+              "id": "4add7993-d029-446a-aac3-b6416b6bc95b",
+              "name": "Menu2",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Consulta SCPC Boa Vista + Pendências + Resumo IA (2 créditos)\n\n2 - Consulta Serasa + Pendências + Resumo IA (2 créditos)\n\n3 - Consulta Serasa + SCPC Boa Vista + Protestos + Dados + Resumo IA (3 créditos)\n\n4 - Consulta Serasa REFIN/PEFIN + SCPC Boa Vista + Protestos + CADIN + Resumo IA (4 créditos)\n\n5 - Consulta SCPC + Score + Pendência +  Renda + Protesto + Resumo IA (5 créditos)\n\n6 - Consulta Serasa + SCPC Boa Vista + Protestos + Divida Federal + Participação Empresa + Dados + Resumo IA (5 créditos)\n\n------- / / -------\n\n9 - Menu principal",
+              "type": "string"
+            },
+            {
+              "id": "4a0b4fb4-4977-4cd4-b7ae-48626b3569b8",
+              "name": "Menu3",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Consulta Serasa REFIN/PEFIN + SCPC Boa Vista + Protestos + Resumo IA (4 créditos)\n\n2 - Consulta SCPC Boa Vista + Pendências Refin / Pefin + Resumo IA (4 créditos)\n\n3 - Consulta Serasa + Pendências Refin / Pefin + Resumo IA (5 créditos)\n\n4 - Consulta Serasa REFIN/PEFIN + SCPC Boa Vista + Protestos + Resumo IA (4 créditos)\n\n------- / / -------\n\n9 - Menu principal",
+              "type": "string"
+            },
+            {
+              "id": "46684073-893b-46f9-b80b-209113effc47",
+              "name": "dado1",
+              "value": "=Digite o número do CPF:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "0d2e0586-8407-4239-84d3-606ba7eed34c",
+              "name": "dado2",
+              "value": "=Digite o número do CNPJ:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "fde9db42-1b30-4345-9984-d86043401c00",
+              "name": "dado3",
+              "value": "=Digite o número da Placa:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "68caa036-7f20-4711-9d4d-96a935142025",
+              "name": "dado4",
+              "value": "=Digite o número do Telefone:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "2b4659c1-a9d0-49af-9574-be299a80bbbc",
+              "name": "dado5",
+              "value": "=Digite o Email:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "a37b07e9-fb67-476b-b1c6-8602f5d7e8cf",
+              "name": "dado6",
+              "value": "=Digite o nome completo:\n\n_Ou se preferir digite 9 para voltar ao menu principal._",
+              "type": "string"
+            },
+            {
+              "id": "fdf22a99-915f-428d-8572-fb9046edaa52",
+              "name": "MenuRevenda",
+              "value": "Digite o número da opção desejada:\n\n------- / / -------\n\n1 - Adicionar crédito cliente\n\n2 - Cadastrar novo cliente\n\n3 - Comprar / renovar revendedor",
+              "type": "string"
+            },
+            {
+              "id": "bd620539-a012-41d5-928b-3ad5481d104a",
+              "name": "Revendedor",
+              "value": "=-",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "57c44a19-09ad-440e-8770-6a55d1258cd3",
+      "name": "Edit Fields2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1020,
+        -180
+      ]
+    }
+  ],
+  "connections": {
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar Créditos Disponíveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis9": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar Créditos Disponíveis1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos Disponíveis9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "42",
+            "content-type": "application/json",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "br, gzip, deflate"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "Telefone": "553799781110@s.whatsapp.net"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/credito-typebot",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "bff9ba70-d21b-4cda-a002-2c0200f7ecb9",
+  "triggerCount": 1,
+  "tags": []
+}
