@@ -1,0 +1,1179 @@
+{
+  "createdAt": "2025-07-25T02:54:07.357Z",
+  "updatedAt": "2025-07-25T02:54:08.000Z",
+  "id": "mRJyUNCIoqZPD7d2",
+  "name": "Criar Novo Usuário Site",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Webhook').item.json.body.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "391b3a70-2bb9-4512-9e48-f08fb080fa20",
+      "name": "Adicionar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2660,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d093de6f-e739-4bf8-8584-bc34342f69ee",
+      "name": "Retornar Créditos Disponíveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3120,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bcce44c3-1298-4446-9e01-1e0e881a5cb2",
+      "name": "Zerar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2900,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/registeruniconsultas",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "name",
+              "value": "={{ $('Webhook').item.json.body.name }}"
+            },
+            {
+              "name": "sobrenome",
+              "value": "={{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "name": "password",
+              "value": "={{ $json.body.password }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f59755cb-4634-4d6e-b9d9-a138e95c7863",
+      "name": "Criar novo usuário",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4160,
+        -280
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "aca42051-4353-4211-a643-015830a84b15",
+              "leftValue": "={{ $json.error.message }}",
+              "rightValue": "registrado",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "53110fc8-d831-49a9-b066-d21566ad7e36",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -3960,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Erro"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "Informações",
+              "value": "Email cadastrado"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "14c9f156-1772-4a8b-bb6c-89715d0935ef",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3740,
+        -460
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "Informações",
+              "value": "=*Email:* {{ $('Webhook').item.json.body.email }}\n*Senha:* {{ $('Edit Fields').item.json.body.password }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a7ba45f7-f2a5-4c62-b37c-55728e330962",
+      "name": "HTTP Request3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1720,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "58601bf5-c25d-4637-8540-700a1b254bca",
+              "name": "body.password",
+              "value": "=1{{$('Webhook').item.json.body.password.replace(/[:\\- ]/g, '')}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4a113792-18f7-4aa1-aaa6-e62a37cda6a2",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -4360,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/BwDx5Q4YIlbX/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=553799781110"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            },
+            {
+              "name": "Nome",
+              "value": "=Nome Teste"
+            },
+            {
+              "name": "Informações",
+              "value": "=Informações Teste"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "10557786-6467-48d7-8c1e-2dc24629d39f",
+      "name": "HTTP Request4",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2620,
+        -620
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/register/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $('Webhook').item.json.body.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b22d86be-164a-4625-8a3c-b1dd211a65c3",
+      "name": "Adicionar Créditos1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2680,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9dd4b854-9083-43bf-a150-a185ae42f0b6",
+      "name": "Retornar Créditos Disponíveis1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3140,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/register/retirarcredits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json.creditos }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8c8d9316-69f2-44e7-bc56-f81d720db5a1",
+      "name": "Zerar Créditos1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2920,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://104.234.224.187:3000/registeruniconsultas",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "name",
+              "value": "={{ $('Webhook').item.json.body.name }}"
+            },
+            {
+              "name": "sobrenome",
+              "value": "={{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "name": "password",
+              "value": "={{ $json.body.password }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6faa03d0-91f8-42ad-a61c-5178ad3c034f",
+      "name": "Criar novo usuário1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3820,
+        120
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "aca42051-4353-4211-a643-015830a84b15",
+              "leftValue": "={{ $json.error.message }}",
+              "rightValue": "registrado",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "1c47b001-0b78-4ce3-90c3-7ffb8230a03f",
+      "name": "If1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -3620,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Erro"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "Informações",
+              "value": "Erro"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "69ab48e3-eea1-4e0b-ae21-0aa694240596",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3420,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "Informações",
+              "value": "=*Email:* {{ $('Webhook').item.json.body.email }}\n*Senha:* {{ $('Edit Fields1').item.json.body.password }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6d700f90-0ad6-4f07-92f9-09ba42e945c8",
+      "name": "HTTP Request5",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2500,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/BwDx5Q4YIlbX/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "=553799781110"
+            },
+            {
+              "name": "Retorno Consulta",
+              "value": "Ok"
+            },
+            {
+              "name": "Nome",
+              "value": "=Nome Teste"
+            },
+            {
+              "name": "Informações",
+              "value": "=Informações Teste"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "52d191c2-a3b6-409f-89b0-8b7384dc562f",
+      "name": "HTTP Request6",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2280,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "58601bf5-c25d-4637-8540-700a1b254bca",
+              "name": "body.password",
+              "value": "={{$('Webhook').item.json.body.password.replace(/[:\\- ]/g, '')}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "eda2baf3-9355-4a61-95e2-d60a9f3e960a",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -4020,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1bPpErnRcn6oXREVHotQ2U7w8JS74-5rDqC4WMtARM2U",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "1072723260",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nome": "={{ $('Webhook').item.json.body.name }}",
+            "Sobrenome": "={{ $('Webhook').item.json.body.sobrenome }}",
+            "Email": "={{ $('Webhook').item.json.body.email }}",
+            "Telefone": "={{ $('Webhook').item.json.body.telefone }}",
+            "Senha": "={{ $('Edit Fields').item.json.body.password }}",
+            "Crédito": "={{ $('Webhook').item.json.body.creditos }}",
+            "Data": "={{ $json.formattedDate }}",
+            "Status": "1"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Sobrenome",
+              "displayName": "Sobrenome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Senha",
+              "displayName": "Senha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Crédito",
+              "displayName": "Crédito",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "46d7bca3-6a77-4fd9-b35e-76c8331b9827",
+      "name": "Alimentar Planilha",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        -3340,
+        -280
+      ],
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "criar-usuario-site",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "795c63be-07f9-40e5-b87c-b9e8fbb19a1b",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -4540,
+        -280
+      ],
+      "webhookId": "b73cf1dd-c75e-4526-85b4-327cefd2cc3a"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "acbf932b-3e0f-49fe-a691-65c27aa2fc38",
+      "name": "Date & Time",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        -3740,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Captura a string de data\nconst originalDate = $json.currentDate;\n\n// Converte para um objeto de data ajustando o fuso horário\nconst date = new Date(originalDate);\n\n// Formata a data para o padrão brasileiro\nconst formattedDate = date.toLocaleDateString('pt-BR', {\n    timeZone: 'America/Sao_Paulo',\n});\n\n// Formata a hora para o padrão brasileiro\nconst formattedTime = date.toLocaleTimeString('pt-BR', {\n    timeZone: 'America/Sao_Paulo',\n    hour: '2-digit',\n    minute: '2-digit',\n    second: '2-digit',\n});\n\n// Retorna os campos separados\nreturn { \n    formattedDate, \n    formattedTime \n};\n"
+      },
+      "id": "c3d86cb7-3015-410e-a163-fdd72e9f7221",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3560,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/23474/DVEB6akZFGRk/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "87c967f8-549b-422a-a5f3-97b728aaa104",
+      "name": "Companhia Compra",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2320,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/7wElvEsVQeP4/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "33b0d771-7705-4e07-b615-b6918d35ea71",
+      "name": "UniConsultas",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2140,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/TbzDeXlShH2R/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "acb28ba8-a25c-4ec0-b4c9-56e076bafbaa",
+      "name": "Rede Quero Imóveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1960,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## CADASTRAR EM TODAS COMPANHIAS",
+        "height": 273.9104582250345,
+        "width": 561.0203822705516
+      },
+      "id": "3819e92b-2d49-4108-9ab9-4ea1dffdd839",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2380,
+        -360
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://base44.app/api/apps/6819f5703086936c581632c2/entities/Usuario",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "876ed4d9d16b40b3b54ab5da6d49a0a4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "nome",
+              "value": "={{ $('Webhook').item.json.body.name }}"
+            },
+            {
+              "name": "sobrenome",
+              "value": "={{ $('Webhook').item.json.body.sobrenome }}"
+            },
+            {
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "name": "senha",
+              "value": "={{ $('Edit Fields').item.json.body.password }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1540,
+        -280
+      ],
+      "id": "e6177f36-ea2a-4444-a3f9-11ccfd801501",
+      "name": "Base44 API - Usuario"
+    }
+  ],
+  "connections": {
+    "Retornar Créditos Disponíveis": {
+      "main": [
+        [
+          {
+            "node": "Zerar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zerar Créditos": {
+      "main": [
+        [
+          {
+            "node": "Adicionar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar novo usuário": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adicionar Créditos": {
+      "main": [
+        [
+          {
+            "node": "Companhia Compra",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Criar novo usuário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adicionar Créditos1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis1": {
+      "main": [
+        [
+          {
+            "node": "Zerar Créditos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zerar Créditos1": {
+      "main": [
+        [
+          {
+            "node": "Adicionar Créditos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar novo usuário1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar Créditos Disponíveis1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Criar novo usuário1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Alimentar Planilha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alimentar Planilha": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos Disponíveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Companhia Compra": {
+      "main": [
+        [
+          {
+            "node": "UniConsultas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UniConsultas": {
+      "main": [
+        [
+          {
+            "node": "Rede Quero Imóveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rede Quero Imóveis": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Base44 API - Usuario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "255",
+            "sentry-trace": "ef9924a0721c4f88873ca9ef16dcd8f9-b5b4f2e50fbbe99f-0",
+            "baggage": "sentry-trace_id=ef9924a0721c4f88873ca9ef16dcd8f9,sentry-environment=production_new,sentry-release=05db53e5ef28d80a44c0d17b3d9a7efe15fd78c8,sentry-public_key=af3c6636fa6e4f89948eaa4e575b3286,sentry-transaction=/api/v1/blocks_integration/test_request/,sentry-sample_rate=0.0003125,sentry-sampled=false",
+            "user-agent": "python-requests/2.32.3",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "name": "Arthur",
+            "email": "arthurbaldiotti1@hotmail.com",
+            "Webhook": "https://backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/8UH2N6fLt7jx/",
+            "creditos": "100",
+            "password": "123234520",
+            "telefone": "553799781111",
+            "sobrenome": "Teste"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/criar-usuario-site",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Criar novo usuário": [
+      {
+        "json": {
+          "message": "Registro realizado com sucesso!"
+        }
+      }
+    ]
+  },
+  "versionId": "25d37783-7bce-4d85-bf7b-ab48acc1027f",
+  "triggerCount": 1,
+  "tags": []
+}
