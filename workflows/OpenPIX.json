@@ -1,0 +1,1046 @@
+{
+  "createdAt": "2025-07-25T01:22:52.447Z",
+  "updatedAt": "2025-07-28T21:34:24.000Z",
+  "id": "yuY4Xo09T0ZWZ6F6",
+  "name": "OpenPIX",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "37ba7d5d-cae7-44a9-8656-162fb32516e6",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        700
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## CRIAR PAGAMENTO",
+        "height": 261.88077314615276,
+        "width": 435.22611794031843,
+        "color": 6
+      },
+      "id": "8f6c999e-e1aa-4e3b-b79c-23a9b3b4b23a",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openpix.com.br/api/v1/charge/",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Q2xpZW50X0lkXzBhMzQ0MjllLTNhNjQtNDhlNS04NzJmLTFiOWRiMTdhOGU5ZjpDbGllbnRfU2VjcmV0X1NXN0Z4Q25vMzJXQWJnaExlLzMrN3gzYUE1b3p4UE9FemVZZVBlR1d4MTA9"
+            },
+            {
+              "name": "correlationID",
+              "value": "Client_Id_63f8f153-98f0-4f48-ac3d-6338e657db35"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"value\": 100,\n  \"comment\": \"pacote prata\",\n  \"customer\": {\n    \"name\": \"Arthur Teste\",\n    \"phone\": \"553799781110\"\n  },\n  \"correlationID\": \"{{ $json.currentDate.replace(/\\D/g, '') }}-{{ $('Webhook').item.json.body.Empresa }}\"\n}",
+        "options": {}
+      },
+      "id": "d13c9c77-9fb6-41a5-803b-a6a858f65708",
+      "name": "Teste2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        1280
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b8258477-8688-4eee-8051-52685430070b",
+              "leftValue": "={{ $json.body.event }}",
+              "rightValue": "CHARGE_COMPLETED",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b25072e4-17ef-491e-9c76-7cbbb047be34",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "f1330182-d5d8-4e82-8964-1e10724efada",
+              "leftValue": "={{ $json.body.charge.correlationID }}",
+              "rightValue": "uniconsultas",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "5222d0d5-142c-458d-b2ab-95cdace8d2d4",
+              "leftValue": "={{ $json.body.charge.correlationID }}",
+              "rightValue": "uniconsultas-principal",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "2b958614-4a71-4c29-8d4a-57b1380051ac",
+      "name": "If1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        100,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/k8xFLIvcDf81/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.charge.customer.phone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.charge.payer.name }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "=PIX"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $('Webhook').item.json.body.charge.value }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "54a5d804-f24f-4425-a3cf-b92eb9562f73",
+      "name": "UniConsultas",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        340,
+        340
+      ],
+      "retryOnFail": false,
+      "maxTries": 5,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/ZM3fZOcchJxm/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $json.body.charge.customer.phone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $json.body.charge.payer.name }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "=PIX"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $json.body.charge.value }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ccfb962c-9409-4f9a-a63f-671f194bdb3d",
+      "name": "Rede Quero Imóveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        440
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## CONFIRMAÇÃO PAGAMENTO",
+        "height": 560.5553776366008,
+        "width": 773.367246130871,
+        "color": 4
+      },
+      "id": "e8279269-f795-4c5c-8699-c5f79c1e12d1",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openpix.com.br/api/v1/charge/",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Q2xpZW50X0lkXzYzZjhmMTUzLTk4ZjAtNGY0OC1hYzNkLTYzMzhlNjU3ZGIzNTpDbGllbnRfU2VjcmV0X2tVc0NPTVkyYUtnV2JYNWQxODRHb2FacHdaMnliRHk0R1lGeGVqeHlONzg9"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"value\": 100,\n  \"comment\": \"pacote prata\",\n  \"customer\": {\n    \"name\": \"Arthur Teste\",\n    \"phone\": \"553799781110\"\n  },\n  \"correlationID\": \"{{ $json.currentDate.replace(/\\D/g, '') }}-{{ $('Webhook').item.json.body.Empresa }}\"\n}",
+        "options": {}
+      },
+      "id": "c0ed3682-fde6-474f-b446-edfb8e655bd6",
+      "name": "Teste",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "openpix",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "fb657672-1a29-413e-b938-0c858bcb92c0",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -360,
+        360
+      ],
+      "webhookId": "999efd0d-29fb-436f-b330-0a20049e547f",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "6f8a5320-798d-430d-b9c0-f18a98d703be",
+      "name": "Date & Time",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        80,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "ba6d767e-be45-456b-a0fa-0fa0102ab9a4",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        840,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Cod_Pix",
+              "value": "={{ $json.charge.paymentLinkUrl }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8ac384fb-1328-40db-b7a6-83109a44d716",
+      "name": "HTTP Request3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        640,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "f1330182-d5d8-4e82-8964-1e10724efada",
+              "leftValue": "={{ $json.body.charge.correlationID }}",
+              "rightValue": "uniconsultas-principal",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "0c902cb4-229b-4494-b6ca-0c35cdccc5b6",
+      "name": "If2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        100,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/23474/oaLD4vLToB5x/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $json.body.charge.customer.phone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $json.body.charge.payer.name }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "=PIX"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $json.body.charge.value }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dd1e192c-60e7-4ec5-ad8f-49e6ddc50941",
+      "name": "UniConsultas1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        340,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/k8xFLIvcDf81/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $json.body.charge.customer.phone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $json.body.charge.payer.name }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "=PIX"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $json.body.charge.value }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cc524dde-f311-4d49-bc4d-c4b56f3d7aa6",
+      "name": "UniConsultas2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        580,
+        240
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "11e028d0-bb9a-49fb-8430-25296af8578d",
+              "leftValue": "={{ $json.charge.paymentLinkUrl }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c467653b-f14b-4cdd-b350-d6bdd77d24b8",
+      "name": "If3",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        440,
+        700
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "b2a16512-7618-48ee-b3b6-a9f94eca78a5",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        920
+      ],
+      "webhookId": "0ec07cd6-339b-4449-ac35-21c0a7ed70d4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openpix.com.br/api/v1/charge/",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Q2xpZW50X0lkXzBhMzQ0MjllLTNhNjQtNDhlNS04NzJmLTFiOWRiMTdhOGU5ZjpDbGllbnRfU2VjcmV0X1NXN0Z4Q25vMzJXQWJnaExlLzMrN3gzYUE1b3p4UE9FemVZZVBlR1d4MTA9"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"value\": {{ $('If').item.json.body.value }},\n  \"comment\": \"{{ $('If').item.json.body.comment }}\",\n  \"customer\": {\n    \"name\": \"{{ $('If').item.json.body.Nome }}\",\n    \"phone\": \"{{ $('If').item.json.body.Telefone }}\"\n  },\n  \"correlationID\": \"{{ $json.currentDate.replace(/\\D/g, '') }}-{{ $('Webhook').item.json.body.Empresa }}\"\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "f181977a-230c-46b1-a95d-abfe86a7ad08",
+      "name": "Produção",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        700
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "openpix",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "7f0e026b-1cca-45d1-84e1-f1d2917a0249",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -360,
+        520
+      ],
+      "webhookId": "999efd0d-29fb-436f-b330-0a20049e547f"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://n8n.redequeroimoveis.com/webhook/retorno-confirmacao-pagamento",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone",
+              "value": "={{ $('Webhook').item.json.body.charge.customer.phone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.charge.payer.name }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "=PIX"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $('Webhook').item.json.body.charge.value }}"
+            },
+            {
+              "name": "Origem",
+              "value": "={{ $('Webhook').item.json.body.charge.correlationID }}"
+            },
+            {
+              "name": "Webhook",
+              "value": "https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/ZCb55SisIslA/"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2189ef96-cdd3-46c1-8400-c5b349592e85",
+      "name": "UniConsultas3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        840,
+        300
+      ],
+      "retryOnFail": false,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://n8n.redequeroimoveis.com/webhook/retorno-confirmacao-pagamento",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone",
+              "value": "={{ $('Webhook').item.json.body.charge.customer.phone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.charge.payer.name }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "=PIX"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $('Webhook').item.json.body.charge.value }}"
+            },
+            {
+              "name": "Origem",
+              "value": "={{ $('Webhook').item.json.body.charge.correlationID }}"
+            },
+            {
+              "name": "Webhook",
+              "value": "https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/FLVRaminVUCH/"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "aafb1d3e-7325-4144-88ca-7d26bd181601",
+      "name": "Rede Quero Imóveis1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        840,
+        480
+      ],
+      "retryOnFail": false,
+      "maxTries": 5
+    }
+  ],
+  "connections": {
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "UniConsultas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Rede Quero Imóveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Produção",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rede Quero Imóveis": {
+      "main": [
+        [
+          {
+            "node": "Rede Quero Imóveis1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UniConsultas": {
+      "main": [
+        [
+          {
+            "node": "UniConsultas3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "UniConsultas1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UniConsultas1": {
+      "main": [
+        [
+          {
+            "node": "UniConsultas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Produção": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UniConsultas3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rede Quero Imóveis1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "4507",
+            "user-agent": "node-fetch",
+            "accept": "application/json",
+            "content-type": "application/json",
+            "authorization": "",
+            "x-openpix-authorization": "",
+            "x-openpix-signature": "XiSZXr4bAeIyazgXw+Wa0U7oj9o=",
+            "x-webhook-signature": "jXcqgQOaX7pe5HC5Kcc1MKYVMRFKHvBVsKbFLXTFxYPJLrMkiAZz8m4XqnBN1pxtV3CjH1dkYXRWBwTWBzKuQI2jKv0uqLm5A/gW0ArpgGvtXIBCMlVUMovD6HCmtWm07q1F6fuFkhKE4QFIoiR9iCMCq+Tdcu1FZQjt4TZlSLc=",
+            "accept-encoding": "gzip,deflate",
+            "traceparent": "00-d364c65529a5255639079ab117ce4d88-c81d6a828db5647d-01",
+            "tracestate": "es=s:1"
+          },
+          "params": {},
+          "query": {
+            "authorization": ""
+          },
+          "body": {
+            "event": "OPENPIX:CHARGE_COMPLETED",
+            "charge": {
+              "customer": {
+                "name": "Arthur Teste",
+                "phone": "+553799781110",
+                "correlationID": "713c4b7e-55f1-487e-9765-b994c3fb4e6a"
+              },
+              "value": 100,
+              "comment": "pacote prata",
+              "identifier": "baf66e3e88a645f4b77243bbbc258f0b",
+              "correlationID": "202412031330451690500-uniconsultas",
+              "transactionID": "baf66e3e88a645f4b77243bbbc258f0b",
+              "status": "COMPLETED",
+              "additionalInfo": [],
+              "fee": 50,
+              "discount": 0,
+              "valueWithDiscount": 100,
+              "expiresDate": "2024-12-06T18:30:45.128Z",
+              "type": "DYNAMIC",
+              "paymentLinkID": "8d7df52b-b4c3-40b9-be26-9304f4a32faa",
+              "createdAt": "2024-12-03T18:30:45.139Z",
+              "updatedAt": "2024-12-03T18:31:05.690Z",
+              "paidAt": "2024-12-03T18:31:05.549Z",
+              "payer": {
+                "name": "Arthur Teste 1",
+                "email": "arthurbaldiotti@hotmail.com",
+                "phone": "+5537999781110",
+                "address": {
+                  "zipcode": "",
+                  "street": "",
+                  "number": "",
+                  "neighborhood": "",
+                  "city": "",
+                  "state": "",
+                  "complement": ""
+                },
+                "taxID": {
+                  "taxID": "11383223696",
+                  "type": "BR:CPF"
+                },
+                "correlationID": "be7a6689-47cd-4196-8ccc-2f461474dc76"
+              },
+              "brCode": "00020101021226950014br.gov.bcb.pix2573api.openpix.com.br/api/testaccount/qr/v1/baf66e3e88a645f4b77243bbbc258f0b52040000530398654041.005802BR5918REDE_QUERO_IMOVEIS6009Sao_Paulo62290525baf66e3e88a645f4b77243bbb630422C7",
+              "expiresIn": 259200,
+              "pixKey": "acf022ee-667d-4690-a2ac-de5f7016918e",
+              "paymentLinkUrl": "https://openpix.com.br/pay/8d7df52b-b4c3-40b9-be26-9304f4a32faa",
+              "qrCodeImage": "https://api.openpix.com.br/openpix/charge/brcode/image/8d7df52b-b4c3-40b9-be26-9304f4a32faa.png",
+              "globalID": "Q2hhcmdlOjY3NGY0ZTU1MWFjNmZlOTUwNDAxOWZjYw==",
+              "paymentMethods": {
+                "pix": {
+                  "method": "PIX_COB",
+                  "txId": "baf66e3e88a645f4b77243bbbc258f0b",
+                  "value": 100,
+                  "status": "COMPLETED",
+                  "fee": 50,
+                  "brCode": "00020101021226950014br.gov.bcb.pix2573api.openpix.com.br/api/testaccount/qr/v1/baf66e3e88a645f4b77243bbbc258f0b52040000530398654041.005802BR5918REDE_QUERO_IMOVEIS6009Sao_Paulo62290525baf66e3e88a645f4b77243bbb630422C7",
+                  "transactionID": "baf66e3e88a645f4b77243bbbc258f0b",
+                  "identifier": "baf66e3e88a645f4b77243bbbc258f0b",
+                  "qrCodeImage": "https://api.openpix.com.br/openpix/charge/brcode/image/8d7df52b-b4c3-40b9-be26-9304f4a32faa.png"
+                }
+              }
+            },
+            "pix": {
+              "customer": {
+                "name": "Arthur Teste",
+                "phone": "+553799781110",
+                "correlationID": "713c4b7e-55f1-487e-9765-b994c3fb4e6a"
+              },
+              "payer": {
+                "name": "Arthur Teste 1",
+                "email": "arthurbaldiotti@hotmail.com",
+                "phone": "+5537999781110",
+                "address": {
+                  "zipcode": "",
+                  "street": "",
+                  "number": "",
+                  "neighborhood": "",
+                  "city": "",
+                  "state": "",
+                  "complement": "",
+                  "country": "BR",
+                  "location": {
+                    "coordinates": []
+                  },
+                  "_id": "64c3b3335b297defb40ac725"
+                },
+                "taxID": {
+                  "taxID": "11383223696",
+                  "type": "BR:CPF"
+                },
+                "correlationID": "be7a6689-47cd-4196-8ccc-2f461474dc76"
+              },
+              "charge": {
+                "customer": {
+                  "name": "Arthur Teste",
+                  "phone": "+553799781110",
+                  "correlationID": "713c4b7e-55f1-487e-9765-b994c3fb4e6a"
+                },
+                "value": 100,
+                "comment": "pacote prata",
+                "identifier": "baf66e3e88a645f4b77243bbbc258f0b",
+                "correlationID": "202412031330451690500-uniconsultas",
+                "transactionID": "baf66e3e88a645f4b77243bbbc258f0b",
+                "status": "COMPLETED",
+                "additionalInfo": [],
+                "fee": 50,
+                "discount": 0,
+                "valueWithDiscount": 100,
+                "expiresDate": "2024-12-06T18:30:45.128Z",
+                "type": "DYNAMIC",
+                "paymentLinkID": "8d7df52b-b4c3-40b9-be26-9304f4a32faa",
+                "createdAt": "2024-12-03T18:30:45.139Z",
+                "updatedAt": "2024-12-03T18:31:05.690Z",
+                "paidAt": "2024-12-03T18:31:05.549Z",
+                "payer": {
+                  "name": "Arthur Teste 1",
+                  "email": "arthurbaldiotti@hotmail.com",
+                  "phone": "+5537999781110",
+                  "address": {
+                    "zipcode": "",
+                    "street": "",
+                    "number": "",
+                    "neighborhood": "",
+                    "city": "",
+                    "state": "",
+                    "complement": ""
+                  },
+                  "taxID": {
+                    "taxID": "11383223696",
+                    "type": "BR:CPF"
+                  },
+                  "correlationID": "be7a6689-47cd-4196-8ccc-2f461474dc76"
+                },
+                "brCode": "00020101021226950014br.gov.bcb.pix2573api.openpix.com.br/api/testaccount/qr/v1/baf66e3e88a645f4b77243bbbc258f0b52040000530398654041.005802BR5918REDE_QUERO_IMOVEIS6009Sao_Paulo62290525baf66e3e88a645f4b77243bbb630422C7",
+                "expiresIn": 259200,
+                "pixKey": "acf022ee-667d-4690-a2ac-de5f7016918e",
+                "paymentLinkUrl": "https://openpix.com.br/pay/8d7df52b-b4c3-40b9-be26-9304f4a32faa",
+                "qrCodeImage": "https://api.openpix.com.br/openpix/charge/brcode/image/8d7df52b-b4c3-40b9-be26-9304f4a32faa.png",
+                "globalID": "Q2hhcmdlOjY3NGY0ZTU1MWFjNmZlOTUwNDAxOWZjYw=="
+              },
+              "value": 100,
+              "time": "2024-12-03T18:31:05.549Z",
+              "endToEndId": "Ec5a4bba9fdbe41869b73a980142ec28f",
+              "transactionID": "baf66e3e88a645f4b77243bbbc258f0b",
+              "infoPagador": "OpenPix testing",
+              "type": "PAYMENT",
+              "createdAt": "2024-12-03T18:31:05.566Z",
+              "globalID": "UGl4VHJhbnNhY3Rpb246Njc0ZjRlNjk2ZWQ3Yjg5MTI2MjI1MzE1"
+            },
+            "company": {
+              "id": "64c2fb2c0609cf94208a2c99",
+              "name": "REDE QUERO IMOVEIS LTDA",
+              "taxID": "40126612000140"
+            },
+            "account": {
+              "environment": "TESTING"
+            }
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/openpix",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "220",
+            "sentry-trace": "5d21e0af345144e2b4d1716f4f6dcfc7-a8a3acdf41fcfe47-0",
+            "baggage": "sentry-trace_id=5d21e0af345144e2b4d1716f4f6dcfc7,sentry-environment=production_new,sentry-release=5652deab06a886b8cbb2c025bdbfe97234261bd3,sentry-public_key=af3c6636fa6e4f89948eaa4e575b3286,sentry-transaction=/api/v1/blocks_integration/test_request/,sentry-sample_rate=0.0025,sentry-sampled=false",
+            "user-agent": "python-requests/2.32.3",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "Nome": "Arthur",
+            "value": "7900",
+            "Empresa": "uniconsultas",
+            "Webhook": "https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/wbXO0Uss1hol/",
+            "comment": "12345689",
+            "Telefone": "+553799781110"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/openpix",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "0a23b895-2d5a-4a7a-9068-413b61264e04",
+  "triggerCount": 1,
+  "tags": []
+}
