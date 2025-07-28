@@ -1,0 +1,2395 @@
+{
+  "createdAt": "2025-07-25T01:32:32.955Z",
+  "updatedAt": "2025-07-25T01:32:38.000Z",
+  "id": "qJ96PICCtn6IId4s",
+  "name": "app-baserow",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "4756f5d6-01cb-4264-92c2-b841d29acb33",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        640,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://baserow.unisistemas.tech/api/database/rows/table/637/?user_field_names=true&order_by=-Ordenar",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_field_names",
+              "value": "true"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token UU2yIjUeFuKaWhvMc734TVS2oEOKWjp9"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cdd1cd3a-c7db-49b4-a091-bf129c446f59",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3500,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "833f5891-c085-48cd-87fa-462beccc574d",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -2780,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d3547aa8-dc0e-4382-9e32-29b7f0733a11",
+              "name": "codigo",
+              "value": "={{ $('Webhook').item.json.body.codigo }}",
+              "type": "string"
+            },
+            {
+              "id": "757f9f4c-735f-441b-bc25-2b067c21061c",
+              "name": "results[0]['Código']",
+              "value": "={{ $('HTTP Request1').item.json.results[0]['Código'] }}",
+              "type": "string"
+            },
+            {
+              "id": "852779e0-00ed-4ac2-9013-727aed011f0f",
+              "name": "",
+              "value": "={{ $('Webhook').item.json.body.tipo }}",
+              "type": "string"
+            },
+            {
+              "id": "4de53af2-c75a-466f-818c-a9e31dff6d03",
+              "name": "body.data",
+              "value": "={{ $('Webhook').item.json.body.data }}",
+              "type": "string"
+            },
+            {
+              "id": "322f2414-6be7-421d-ac09-ab4abb304998",
+              "name": "body.valor",
+              "value": "={{ $('Webhook').item.json.body.valor }}",
+              "type": "string"
+            },
+            {
+              "id": "4488eceb-1a51-4106-8601-a7f5c91919d8",
+              "name": "",
+              "value": "={{ new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format($('Webhook').item.json.body.valor / 100) }}",
+              "type": "string"
+            },
+            {
+              "id": "c7bf71cf-1b9c-48db-b180-94ea55249380",
+              "name": "data",
+              "value": "={{ $('Code Data hoje').item.json.data }}",
+              "type": "string"
+            },
+            {
+              "id": "adc727b9-91b1-4b8c-a683-9edab758fdc1",
+              "name": "results",
+              "value": "={{ $('HTTP Request1').item.json.results }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1db666e3-eaf8-4c52-b2fd-97e6f904a252",
+      "name": "Edit Fields2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -2580,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const valorOriginal = $('Webhook').item.json.body.valor;\nlet valorNumerico = parseFloat(valorOriginal.toString().replace(',', '.'));\n\n// Garante que tenha duas casas decimais\nlet valorFormatado = valorNumerico.toFixed(2).replace('.', ',');\n\n// Verifica se o valor é negativo e formata corretamente\nif (valorNumerico < 0) {\n    valorFormatado = `R$ (${Math.abs(valorNumerico).toFixed(2).replace('.', ',')})`;\n} else {\n    valorFormatado = `R$ ${valorFormatado}`;\n}\n\nreturn [{ valorFormatado }];\n"
+      },
+      "id": "88999508-7fa8-4690-b799-ca5ab1062947",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -980,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const resultado = parseInt($('HTTP Request1').item.json.results[0].Ordenar) + 1;\nreturn [{ json: { resultado } }];\n"
+      },
+      "id": "4078a549-8177-499e-aab0-166afdd6019c",
+      "name": "Ordenar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1960,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Captura o valor retornado no campo \"Código\"\nconst codigo = $('HTTP Request1').item.json.results[0]['Código']; \n\n// Separa a parte da letra e do número usando regex\nconst match = codigo.match(/^([A-Za-z]+)(\\d+)$/);\n\nif (match) {\n    const letra = match[1]; // Captura a parte da letra (D, A, B, etc.)\n    const numero = parseInt(match[2], 10) + 1; // Captura a parte numérica e soma 1\n\n    return [{ json: { letra, numero } }];\n} else {\n    return [{ json: { error: \"Formato inválido\" } }];\n}\n"
+      },
+      "id": "1009e93b-9366-47cf-af0a-3206c83a3672",
+      "name": "código número",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2360,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const tipo = $('Webhook').item.json.body.tipo; \n\nconst resultado = tipo === \"Despesa\" ? \"D\" : \"R\";\n\nreturn [{ json: { resultado } }];\n"
+      },
+      "id": "da220a71-f9ea-442c-bfb3-f1152f811306",
+      "name": "código letra",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2180,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## VALOR",
+        "height": 387.0943396226415,
+        "width": 448.01078167115867
+      },
+      "id": "c0b3c3be-ffe2-4f83-99c2-3ff236328a9f",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1100,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c9e65eb4-7bb1-4c35-94d4-208743effc32",
+              "leftValue": "={{ $('Webhook').item.json.body.centro_custo }}",
+              "rightValue": "Pacote",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "58a91886-8cc8-4d30-a500-06996e04bbc8",
+              "leftValue": "={{ $('Webhook').item.json.body.centro_custo }}",
+              "rightValue": "Crédito",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "838b5641-d348-4d5c-b40d-e6b89d2dfba9",
+              "leftValue": "={{ $('Webhook').item.json.body.centro_custo }}",
+              "rightValue": "credito",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "29e4866c-d241-4977-83d4-afa990d54e7e",
+              "leftValue": "={{ $('Webhook').item.json.body.centro_custo }}",
+              "rightValue": "ompartilhado",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "1d59aa6f-d6ff-4338-ac1b-a9aafa404308",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1320,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d4ed38ed-3884-408c-a954-9e2082ebf47c",
+              "name": "valorFormatado",
+              "value": "={{ new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format($('Webhook').item.json.body.valor / 100) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2f18bfc7-5422-45e2-9eb4-6d05363c2d3b",
+      "name": "Edit Fields4",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -980,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c9e65eb4-7bb1-4c35-94d4-208743effc32",
+              "leftValue": "={{ $('Webhook').item.json.body.centro_custo }}",
+              "rightValue": "Pacote",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "58a91886-8cc8-4d30-a500-06996e04bbc8",
+              "leftValue": "={{ $('Webhook').item.json.body.centro_custo }}",
+              "rightValue": "Crédito",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "838b5641-d348-4d5c-b40d-e6b89d2dfba9",
+              "leftValue": "={{ $('Webhook').item.json.body.centro_custo }}",
+              "rightValue": "credito",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "29e4866c-d241-4977-83d4-afa990d54e7e",
+              "leftValue": "={{ $('Webhook').item.json.body.centro_custo }}",
+              "rightValue": "ompartilhado",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "cab159a5-4bf4-498e-bad5-f3f4fc8fbf9e",
+              "leftValue": "={{ $('Webhook').item.json.body.centro_custo }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "01332def-8290-4072-baba-b9ea25f6f22f",
+      "name": "If Data",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1740,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "7b55222b-26c1-4889-b09d-585c2d69004a",
+      "name": "If Valor",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://base44.app/api/apps/67d1c37d9e8f1bef02d57b3a/entities/Lancamento",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZWRlcXVlcm9pbW92ZWlzQGdtYWlsLmNvbSIsImV4cCI6MTc0NzA5MTIyNn0.JUUygHiJSbbxwEGLMgJAcFfQyHyHfErJ28GQIhOR-84"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $('Code Data hoje').item.json.data }}"
+            },
+            {
+              "name": "tipo",
+              "value": "={{ $('Webhook').item.json.body.tipo }}"
+            },
+            {
+              "name": "centro_custo",
+              "value": "={{ $('Webhook').item.json.body.centro_custo }}"
+            },
+            {
+              "name": "origem",
+              "value": "={{ $('Webhook').item.json.body.origem }}"
+            },
+            {
+              "name": "valor",
+              "value": "={{ $('If Valor').item.json.valorFormatado.replace('R$', '').replace(/[()]/g, '').replace(',', '.').replace(/\\s+/g, '') }}"
+            },
+            {
+              "name": "pagamento",
+              "value": "={{ $('Webhook').item.json.body.pagamento }}"
+            },
+            {
+              "name": "codigo",
+              "value": "={{ $('código letra').item.json.resultado }}{{ $('código número').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d517ca8f-469a-4a8b-bfc5-e84a873864bb",
+      "name": "Enviar para app",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        140
+      ],
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputDate = $('Webhook').item.json.body.data;\nconst [day, month, year] = inputDate.split('-');\nconst formattedDate = `${year}-${month}-${day}`;\n\nreturn [{ json: { formattedDate } }];\n"
+      },
+      "id": "8939afe8-2a07-4c87-a1c6-85cc7dcd87b2",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1520,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "id": "21d98687-f8b5-4700-bc59-2448fe58b557",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -320,
+        240
+      ],
+      "webhookId": "40f5861b-df4d-4d73-8d92-07e38b4b893d",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "4d9daa22-d531-401d-99a2-6a8899036eca",
+              "leftValue": "={{ $('Webhook').item.json.body.tipo }}",
+              "rightValue": "espesa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "42a0bf56-eff7-44fd-8644-c2cf35e2dbc1",
+      "name": "If1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        40,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const dataAtual = new Date();\n\n// Ajusta para o fuso horário de Brasília (UTC-3 ou UTC-2 no horário de verão)\nconst dataBrasilia = new Date(dataAtual.toLocaleString(\"en-US\", { timeZone: \"America/Sao_Paulo\" }));\n\n// Formata a data no padrão YYYY-MM-DD\nconst dataFormatada = dataBrasilia.toISOString().split('T')[0];\n\nreturn [{ data: dataFormatada }];\n"
+      },
+      "id": "f27dbe3c-da97-4bb8-9da3-0fbb78d8f5c6",
+      "name": "Code Data hoje",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3000,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "4d9daa22-d531-401d-99a2-6a8899036eca",
+              "leftValue": "={{ $('Webhook').item.json.body.tipo }}",
+              "rightValue": "espesa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e5fd68f8-9dfa-46de-945a-3ac39398adf4",
+      "name": "If4",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -540,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = $json.results;\n\n// Verifica se results é um array\nif (!Array.isArray(results)) {\n    throw new Error(\"Os dados de entrada não possuem a estrutura esperada.\");\n}\n\n// Filtra apenas os itens onde \"Receita / Despesa\" é \"Despesa\"\nconst despesas = results.filter(item => item[\"Receita / Despesa\"] === \"Despesa\");\n\nreturn despesas;\n"
+      },
+      "id": "84d30b5c-a6ee-483b-84f7-9c8854cfe817",
+      "name": "Code2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2360,
+        540
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "f8f4a046-f6aa-4569-a606-b0e4adacc3d0",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -2060,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d438f555-76ba-4f36-92f3-9738f472876a",
+              "name": "item.json['Código']",
+              "value": "={{ $('Aggregate1').item.json.data[0]['Código'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c538aae8-360c-4c75-8501-9c835fdeef70",
+      "name": "Edit Fields3",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1900,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "e41bbc68-83a6-41b5-9753-59dc10153399",
+      "name": "Aggregate1",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -2220,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Captura o valor retornado no campo \"Código\"\nconst codigo = $('Aggregate1').item.json.data[0]['Código']; \n\n// Separa a parte da letra e do número usando regex\nconst match = codigo.match(/^([A-Za-z]+)(\\d+)$/);\n\nif (match) {\n    const letra = match[1]; // Captura a parte da letra (D, A, B, etc.)\n    const numero = parseInt(match[2], 10) + 1; // Captura a parte numérica e soma 1\n\n    return [{ json: { letra, numero } }];\n} else {\n    return [{ json: { error: \"Formato inválido\" } }];\n}\n"
+      },
+      "id": "8e07d070-9076-4d8a-8ec7-164d972d52ee",
+      "name": "Despesa - código número",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1700,
+        660
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const tipo = $('Webhook').item.json.body.tipo; \n\nconst resultado = tipo === \"Despesa\" ? \"D\" : \"R\";\n\nreturn [{ json: { resultado } }];\n"
+      },
+      "id": "7380adf3-0a0d-4953-9b8c-446e9f0da3a7",
+      "name": "Despesa - código letra",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1460,
+        660
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtém a data atual no fuso horário de Brasília\nconst dataBrasilia = new Date(new Date().toLocaleString(\"en-US\", { timeZone: \"America/Sao_Paulo\" }));\n\n// Formata a data para DD/MM/AAAA\nconst dia = String(dataBrasilia.getDate()).padStart(2, '0');\nconst mes = String(dataBrasilia.getMonth() + 1).padStart(2, '0'); // Mês começa do zero\nconst ano = dataBrasilia.getFullYear();\n\n// Retorna a data formatada\nreturn [{ json: { dataFormatada: `${dia}/${mes}/${ano}` } }];\n"
+      },
+      "id": "97c1584a-4211-4e5c-8133-79203424bcb3",
+      "name": "Data Hoje Brasil",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3280,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "app-baserow",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "ea4ec1c3-119b-42ab-974b-c387c4921589",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -3680,
+        280
+      ],
+      "webhookId": "b37811fe-8d91-4574-9194-b5d1b2df770a"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://base44.app/api/apps/67d1c37d9e8f1bef02d57b3a/entities/Lancamento",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZWRlcXVlcm9pbW92ZWlzQGdtYWlsLmNvbSIsImV4cCI6MTc0MjgyMjgzOH0.cwaye-Qql98E0frbuFGOamTniWKwSqaoPb4m9eqV6CY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $('Code Data hoje').item.json.data }}"
+            },
+            {
+              "name": "tipo",
+              "value": "={{ $('Webhook').item.json.body.tipo }}"
+            },
+            {
+              "name": "centro_custo",
+              "value": "={{ $('Webhook').item.json.body.centro_custo }}"
+            },
+            {
+              "name": "origem",
+              "value": "={{ $('Webhook').item.json.body.origem }}"
+            },
+            {
+              "name": "valor",
+              "value": "={{ $('If Valor').item.json.valorFormatado.replace('R$', '').replace(/[()]/g, '').replace(',', '.').replace(/\\s+/g, '') }}"
+            },
+            {
+              "name": "pagamento",
+              "value": "={{ $('Webhook').item.json.body.pagamento }}"
+            },
+            {
+              "name": "codigo",
+              "value": "={{ $('código letra').item.json.resultado }}{{ $('código número').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e29f4268-626f-4087-81ac-6a1156034edc",
+      "name": "Enviar para app1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -80,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://base44.app/api/apps/6819f5703086936c581632c2/entities/Lancamento",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "876ed4d9d16b40b3b54ab5da6d49a0a4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $('Code Data hoje').item.json.data }}"
+            },
+            {
+              "name": "tipo",
+              "value": "={{ $('Webhook').item.json.body.tipo }}"
+            },
+            {
+              "name": "centro_custo",
+              "value": "={{ $('Webhook').item.json.body.centro_custo }}"
+            },
+            {
+              "name": "origem",
+              "value": "={{ $('Webhook').item.json.body.origem }}"
+            },
+            {
+              "name": "valor",
+              "value": "={{ $('If Valor').item.json.valorFormatado.replace('R$', '').replace(/[.\\s()]/g, '').replace(',', '.') }}"
+            },
+            {
+              "name": "pagamento",
+              "value": "={{ $('Webhook').item.json.body.pagamento === 'credit_card' ? 'Cartão' : $('Webhook').item.json.body.pagamento }}"
+            },
+            {
+              "name": "codigo",
+              "value": "={{ $('código letra').item.json.resultado }}{{ $('código número').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        380
+      ],
+      "id": "83691bf5-5a88-4ad3-9fbe-ebf9b88f6d74",
+      "name": "Enviar para app API COPY"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://base44.app/api/apps/67d1c37d9e8f1bef02d57b3a/entities/Lancamento",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "876ed4d9d16b40b3b54ab5da6d49a0a4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $('Code Data hoje').item.json.data }}"
+            },
+            {
+              "name": "tipo",
+              "value": "={{ $('Webhook').item.json.body.tipo }}"
+            },
+            {
+              "name": "centro_custo",
+              "value": "={{ $('Webhook').item.json.body.centro_custo }}"
+            },
+            {
+              "name": "origem",
+              "value": "={{ $('Webhook').item.json.body.origem }}"
+            },
+            {
+              "name": "valor",
+              "value": "={{ $('If Valor').item.json.valorFormatado.replace('R$', '').replace(/[.\\s()]/g, '').replace(',', '.') }}"
+            },
+            {
+              "name": "pagamento",
+              "value": "={{ $('Webhook').item.json.body.pagamento === 'credit_card' ? 'Cartão' : $('Webhook').item.json.body.pagamento }}"
+            },
+            {
+              "name": "codigo",
+              "value": "={{ $('código letra').item.json.resultado }}{{ $('código número').item.json.numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        380
+      ],
+      "id": "7c11a4d8-a8aa-4f31-b183-d7faa32b9304",
+      "name": "Enviar para app API"
+    }
+  ],
+  "connections": {
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Data Hoje Brasil",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ordenar": {
+      "main": [
+        [
+          {
+            "node": "If Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "código número": {
+      "main": [
+        [
+          {
+            "node": "código letra",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "código letra": {
+      "main": [
+        [
+          {
+            "node": "Ordenar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "If Valor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "If Valor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Data": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar para app": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Valor": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar para app API COPY",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Data hoje": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Despesa - código número",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Despesa - código número": {
+      "main": [
+        [
+          {
+            "node": "Despesa - código letra",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Despesa - código letra": {
+      "main": [
+        [
+          {
+            "node": "código número",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Hoje Brasil": {
+      "main": [
+        [
+          {
+            "node": "Code Data hoje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar para app API COPY": {
+      "main": [
+        [
+          {
+            "node": "Enviar para app API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar para app API": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "171",
+            "sentry-trace": "99e63bfa66a446678002445defc81dad-a9842fcf58989a3d-0",
+            "baggage": "sentry-trace_id=99e63bfa66a446678002445defc81dad,sentry-environment=production_new,sentry-release=96bf86e1c093aabd42150ab844268602edeb2ce2,sentry-public_key=af3c6636fa6e4f89948eaa4e575b3286,sentry-transaction=/api/v1/pipelines/user_card/%7Buser_id%7D/send_flow/,sentry-sample_rate=0.005,sentry-sampled=false",
+            "user-agent": "python-requests/2.32.3",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "data": "15-03-2025",
+            "tipo": "Receita",
+            "valor": "19900",
+            "codigo": "1",
+            "origem": "UniConsultas",
+            "pagamento": "PIX",
+            "centro_custo": "Compartilhado 300 créditos"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/app-baserow",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "HTTP Request1": [
+      {
+        "json": {
+          "count": 379,
+          "next": "http://baserow.unisistemas.tech/api/database/rows/table/637/?order_by=-Ordenar&page=2&user_field_names=true&user_field_names=true",
+          "previous": null,
+          "results": [
+            {
+              "id": 7781,
+              "order": "381.00000000000000000000",
+              "Data": "20/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4085",
+              "Ordenar": "4156"
+            },
+            {
+              "id": 7780,
+              "order": "380.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4084",
+              "Ordenar": "4155"
+            },
+            {
+              "id": 7779,
+              "order": "379.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4083",
+              "Ordenar": "4154"
+            },
+            {
+              "id": 7778,
+              "order": "378.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4082",
+              "Ordenar": "4153"
+            },
+            {
+              "id": 7777,
+              "order": "377.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "iConsultei",
+              "Valor": "R$ (200,00)",
+              "Pagamento": "PIX",
+              "Código": "D4081",
+              "Ordenar": "4152"
+            },
+            {
+              "id": 7776,
+              "order": "376.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4093",
+              "Ordenar": "4151"
+            },
+            {
+              "id": 7775,
+              "order": "375.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Platinum 300 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 179,00",
+              "Pagamento": "PIX",
+              "Código": "R4092",
+              "Ordenar": "4150"
+            },
+            {
+              "id": 7774,
+              "order": "374.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "Rede Quero Imóveis",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4091",
+              "Ordenar": "4149"
+            },
+            {
+              "id": 7773,
+              "order": "373.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4090",
+              "Ordenar": "4148"
+            },
+            {
+              "id": 7772,
+              "order": "372.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4089",
+              "Ordenar": "4147"
+            },
+            {
+              "id": 7770,
+              "order": "371.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4088",
+              "Ordenar": "4146"
+            },
+            {
+              "id": 7769,
+              "order": "370.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Compartilhado 300 créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 199,00",
+              "Pagamento": "PIX",
+              "Código": "R4087",
+              "Ordenar": "4145"
+            },
+            {
+              "id": 7768,
+              "order": "369.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Bronze 5 Créditos",
+              "Origem": "Rede Quero Imóveis",
+              "Valor": "R$ 29,00",
+              "Pagamento": "PIX",
+              "Código": "R4086",
+              "Ordenar": "4144"
+            },
+            {
+              "id": 7767,
+              "order": "368.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4085",
+              "Ordenar": "4143"
+            },
+            {
+              "id": 7766,
+              "order": "367.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4084",
+              "Ordenar": "4142"
+            },
+            {
+              "id": 7765,
+              "order": "366.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4083",
+              "Ordenar": "4141"
+            },
+            {
+              "id": 7764,
+              "order": "365.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4082",
+              "Ordenar": "4140"
+            },
+            {
+              "id": 7763,
+              "order": "364.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Diamond 200 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 129,00",
+              "Pagamento": "PIX",
+              "Código": "R4081",
+              "Ordenar": "4139"
+            },
+            {
+              "id": 7762,
+              "order": "363.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "Acesso Positivo",
+              "Valor": "R$ (100,00)",
+              "Pagamento": "PIX",
+              "Código": "D4080",
+              "Ordenar": "4138"
+            },
+            {
+              "id": 7761,
+              "order": "362.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "iConsultei",
+              "Valor": "R$ (100,00)",
+              "Pagamento": "PIX",
+              "Código": "D4079",
+              "Ordenar": "4137"
+            },
+            {
+              "id": 7760,
+              "order": "361.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Platinum 300 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 179,00",
+              "Pagamento": "PIX",
+              "Código": "R4088",
+              "Ordenar": "4136"
+            },
+            {
+              "id": 7759,
+              "order": "360.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "Cartão",
+              "Código": "R4087",
+              "Ordenar": "4135"
+            },
+            {
+              "id": 7758,
+              "order": "359.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4086",
+              "Ordenar": "4134"
+            },
+            {
+              "id": 7757,
+              "order": "358.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4085",
+              "Ordenar": "4133"
+            },
+            {
+              "id": 7756,
+              "order": "357.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Bronze 5 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 29,00",
+              "Pagamento": "PIX",
+              "Código": "R4084",
+              "Ordenar": "4132"
+            },
+            {
+              "id": 7755,
+              "order": "356.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4083",
+              "Ordenar": "4131"
+            },
+            {
+              "id": 7754,
+              "order": "355.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4082",
+              "Ordenar": "4130"
+            },
+            {
+              "id": 7753,
+              "order": "354.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4081",
+              "Ordenar": "4129"
+            },
+            {
+              "id": 7752,
+              "order": "353.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Diamond 200 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 129,00",
+              "Pagamento": "PIX",
+              "Código": "R4080",
+              "Ordenar": "4128"
+            },
+            {
+              "id": 7751,
+              "order": "352.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "Cartão",
+              "Código": "R4079",
+              "Ordenar": "4127"
+            },
+            {
+              "id": 7750,
+              "order": "351.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "iConsultei",
+              "Valor": "R$ (100,00)",
+              "Pagamento": "PIX",
+              "Código": "D4078",
+              "Ordenar": "4126"
+            },
+            {
+              "id": 7749,
+              "order": "350.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4080",
+              "Ordenar": "4125"
+            },
+            {
+              "id": 7748,
+              "order": "349.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Diamond 200 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 129,00",
+              "Pagamento": "PIX",
+              "Código": "R4079",
+              "Ordenar": "4124"
+            },
+            {
+              "id": 7747,
+              "order": "348.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Compartilhado 100 créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 99,00",
+              "Pagamento": "PIX",
+              "Código": "R4078",
+              "Ordenar": "4123"
+            },
+            {
+              "id": 7746,
+              "order": "347.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Marketing",
+              "Origem": "Facebook Ads",
+              "Valor": "R$ (150,16)",
+              "Pagamento": "Cartão",
+              "Código": "D4077",
+              "Ordenar": "4122"
+            },
+            {
+              "id": 7745,
+              "order": "346.00000000000000000000",
+              "Data": "19/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "Rede Quero Imóveis",
+              "Valor": "R$ 49,00",
+              "Pagamento": "Cartão",
+              "Código": "R4077",
+              "Ordenar": "4121"
+            },
+            {
+              "id": 7744,
+              "order": "345.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "iConsultei",
+              "Valor": "R$ (100,00)",
+              "Pagamento": "PIX",
+              "Código": "D4076",
+              "Ordenar": "4120"
+            },
+            {
+              "id": 7743,
+              "order": "344.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "Rede Quero Imóveis",
+              "Valor": "R$ 79,00",
+              "Pagamento": "Cartão",
+              "Código": "R4084",
+              "Ordenar": "4119"
+            },
+            {
+              "id": 7742,
+              "order": "343.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Bronze 5 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 29,00",
+              "Pagamento": "PIX",
+              "Código": "R4083",
+              "Ordenar": "4118"
+            },
+            {
+              "id": 7741,
+              "order": "342.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4082",
+              "Ordenar": "4117"
+            },
+            {
+              "id": 7740,
+              "order": "341.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Diamond 200 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 129,00",
+              "Pagamento": "PIX",
+              "Código": "R4081",
+              "Ordenar": "4116"
+            },
+            {
+              "id": 7739,
+              "order": "340.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Bronze 5 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 29,00",
+              "Pagamento": "PIX",
+              "Código": "R4080",
+              "Ordenar": "4115"
+            },
+            {
+              "id": 7738,
+              "order": "339.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4079",
+              "Ordenar": "4114"
+            },
+            {
+              "id": 7737,
+              "order": "338.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4078",
+              "Ordenar": "4113"
+            },
+            {
+              "id": 7736,
+              "order": "337.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "Cartão",
+              "Código": "R4077",
+              "Ordenar": "4112"
+            },
+            {
+              "id": 7735,
+              "order": "336.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4076",
+              "Ordenar": "4111"
+            },
+            {
+              "id": 7734,
+              "order": "335.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "iConsultei",
+              "Valor": "R$ (100,00)",
+              "Pagamento": "PIX",
+              "Código": "D4075",
+              "Ordenar": "4110"
+            },
+            {
+              "id": 7733,
+              "order": "334.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "Acesso Positivo",
+              "Valor": "R$ (100,00)",
+              "Pagamento": "PIX",
+              "Código": "D4074",
+              "Ordenar": "4109"
+            },
+            {
+              "id": 7732,
+              "order": "333.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Platinum 300 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 179,00",
+              "Pagamento": "PIX",
+              "Código": "R4079",
+              "Ordenar": "4108"
+            },
+            {
+              "id": 7731,
+              "order": "332.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4078",
+              "Ordenar": "4107"
+            },
+            {
+              "id": 7730,
+              "order": "331.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Compartilhado 300 créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 199,00",
+              "Pagamento": "Cartão",
+              "Código": "R4077",
+              "Ordenar": "4106"
+            },
+            {
+              "id": 7729,
+              "order": "330.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4076",
+              "Ordenar": "4105"
+            },
+            {
+              "id": 7728,
+              "order": "329.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "Cartão",
+              "Código": "R4075",
+              "Ordenar": "4104"
+            },
+            {
+              "id": 7726,
+              "order": "327.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "Cartão",
+              "Código": "R4074",
+              "Ordenar": "4103"
+            },
+            {
+              "id": 7727,
+              "order": "328.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "Cartão",
+              "Código": "R4074",
+              "Ordenar": "4103"
+            },
+            {
+              "id": 7725,
+              "order": "326.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Marketing",
+              "Origem": "Facebook Ads",
+              "Valor": "R$ (150,01)",
+              "Pagamento": "Cartão",
+              "Código": "D4073",
+              "Ordenar": "4102"
+            },
+            {
+              "id": 7724,
+              "order": "325.00000000000000000000",
+              "Data": "18/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4075",
+              "Ordenar": "4101"
+            },
+            {
+              "id": 7720,
+              "order": "324.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Platinum 300 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 179,00",
+              "Pagamento": "PIX",
+              "Código": "R4074",
+              "Ordenar": "4100"
+            },
+            {
+              "id": 7719,
+              "order": "323.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Compartilhado 200 créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 149,00",
+              "Pagamento": "PIX",
+              "Código": "R4073",
+              "Ordenar": "4099"
+            },
+            {
+              "id": 7718,
+              "order": "322.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "Acesso Positivo",
+              "Valor": "R$ (150,00)",
+              "Pagamento": "PIX",
+              "Código": "D4072",
+              "Ordenar": "4098"
+            },
+            {
+              "id": 7717,
+              "order": "321.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "iConsultei",
+              "Valor": "R$ (150,00)",
+              "Pagamento": "PIX",
+              "Código": "D4071",
+              "Ordenar": "4097"
+            },
+            {
+              "id": 7716,
+              "order": "320.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "EHM Consultas",
+              "Valor": "R$ (500,00)",
+              "Pagamento": "PIX",
+              "Código": "D4070",
+              "Ordenar": "4096"
+            },
+            {
+              "id": 7715,
+              "order": "319.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Marketing",
+              "Origem": "Facebook Ads",
+              "Valor": "R$ (151,35)",
+              "Pagamento": "Cartão",
+              "Código": "D4069",
+              "Ordenar": "4095"
+            },
+            {
+              "id": 7714,
+              "order": "318.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Bronze 5 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 29,00",
+              "Pagamento": "PIX",
+              "Código": "R4080",
+              "Ordenar": "4094"
+            },
+            {
+              "id": 7713,
+              "order": "317.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4079",
+              "Ordenar": "4093"
+            },
+            {
+              "id": 7712,
+              "order": "316.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4078",
+              "Ordenar": "4092"
+            },
+            {
+              "id": 7711,
+              "order": "315.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "Cartão",
+              "Código": "R4077",
+              "Ordenar": "4091"
+            },
+            {
+              "id": 7710,
+              "order": "314.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4076",
+              "Ordenar": "4090"
+            },
+            {
+              "id": 7709,
+              "order": "313.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4075",
+              "Ordenar": "4089"
+            },
+            {
+              "id": 7708,
+              "order": "312.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Diamond 200 Créditos",
+              "Origem": "Rede Quero Imóveis",
+              "Valor": "R$ 129,00",
+              "Pagamento": "PIX",
+              "Código": "R4074",
+              "Ordenar": "4088"
+            },
+            {
+              "id": 7707,
+              "order": "311.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4073",
+              "Ordenar": "4087"
+            },
+            {
+              "id": 7706,
+              "order": "310.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4072",
+              "Ordenar": "4086"
+            },
+            {
+              "id": 7705,
+              "order": "309.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4071",
+              "Ordenar": "4085"
+            },
+            {
+              "id": 7704,
+              "order": "308.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4070",
+              "Ordenar": "4084"
+            },
+            {
+              "id": 7703,
+              "order": "307.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Diamond 200 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 129,00",
+              "Pagamento": "PIX",
+              "Código": "R4069",
+              "Ordenar": "4083"
+            },
+            {
+              "id": 7702,
+              "order": "306.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "iConsultei",
+              "Valor": "R$ (100,00)",
+              "Pagamento": "PIX",
+              "Código": "D4068",
+              "Ordenar": "4082"
+            },
+            {
+              "id": 7701,
+              "order": "305.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4079",
+              "Ordenar": "4081"
+            },
+            {
+              "id": 7700,
+              "order": "304.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "Rede Quero Imóveis",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4078",
+              "Ordenar": "4080"
+            },
+            {
+              "id": 7699,
+              "order": "303.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Prata 25 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 49,00",
+              "Pagamento": "PIX",
+              "Código": "R4077",
+              "Ordenar": "4079"
+            },
+            {
+              "id": 7698,
+              "order": "302.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4076",
+              "Ordenar": "4078"
+            },
+            {
+              "id": 7697,
+              "order": "301.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4075",
+              "Ordenar": "4077"
+            },
+            {
+              "id": 7696,
+              "order": "300.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Platinum 300 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 179,00",
+              "Pagamento": "PIX",
+              "Código": "R4074",
+              "Ordenar": "4076"
+            },
+            {
+              "id": 7695,
+              "order": "299.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Compartilhado 200 créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 149,00",
+              "Pagamento": "Cartão",
+              "Código": "R4073",
+              "Ordenar": "4075"
+            },
+            {
+              "id": 7694,
+              "order": "298.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "PIX",
+              "Código": "R4072",
+              "Ordenar": "4074"
+            },
+            {
+              "id": 7693,
+              "order": "297.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Diamond 200 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 129,00",
+              "Pagamento": "PIX",
+              "Código": "R4071",
+              "Ordenar": "4073"
+            },
+            {
+              "id": 7692,
+              "order": "296.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Platinum 300 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 179,00",
+              "Pagamento": "PIX",
+              "Código": "R4070",
+              "Ordenar": "4072"
+            },
+            {
+              "id": 7691,
+              "order": "295.00000000000000000000",
+              "Data": "17/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "Cartão",
+              "Código": "R4069",
+              "Ordenar": "4071"
+            },
+            {
+              "id": 7690,
+              "order": "294.00000000000000000000",
+              "Data": "16/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Bronze 5 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 29,00",
+              "Pagamento": "PIX",
+              "Código": "R4068",
+              "Ordenar": "4070"
+            },
+            {
+              "id": 7689,
+              "order": "293.00000000000000000000",
+              "Data": "16/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Marketing",
+              "Origem": "Facebook Ads",
+              "Valor": "R$ (150,02)",
+              "Pagamento": "Cartão",
+              "Código": "D4067",
+              "Ordenar": "4069"
+            },
+            {
+              "id": 7688,
+              "order": "292.00000000000000000000",
+              "Data": "16/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Compartilhado 300 créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 199,00",
+              "Pagamento": "Cartão",
+              "Código": "R4068",
+              "Ordenar": "4068"
+            },
+            {
+              "id": 7687,
+              "order": "291.00000000000000000000",
+              "Data": "16/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Ouro 100 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 79,00",
+              "Pagamento": "Cartão",
+              "Código": "R4067",
+              "Ordenar": "4067"
+            },
+            {
+              "id": 7686,
+              "order": "290.00000000000000000000",
+              "Data": "15/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "Consultas Prime",
+              "Valor": "R$ (39,90)",
+              "Pagamento": "PIX",
+              "Código": "D4066",
+              "Ordenar": "4066"
+            },
+            {
+              "id": 7679,
+              "order": "289.00000000000000000000",
+              "Data": "15/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Marketing",
+              "Origem": "Facebook Ads",
+              "Valor": "R$  (125,68)",
+              "Pagamento": "Cartão",
+              "Código": "D4065",
+              "Ordenar": "4065"
+            },
+            {
+              "id": 7678,
+              "order": "288.00000000000000000000",
+              "Data": "15/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "Acesso Positivo",
+              "Valor": "R$  (150,00)",
+              "Pagamento": "PIX",
+              "Código": "D4064",
+              "Ordenar": "4064"
+            },
+            {
+              "id": 7676,
+              "order": "286.00000000000000000000",
+              "Data": "15/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Consultas",
+              "Origem": "iConsultei",
+              "Valor": "R$  (200,00)",
+              "Pagamento": "PIX",
+              "Código": "D4063",
+              "Ordenar": "4063"
+            },
+            {
+              "id": 7674,
+              "order": "285.00000000000000000000",
+              "Data": "15/03/2025",
+              "Receita / Despesa": "Receita",
+              "Centro de custo": "Pacote Bronze 5 Créditos",
+              "Origem": "UniConsultas",
+              "Valor": "R$ 29,00",
+              "Pagamento": "PIX",
+              "Código": "R4062",
+              "Ordenar": "4062"
+            },
+            {
+              "id": 7672,
+              "order": "284.00000000000000000000",
+              "Data": "11/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Marketing",
+              "Origem": "Facebook Ads",
+              "Valor": "R$  (150,07)",
+              "Pagamento": "Cartão",
+              "Código": "D4061",
+              "Ordenar": "4061"
+            },
+            {
+              "id": 7671,
+              "order": "283.00000000000000000000",
+              "Data": "12/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Marketing",
+              "Origem": "Facebook Ads",
+              "Valor": "R$  (150,37)",
+              "Pagamento": "Cartão",
+              "Código": "D4060",
+              "Ordenar": "4060"
+            },
+            {
+              "id": 7670,
+              "order": "282.00000000000000000000",
+              "Data": "13/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Marketing",
+              "Origem": "Facebook Ads",
+              "Valor": "R$  (46,63)",
+              "Pagamento": "Cartão",
+              "Código": "D4059",
+              "Ordenar": "4059"
+            },
+            {
+              "id": 7669,
+              "order": "281.00000000000000000000",
+              "Data": "13/03/2025",
+              "Receita / Despesa": "Despesa",
+              "Centro de custo": "Marketing",
+              "Origem": "Facebook Ads",
+              "Valor": "R$  (151,24)",
+              "Pagamento": "Cartão",
+              "Código": "D4058",
+              "Ordenar": "4058"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "versionId": "67047042-1d85-4772-8199-5fceee75d71f",
+  "triggerCount": 1,
+  "tags": []
+}
