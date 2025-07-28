@@ -1,0 +1,103 @@
+{
+  "createdAt": "2025-07-25T02:50:22.156Z",
+  "updatedAt": "2025-07-25T02:50:22.156Z",
+  "id": "PUpLVQtFsJUem3bu",
+  "name": "Validador número whatsapp",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "77262d31-2f8d-47a9-b126-16ad43e0c04f",
+      "name": "On clicking 'execute'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "whatsapp",
+              "value": "5534991637646"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2116a73d-defc-4440-a087-d4abca250396",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        260,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "var whatsapp = $input.item.json.whatsapp.replaceAll(/[^0-9]/g, '');\nvar ddd = whatsapp.slice(2,4);\nvar ddi = whatsapp.charAt(0);\nvar ddx = whatsapp.slice(0,2);\nvar length = whatsapp.length;\nif (length >= 12){\n  if (ddi == '+'){\n    ddi = whatsapp.slice(0,3);\n    whatsapp = parseInt(whatsapp.slice(3)).toString();\n  } else {\n    if (ddx == '55'){\n      whatsapp = parseInt(whatsapp.slice(2)).toString();\n      ddi = \"+55\";\n    } else {\n      whatsapp = parseInt(whatsapp).toString();\n      ddi = 'não informado';\n    }\n  }\n} else {\n  whatsapp = parseInt(whatsapp).toString();\n  ddi = 'não informado';\n}\n\nddd = whatsapp.slice(0,2);\nwhatsapp = whatsapp.slice(2);\nif (ddd > 28){\n  whatsapp = whatsapp.slice(-8);\n} else {\n  whatsapp = '9'+whatsapp.slice(-8);\n}\nvar whatsapp_formatado = '+55'+ddd+whatsapp;\n\nreturn {json: {\"whatsapp_formatado\": whatsapp_formatado,\n              \"ddd\": ddd,\n              \"ddi\": ddi}};"
+      },
+      "id": "d04ee107-ffd7-42d5-9e58-19c0c64e9fe6",
+      "name": "Validar Telefone (Code)",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        480,
+        140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "path": "17dc5276-0ada-4f54-9a9e-4709e6016f34",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "8c21fab0-366d-462c-ad13-c9e686bcb066",
+      "name": "Webhook",
+      "webhookId": "17dc5276-0ada-4f54-9a9e-4709e6016f34"
+    }
+  ],
+  "connections": {
+    "On clicking 'execute'": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Validar Telefone (Code)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "ecfe29e7-b947-4341-8737-0d60328bec8d",
+  "triggerCount": 0,
+  "tags": []
+}
