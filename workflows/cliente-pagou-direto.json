@@ -1,0 +1,213 @@
+{
+  "createdAt": "2025-07-25T02:50:02.669Z",
+  "updatedAt": "2025-07-25T02:50:03.000Z",
+  "id": "y4FlmIjx5hZ8ukLX",
+  "name": "cliente-pagou-direto",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cliente-pagou-direto",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "7f6c7fd7-3e3e-4b50-9cdd-2e17f8ebc798",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "c5f0d33e-eac8-41ae-ab47-2b24482c127b"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        600,
+        0
+      ],
+      "id": "e94161fc-290a-45c5-a37a-e0e8ed95c209",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.redequeroimoveis.com/webhook/retorno-confirmacao-pagamento",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=Webhook",
+              "value": "={{ $json.Webhook }}"
+            },
+            {
+              "name": "Telefone",
+              "value": "={{ $json.Telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $json.Nome }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "={{ $json['Tipo Pagamento'] }}"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $json.Valor }}"
+            },
+            {
+              "name": "Origem",
+              "value": "={{ $json.Origem }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "34515f58-1865-4465-b446-1d61029b9641",
+      "name": "HTTP Request19",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        400,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e50cb44d-b4f7-41e8-9ba8-803fa87f581c",
+              "name": "Webhook",
+              "value": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/ZCb55SisIslA/",
+              "type": "string"
+            },
+            {
+              "id": "74b4c7c5-e1ef-456d-b385-884a908a531b",
+              "name": "Telefone",
+              "value": "={{ $json.body.Telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "30009b44-440a-4d7d-91a0-f2552894270d",
+              "name": "Nome",
+              "value": "={{ $json.body.Nome }}",
+              "type": "string"
+            },
+            {
+              "id": "1ad9454f-4710-4150-997c-d800775fc5bb",
+              "name": "Tipo Pagamento",
+              "value": "PIX",
+              "type": "string"
+            },
+            {
+              "id": "678eaa98-7fb5-41e4-b972-2523053d9732",
+              "name": "Valor",
+              "value": "={{ $json.body.valor }}",
+              "type": "string"
+            },
+            {
+              "id": "1bd3b1d4-024a-4e07-bfe7-b73f6f8424c8",
+              "name": "Origem",
+              "value": "UniConsultas",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        200,
+        0
+      ],
+      "id": "4c6d1536-a03d-459b-81c9-aae1bc15edf1",
+      "name": "uniconsultas"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "uniconsultas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "uniconsultas": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request19": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "284",
+            "sentry-trace": "afd08238b8064fc9b256e090b15f272b-98002aa544ce0705-0",
+            "baggage": "sentry-trace_id=afd08238b8064fc9b256e090b15f272b,sentry-environment=production_new,sentry-release=f90485b33829dc3ec85f6c34d03e93f9ed24ff6b,sentry-public_key=af3c6636fa6e4f89948eaa4e575b3286,sentry-transaction=/api/v1/blocks_integration/test_request/,sentry-sample_rate=0.01,sentry-sampled=false",
+            "user-agent": "python-requests/2.32.3",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "tipo": "Receita",
+            "centro_custo": "Pacote Prata 24 créditos",
+            "origem": "UniConsultas",
+            "valor": "4900",
+            "pagamento": "PIX",
+            "Webhook": "https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/ZCb55SisIslA/",
+            "Telefone": "+553799781110",
+            "Nome": "Arthur"
+          },
+          "webhookUrl": "https://n8n.redequeroimoveis.com:5678/webhook-test/cliente-pagou-direto",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "758fb64f-1a63-42cc-a3aa-556237a82dfd",
+  "triggerCount": 1,
+  "tags": []
+}
