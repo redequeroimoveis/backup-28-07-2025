@@ -1,0 +1,588 @@
+{
+  "createdAt": "2025-07-25T01:21:42.771Z",
+  "updatedAt": "2025-07-25T01:21:43.000Z",
+  "id": "FOw94rmXFqORV0i4",
+  "name": "Cadastrar Usuário em todas companhias",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/23474/DVEB6akZFGRk/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome ?? '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7924c931-b080-4b80-ae8d-fd6e0fccb497",
+      "name": "Companhia Compra",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        60,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/7wElvEsVQeP4/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome ?? '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "62f78660-b6c2-4690-acf4-d191b3c49022",
+      "name": "UniConsultas",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/TbzDeXlShH2R/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome ?? '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "237f3713-3ade-42f5-9a0d-ee0ac1153967",
+      "name": "Rede Quero Imóveis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        420,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## CADASTRAR EM TODAS COMPANHIAS PACOTE ATIVO",
+        "height": 273.9104582250345,
+        "width": 751.085870715021
+      },
+      "id": "b630fdc1-1e76-405b-a07b-244f4ae4331c",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cadastrar-todas-companhias",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "601f0a45-8958-4027-933b-6fe761fa9e6e",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        100
+      ],
+      "webhookId": "b73cf1dd-c75e-4526-85b4-327cefd2cc3a"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "52bcc608-cf8a-4340-b164-9661865bcc77",
+              "leftValue": "={{ $json.body.Status }}",
+              "rightValue": "Novo usuário",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5fcf8894-4f98-4910-aeb5-a563044496e2",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -620,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/23474/ONCLHKC8k90v/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome ?? '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5dc93c07-9433-4f94-8777-2a02a9808f57",
+      "name": "Companhia Compra1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        60,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/12CSvxYVJTqE/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome ?? '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5c0ec028-fde0-41e9-a86d-691055e95dcf",
+      "name": "UniConsultas1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/3980/2r3Ejq22O2FI/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome ?? '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "21e088f2-e3a3-464e-952e-1b14a70c1198",
+      "name": "Rede Quero Imóveis1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        400,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## CADASTRAR EM TODAS COMPANHIAS",
+        "height": 273.9104582250345,
+        "width": 751.0858707150209
+      },
+      "id": "43997ead-7741-4967-b659-baeffd029ed2",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/78442/ay2C9naQ3tVp/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome ?? '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "db0edeb8-d866-4890-9592-5d5548070cca",
+      "name": "Reserva - 2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        580,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/78442/9Fa1TkZI3fRd/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.name }} {{ $('Webhook').item.json.body.sobrenome ?? '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1d1f6db5-6b5b-42bc-ae0b-644f93c52b3a",
+      "name": "Reserva",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        580,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/10_Yu4uO1jpeHSUyR4iwHKQznOoLyYdXMzq5joO9vpWw/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10_Yu4uO1jpeHSUyR4iwHKQznOoLyYdXMzq5joO9vpWw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "telefone_cod": "553799781110",
+            "telefone_indicado": "={{ $('Webhook').item.json.body.telefone }}",
+            "data": "={{ $json.data }}",
+            "hora": "={{ $json.hora }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "telefone_cod",
+              "displayName": "telefone_cod",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "telefone_indicado",
+              "displayName": "telefone_indicado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "hora",
+              "displayName": "hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -140,
+        80
+      ],
+      "id": "13790bd1-39da-48b4-b95e-ce8e2aea89f5",
+      "name": "Obter Planilha",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agora = new Date().toLocaleString(\"pt-BR\", { timeZone: \"America/Sao_Paulo\" });\n\n// Divide data e hora\nconst [dataStrRaw, horaStr] = agora.split(' ');\nconst dataStr = dataStrRaw.replace(',', '');\n\n// Extrai dia, mês e ano\nconst [dia, mes, ano] = dataStr.split('/');\nconst dataFormatada = `${dia}/${mes}/${ano}`;\n\n// Novo formato ISO (YYYY-MM-DD)\nconst dataISO = `${ano}-${mes}-${dia}`;\n\n// Monta a URL da execução\nconst executionId = $execution.id;\nconst workflowId = $workflow.id;\nconst baseUrl = \"https://n8n.redequeroimoveis.com\";\nconst executionUrl = `${baseUrl}/workflow/${workflowId}/executions/${executionId}`;\n\n// Retorna tudo em um único objeto\nreturn [{\n  json: {\n    data: dataFormatada,\n    data_iso: dataISO,\n    hora: horaStr,\n    executionUrl: executionUrl\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -340,
+        80
+      ],
+      "id": "976541a2-5824-4c09-939a-d4be55267ec9",
+      "name": "Data e Hora"
+    }
+  ],
+  "connections": {
+    "Companhia Compra": {
+      "main": [
+        [
+          {
+            "node": "UniConsultas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UniConsultas": {
+      "main": [
+        [
+          {
+            "node": "Rede Quero Imóveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Data e Hora",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Companhia Compra",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Companhia Compra1": {
+      "main": [
+        [
+          {
+            "node": "UniConsultas1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UniConsultas1": {
+      "main": [
+        [
+          {
+            "node": "Rede Quero Imóveis1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rede Quero Imóveis1": {
+      "main": [
+        [
+          {
+            "node": "Reserva - 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rede Quero Imóveis": {
+      "main": [
+        [
+          {
+            "node": "Reserva",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data e Hora": {
+      "main": [
+        [
+          {
+            "node": "Obter Planilha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obter Planilha": {
+      "main": [
+        [
+          {
+            "node": "Companhia Compra1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "77",
+            "sentry-trace": "3f5b17a01e184a569424c29618f604d4-80870b0c6cf76964-0",
+            "baggage": "sentry-trace_id=3f5b17a01e184a569424c29618f604d4,sentry-environment=production_new,sentry-release=05db53e5ef28d80a44c0d17b3d9a7efe15fd78c8,sentry-public_key=af3c6636fa6e4f89948eaa4e575b3286,sentry-transaction=/api/v1/blocks_integration/test_request/,sentry-sample_rate=0.01,sentry-sampled=false",
+            "user-agent": "python-requests/2.32.3",
+            "accept-encoding": "gzip, deflate",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "name": "Arthur",
+            "telefone": "553799781110",
+            "Status": "Novo usuário"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/cadastrar-todas-companhias",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Obter Planilha": [
+      {
+        "json": {}
+      }
+    ]
+  },
+  "versionId": "d287fc9c-6597-494b-83bb-8fc91bb5788f",
+  "triggerCount": 1,
+  "tags": []
+}
