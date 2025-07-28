@@ -1,0 +1,557 @@
+{
+  "createdAt": "2025-07-25T02:25:18.104Z",
+  "updatedAt": "2025-07-27T11:20:48.000Z",
+  "id": "5OEHG2hV56NjazCE",
+  "name": "Backup n8n GitHub 3:00am",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "position": [
+        -1680,
+        800
+      ],
+      "typeVersion": 1,
+      "id": "0b9d9af6-7cc3-45b9-881e-5e6b4385b9a1",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        20,
+        960
+      ],
+      "typeVersion": 1,
+      "id": "d384e560-815b-4258-8967-660e6dcd7e67"
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{$json[\"github_status\"]}}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "same"
+            },
+            {
+              "value2": "different",
+              "output": 1
+            },
+            {
+              "value2": "new",
+              "output": 2
+            }
+          ]
+        }
+      },
+      "name": "github_status",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        320,
+        960
+      ],
+      "typeVersion": 1,
+      "id": "2ec513aa-3aef-44da-ae17-8da79a817ad4"
+    },
+    {
+      "parameters": {},
+      "name": "same",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        520,
+        780
+      ],
+      "typeVersion": 1,
+      "id": "789e5116-9e90-45d2-9609-89c1466ed8d3"
+    },
+    {
+      "parameters": {},
+      "name": "different",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        520,
+        960
+      ],
+      "typeVersion": 1,
+      "id": "b6700d60-1693-452b-a88e-3815b632064c"
+    },
+    {
+      "parameters": {},
+      "name": "new",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        520,
+        1120
+      ],
+      "typeVersion": 1,
+      "id": "7d138c86-141a-451d-a86d-5fb793ca0602"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "edit",
+        "owner": "={{$node[\"Globals\"].json[\"repo\"][\"owner\"]}}",
+        "repository": "={{$node[\"Globals\"].json[\"repo\"][\"name\"]}}",
+        "filePath": "={{$node[\"Globals\"].json[\"repo\"][\"path\"]}}{{JSON.parse($node[\"Move Binary Data\"].json[\"data\"]).name}}.json",
+        "fileContent": "={{$node[\"isDiffOrNew\"].json[\"n8n_data_stringy\"]}}",
+        "commitMessage": "=[N8N Backup] {{JSON.parse($node[\"Move Binary Data\"].json[\"data\"]).name}}.json ({{$json[\"github_status\"]}})"
+      },
+      "name": "GitHub Edit",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        720,
+        960
+      ],
+      "typeVersion": 1,
+      "id": "b0eda7f2-3252-4f9f-9e22-0181eb94cfbb",
+      "credentials": {
+        "githubApi": {
+          "id": "4X9kXZWPjD3YaJrq",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": "={{$node[\"Globals\"].json[\"repo\"][\"owner\"]}}",
+        "repository": "={{$node[\"Globals\"].json[\"repo\"][\"name\"]}}",
+        "filePath": "={{$node[\"Globals\"].json[\"repo\"][\"path\"]}}{{JSON.parse($node[\"Move Binary Data\"].json[\"data\"]).name}}.json",
+        "fileContent": "={{$node[\"isDiffOrNew\"].json[\"n8n_data_stringy\"]}}",
+        "commitMessage": "=[N8N Backup] {{JSON.parse($node[\"Move Binary Data\"].json[\"data\"]).name}}.json ({{$json[\"github_status\"]}})"
+      },
+      "name": "GitHub Create",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        720,
+        1120
+      ],
+      "typeVersion": 1,
+      "id": "ce93a441-4e02-4ce0-bee3-ef1f417be247",
+      "credentials": {
+        "githubApi": {
+          "id": "4X9kXZWPjD3YaJrq",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// File Returned with Content\nif (Object.keys(items[0].json).includes(\"content\")) {\n  // Get JSON Objects\n  var origWorkflow = JSON.parse(Buffer.from(items[0].json.content, 'base64'));\n  var n8nWorkflow = items[1].json.data;\n  var orderedOriginal = JSON.stringify(origWorkflow, null, 2);\n  \n  // Determine Difference\n  if ( orderedOriginal === n8nWorkflow ) {\n    items[0].json.github_status = \"same\";\n    items[0].json.content_decoded = orderedOriginal;\n  } else {\n    items[0].json.github_status = \"different\";\n    items[0].json.content_decoded = orderedOriginal;\n    items[0].json.n8n_data_stringy = n8nWorkflow;\n  }\n// No File Returned / New Workflow\n} else {\n  // Order JSON Object\n  var n8nWorkflow = (items[1].json.data);\n  \n  // Proper Formatting\n  items[0].json.github_status = \"new\";\n  items[0].json.n8n_data_stringy = n8nWorkflow;\n}\n\n// Return Items\nreturn items;"
+      },
+      "name": "isDiffOrNew",
+      "type": "n8n-nodes-base.function",
+      "position": [
+        180,
+        960
+      ],
+      "typeVersion": 1,
+      "id": "bc814f4f-81ea-4170-98db-a74abba80663"
+    },
+    {
+      "parameters": {
+        "filePath": "={{$json[\"filename\"]}}"
+      },
+      "name": "Read Binary File",
+      "type": "n8n-nodes-base.readBinaryFile",
+      "position": [
+        -580,
+        980
+      ],
+      "typeVersion": 1,
+      "id": "b01c7c49-7123-4fc6-a0be-5d261dc56212"
+    },
+    {
+      "parameters": {
+        "setAllData": false,
+        "options": {}
+      },
+      "name": "Move Binary Data",
+      "type": "n8n-nodes-base.moveBinaryData",
+      "position": [
+        -380,
+        980
+      ],
+      "typeVersion": 1,
+      "id": "5f5f5a51-4a0d-4a1d-8225-8451b6ecf83c"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "repo.owner",
+              "value": "redequeroimoveis"
+            },
+            {
+              "name": "repo.name",
+              "value": "backupn8n-6"
+            },
+            {
+              "name": "repo.path",
+              "value": "workflows/"
+            },
+            {
+              "name": "backupFolder",
+              "value": "/home/node/tmp/backups/"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Globals",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1500,
+        980
+      ],
+      "typeVersion": 1,
+      "id": "92f529b9-c655-4532-b718-32e9528c66d4"
+    },
+    {
+      "parameters": {
+        "command": "=n8n export:workflow --backup --output={{$json[\"backupFolder\"]}}"
+      },
+      "name": "Run CLI to export Workflows",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [
+        -1320,
+        980
+      ],
+      "typeVersion": 1,
+      "id": "253aa383-7d52-494b-bed5-01aa792a65fd"
+    },
+    {
+      "parameters": {
+        "command": "=ls -1 {{$node[\"Globals\"].json[\"backupFolder\"]}}"
+      },
+      "name": "List filenames",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [
+        -1140,
+        980
+      ],
+      "typeVersion": 1,
+      "id": "b7ecccfe-5b7a-4f42-b76a-862466cd6b65"
+    },
+    {
+      "parameters": {
+        "functionCode": "const newItems = [];\nfor (file of items[0].json.stdout.split('\\n')) {\n  newItems.push({\n    json: {\n      filename: $node[\"Globals\"].json[\"backupFolder\"] + file\n    }\n  });\n}\nreturn newItems;"
+      },
+      "name": "Convert filenames to objects with path",
+      "type": "n8n-nodes-base.function",
+      "position": [
+        -960,
+        980
+      ],
+      "typeVersion": 1,
+      "id": "df7e9e17-f4b3-4c78-987a-595c63768de9"
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "name": "One at a time",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        -780,
+        980
+      ],
+      "typeVersion": 1,
+      "id": "9efe0803-69b6-45e6-8614-67295d986823"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": "={{$node[\"Globals\"].json[\"repo\"][\"owner\"]}}",
+        "repository": "={{$node[\"Globals\"].json[\"repo\"][\"name\"]}}",
+        "filePath": "={{$node[\"Globals\"].json[\"repo\"][\"path\"]}}{{JSON.parse($json[\"data\"]).name}}.json",
+        "asBinaryProperty": false,
+        "additionalParameters": {}
+      },
+      "name": "GitHub",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        -180,
+        780
+      ],
+      "typeVersion": 1,
+      "alwaysOutputData": true,
+      "id": "6ed1721c-0e50-4f5e-8777-791a454c115f",
+      "credentials": {
+        "githubApi": {
+          "id": "4X9kXZWPjD3YaJrq",
+          "name": "GitHub account"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {},
+      "id": "35f14a2b-35e6-4425-94c8-3c35e3e2b7e3",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1680,
+        1180
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "hour": 3
+            }
+          ]
+        }
+      },
+      "name": "3:00 am",
+      "type": "n8n-nodes-base.cron",
+      "position": [
+        -1680,
+        980
+      ],
+      "typeVersion": 1,
+      "id": "412c5d25-5eb6-46b5-bd99-95226fea9e2a"
+    }
+  ],
+  "connections": {
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "isDiffOrNew",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "github_status": {
+      "main": [
+        [
+          {
+            "node": "same",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "different",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "new",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "same": {
+      "main": [
+        [
+          {
+            "node": "One at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "different": {
+      "main": [
+        [
+          {
+            "node": "GitHub Edit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "new": {
+      "main": [
+        [
+          {
+            "node": "GitHub Create",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "isDiffOrNew": {
+      "main": [
+        [
+          {
+            "node": "github_status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Binary File": {
+      "main": [
+        [
+          {
+            "node": "Move Binary Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Move Binary Data": {
+      "main": [
+        [
+          {
+            "node": "GitHub",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Globals": {
+      "main": [
+        [
+          {
+            "node": "Run CLI to export Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run CLI to export Workflows": {
+      "main": [
+        [
+          {
+            "node": "List filenames",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List filenames": {
+      "main": [
+        [
+          {
+            "node": "Convert filenames to objects with path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert filenames to objects with path": {
+      "main": [
+        [
+          {
+            "node": "One at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One at a time": {
+      "main": [
+        [
+          {
+            "node": "Read Binary File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Globals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub Edit": {
+      "main": [
+        [
+          {
+            "node": "One at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub Create": {
+      "main": [
+        [
+          {
+            "node": "One at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3:00 am": {
+      "main": [
+        [
+          {
+            "node": "Globals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "2f5622e7-25b8-4dd6-aa46-e97937cf95c9",
+  "triggerCount": 1,
+  "tags": []
+}
