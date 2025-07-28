@@ -1,0 +1,339 @@
+{
+  "createdAt": "2025-07-25T02:51:11.054Z",
+  "updatedAt": "2025-07-25T02:51:40.000Z",
+  "id": "981sx3WeWCAwaJe6",
+  "name": "Retornar usuário e senha site",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1bPpErnRcn6oXREVHotQ2U7w8JS74-5rDqC4WMtARM2U/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1bPpErnRcn6oXREVHotQ2U7w8JS74-5rDqC4WMtARM2U/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Telefone",
+              "lookupValue": "={{ $json.body.Telefone.replace('+', '') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9033a83f-5291-464f-bbf1-f90a1b573e23",
+      "name": "Google Sheets5",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -1880,
+        -220
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "wp0EdElCZ5oZWPuR",
+          "name": "Google Service Account account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "id": "834112b3-3d73-4074-bd50-a07581b9fd6a",
+      "name": "Limit",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -1700,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "729f6827-b451-44b0-b758-50a3eeb5c3db",
+              "name": "resposta",
+              "value": "=Acesse nosso site ou App através do link\n\n- https://app.unisistemas.tech/\n\n----------- / / -----------\n\nUsuário: {{ $json.Email }}\nSenha: {{ $json.Senha }}\n\n----------- / / -----------\n\n_Obs: Nosso site está em fase beta, e contamos com sua compreensão e feedback para que possamos aprimorá-lo continuamente._",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b08a7629-2c53-4f08-9267-0e1e866d81eb",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1200,
+        -340
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "4f5ef2c8-8c30-401f-a4d3-8821ddce5bd3",
+              "leftValue": "={{ $json.row_number }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5ca19b17-728e-4f99-bd10-19778d86ebbf",
+      "name": "If2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1480,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "729f6827-b451-44b0-b758-50a3eeb5c3db",
+              "name": "resposta",
+              "value": "=Não encontrado",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "77bcb594-d0f9-46f9-958d-31029787383c",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1200,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Informações",
+              "value": "={{ $json.resposta }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e7aa09da-5468-40bb-b6ca-e1ffb545c192",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -600,
+        -240
+      ],
+      "alwaysOutputData": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "usuário-senha-site",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "dc0a1d14-a3fa-4c9d-9122-f8a361aabfce",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -2100,
+        -220
+      ],
+      "webhookId": "ef91077f-7a58-4ac3-a028-cec3337977c4"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -780,
+        -240
+      ],
+      "id": "dca3fde7-7572-487e-936a-7fd70bcbb71f",
+      "name": "Respond to Webhook",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -980,
+        -240
+      ],
+      "id": "c11df0de-abd4-4c4f-b866-97acd5f6597f",
+      "name": "Respond to Webhook1"
+    }
+  ],
+  "connections": {
+    "Google Sheets5": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Google Sheets5": [
+      {
+        "json": {
+          "row_number": 2,
+          "Telefone": 553799781110,
+          "Nome": "Arthur",
+          "Sobrenome": "",
+          "Email": "arthurbaldiotti@hotmail.com",
+          "Senha": "Arthur@123",
+          "Crédito": 470,
+          "Data": "19/06/2024",
+          "Status": 1
+        }
+      }
+    ]
+  },
+  "versionId": "08461c5f-96a5-4192-a946-93c37ef5f799",
+  "triggerCount": 1,
+  "tags": []
+}
