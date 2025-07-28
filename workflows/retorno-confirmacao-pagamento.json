@@ -1,0 +1,2571 @@
+{
+  "createdAt": "2025-07-25T01:23:32.510Z",
+  "updatedAt": "2025-07-28T21:25:22.000Z",
+  "id": "KBiaxby9Tvhnuhvr",
+  "name": "retorno-confirmacao-pagamento",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "retorno-confirmacao-pagamento",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "3c158c20-e375-491d-aa39-4e2a41922486",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1860,
+        820
+      ],
+      "webhookId": "ccf3927a-05cf-4efb-a88b-8547fb132454"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "f443216c-96d9-4797-b41e-a6fa459f5b48",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2160,
+        740
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 2900,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "6e1bb456-c010-49bf-a2a4-e0e55157e43d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "5 créditos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "86e7e773-8586-458f-a1fb-2890f2030230",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 4900,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "25 créditos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "7f108034-a1be-4e90-b42e-e4f8a719e311",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 7900,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "100 créditos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "256e7cf8-be54-4c41-ba80-2d9eb0a07563",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 12900,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "200 créditos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "da03e413-3422-419c-af1a-71ff87c307e2",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 17900,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "300 créditos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "eb6a66ae-1413-4a05-9c55-14ebd0cf77de",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 28900,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "500 créditos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "bfa4ba18-8a8f-4b70-84b2-8eb30fc59929",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 9900,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Compartilhado 100 créditos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "cb0b87c4-12fe-47f2-82f7-2e30c8abf224",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 14900,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Compartilhado 200 créditos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "96d5ecdc-804c-4b53-8837-c41f58bdd657",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 19900,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Compartilhado 300 créditos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "4cac9701-c694-42e9-a1bc-cf4ebee1dc74",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 100,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Teste"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "06264af0-121d-40b4-979d-80505a979260",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 29900,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "500 créditos compartilhado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "9a42ca58-65ec-4fcb-8d54-5ede3138600b",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 29000,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "500 créditos compartilhado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "1d2e5dd1-9d02-4aca-8773-ac495020b154",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 39500,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pacote API 500 Créditos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "4b8e8b9b-da42-41a0-a720-fe04f1b292cb",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 600000,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pacote Personalizado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "17f0f487-c27d-4dc4-8b99-4ef5ffaa2db6",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 300000,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pacote Personalizado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "148f5c39-5d55-4bae-92e8-419bd297c3d0",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 59000,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pacote Personalizado 1000 Créditos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "27365b13-5a96-4add-a9f7-6f73201f62e1",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 114000,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pacote Personalizado 2000 Créditos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "b2ce6ca9-c6da-4412-9787-49a74db2bf92",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 74000,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pacote Personalizado 1000 Créditos 740,00"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "085a50bb-d291-4871-ae94-6dd703997c63",
+                    "leftValue": "={{ $('Webhook').item.json.body.Valor }}",
+                    "rightValue": 111000,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pacote Personalizado 1500 Créditos 1100,00"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d90ca2eb-328e-4437-8b47-3faf9bc74131",
+      "name": "Tipo da Mensagem",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -420,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 5 }}",
+              "type": "number"
+            },
+            {
+              "id": "3a55e28b-c7cc-485b-8ed1-2fcbc3a20069",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "388a7815-85c4-49e5-be96-75ce701b8bce",
+              "name": "creditos adicionar",
+              "value": 5,
+              "type": "number"
+            },
+            {
+              "id": "3b587da9-c9aa-4c0d-98e3-9ea41a85568d",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "c0136f60-fe25-41fd-a97a-f8258382973d",
+              "name": "comment",
+              "value": "Pacote Bronze 5 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        3560
+      ],
+      "id": "c8e2dc59-ad48-4c65-9747-8f5a85feaf66",
+      "name": "Teste"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 5 }}",
+              "type": "number"
+            },
+            {
+              "id": "45139060-45f0-4e03-9ebd-910e0cee66c3",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "87a4a2a9-ee8f-454f-b3d7-dba80063611c",
+              "name": "creditos adicionar",
+              "value": 5,
+              "type": "number"
+            },
+            {
+              "id": "1deefd83-710d-4ee5-8b21-4eca5328c7b2",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "4fc53f6a-0d42-4a22-8252-e701e797dabc",
+              "name": "comment",
+              "value": "Pacote Bronze 5 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        80
+      ],
+      "id": "809d2ee5-d9ac-4a6a-b5ea-b4f1be8ba1de",
+      "name": "5 créditos"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 25 }}",
+              "type": "number"
+            },
+            {
+              "id": "09928084-4fc6-42c1-b455-7cd266bdb406",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "9e0f9b35-a76d-40b6-a065-fae22c0b2299",
+              "name": "creditos adicionar",
+              "value": 25,
+              "type": "number"
+            },
+            {
+              "id": "bb47f453-0c87-4eec-94b4-147363004b90",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "b0d335e1-12cc-4d7a-8efb-7c251ec7d3fd",
+              "name": "comment",
+              "value": "Pacote Prata 25 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        240
+      ],
+      "id": "1835d696-6d1e-4b13-bcf9-45ffc7cfbf95",
+      "name": "25 créditos"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 100 }}",
+              "type": "number"
+            },
+            {
+              "id": "7a871be4-9f89-46b8-a1d3-725f4bd3ffce",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "34ea9944-6f85-43e7-a18a-4c25a2c3a920",
+              "name": "creditos adicionar",
+              "value": 100,
+              "type": "number"
+            },
+            {
+              "id": "1b3a38e2-8a00-447a-a636-ff393b1d4709",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "d17c7d4b-4fce-40eb-9d9e-4374cf0ec071",
+              "name": "comment",
+              "value": "Pacote Ouro 100 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        400
+      ],
+      "id": "0dae23cf-cf39-45f0-beab-18df2e1bef49",
+      "name": "100 créditos"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 200 }}",
+              "type": "number"
+            },
+            {
+              "id": "c245418b-5e09-4956-818e-f60a8435019e",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "419e1ac0-19ee-4ced-9a8a-52ada2be0ea9",
+              "name": "creditos adicionar",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "ed75611e-72d1-48a4-8079-8585ec6dce46",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "4363c441-2fb6-4311-a750-f7b0943c24a3",
+              "name": "comment",
+              "value": "Pacote Diamond 200 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        560
+      ],
+      "id": "07b58605-931d-403b-8b88-4165e78845e8",
+      "name": "200 créditos"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 300 }}",
+              "type": "number"
+            },
+            {
+              "id": "ac95a937-5a3e-4088-a4f9-e965470a2b37",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "b6f141c8-f824-42f4-b506-f6e624ac8a51",
+              "name": "creditos adicionar",
+              "value": 300,
+              "type": "number"
+            },
+            {
+              "id": "e9479cb1-ebba-4a05-a3a0-0da5f4619f25",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "fcc840aa-0569-4ca8-a129-89fdc825e7b4",
+              "name": "comment",
+              "value": "Pacote Platinum 300 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        720
+      ],
+      "id": "665e5a9d-1a31-4011-954b-66601ba447aa",
+      "name": "300 créditos"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 100 }}",
+              "type": "number"
+            },
+            {
+              "id": "4fac6006-f18b-43db-bf9c-53e33e67ffc6",
+              "name": "Tipo pacote",
+              "value": "Compartilhado",
+              "type": "string"
+            },
+            {
+              "id": "7814f7c8-0e61-4fe2-bae4-8bc092a11cd9",
+              "name": "creditos adicionar",
+              "value": 100,
+              "type": "number"
+            },
+            {
+              "id": "c6377e2e-a871-4d00-bd23-3a8fc6c26079",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "65fdbccd-d362-470f-8172-ded44d53db4e",
+              "name": "comment",
+              "value": "Compartilhado 100 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        1200
+      ],
+      "id": "66f4d4e2-d0cf-481e-8112-ed4db644de7e",
+      "name": "100 créditos compartilhado"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 200 }}",
+              "type": "number"
+            },
+            {
+              "id": "49d55377-bbe5-46a4-b792-f722a6613f74",
+              "name": "Tipo pacote",
+              "value": "Compartilhado",
+              "type": "string"
+            },
+            {
+              "id": "2b7aeb21-30eb-4996-bde9-fc1d77fa6d7e",
+              "name": "creditos adicionar",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "b479789d-19dd-473c-9c64-d9af13397db7",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "395589c8-b494-4aff-b53f-4422e06548f7",
+              "name": "comment",
+              "value": "Compartilhado 200 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        1380
+      ],
+      "id": "57c40d27-563f-4ce5-a477-329ebb0fe0c1",
+      "name": "200 créditos compartilhado"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 300 }}",
+              "type": "number"
+            },
+            {
+              "id": "e4a83ea4-6332-4cbf-85a7-f6f649943e12",
+              "name": "Tipo pacote",
+              "value": "Compartilhado",
+              "type": "string"
+            },
+            {
+              "id": "b91c6e29-c649-478b-9a19-974021d62722",
+              "name": "creditos adicionar",
+              "value": 300,
+              "type": "number"
+            },
+            {
+              "id": "5de86546-bf51-4dee-a01f-503bdc7a3743",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "f55a6c37-4224-44ca-880d-c9dc500d06e4",
+              "name": "comment",
+              "value": "Compartilhado 300 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        1560
+      ],
+      "id": "74902739-49cd-4316-9fcd-2950bb8264c6",
+      "name": "300 créditos compartilhado"
+    },
+    {
+      "parameters": {
+        "content": "## INDIVIDUAL",
+        "height": 1080,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "a810a9ae-7841-4fb2-99e1-3299d3ab5918",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## COMPARTILHADO",
+        "height": 620,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        1120
+      ],
+      "typeVersion": 1,
+      "id": "11fa066a-190e-4fb3-aed9-2e7fd7e7ad9f",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/register/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $('If Telefone').item.json.Telefone }}"
+            },
+            {
+              "name": "creditos",
+              "value": "={{ $json['creditos adicionar'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "22b63819-71cd-4213-ae03-09aba157039a",
+      "name": "Adicionar Créditos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        580
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "52cb726a-d64d-499b-b383-1871758b0981",
+              "leftValue": "={{ $('Retornar Créditos Disponíveis SEM 9').item.json.creditos ?? $('Retornar Créditos Disponíveis COM 9').item.json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        700,
+        720
+      ],
+      "id": "64805a7f-9487-4d09-94bf-f83a2df7cda4",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Webhook').item.json.body.Webhook }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('If Telefone').item.json.Telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.Nome }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "={{ $('Webhook').item.json.body['Tipo Pagamento'] }}"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $('Webhook').item.json.body.Valor }}"
+            },
+            {
+              "name": "Créditos",
+              "value": "={{ $('If').item.json.creditos }}"
+            },
+            {
+              "name": "comment",
+              "value": "={{ $('If').item.json.comment }}"
+            },
+            {
+              "name": "Tipo pacote",
+              "value": "={{ $('If').item.json['Tipo pacote'] }}"
+            },
+            {
+              "name": "status usuario",
+              "value": "={{ $('If').item.json['status usuario'] }}"
+            },
+            {
+              "name": "Créditos comprados",
+              "value": "={{ $('If').item.json['creditos adicionar'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2aec1692-eee9-42ac-991f-4534b33559a5",
+      "name": "retorno-confirmacao-pagamento",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1380,
+        740
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1140,
+        580
+      ],
+      "id": "89e09bc1-93fe-41dd-994b-816075e06061",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agora = new Date().toLocaleString(\"pt-BR\", { timeZone: \"America/Sao_Paulo\" });\n\n// Divide data e hora\nconst [dataStrRaw, horaStr] = agora.split(' ');\nconst dataStr = dataStrRaw.replace(',', '');\n\n// Extrai dia, mês e ano\nconst [dia, mes, ano] = dataStr.split('/');\nconst dataFormatada = `${dia}/${mes}/${ano}`;\n\n// Novo formato ISO (YYYY-MM-DD)\nconst dataISO = `${ano}-${mes}-${dia}`;\n\n// Monta a URL da execução\nconst executionId = $execution.id;\nconst workflowId = $workflow.id;\nconst baseUrl = \"https://n8n.redequeroimoveis.com\";\nconst executionUrl = `${baseUrl}/workflow/${workflowId}/executions/${executionId}`;\n\n// Retorna tudo em um único objeto\nreturn [{\n  json: {\n    data: dataFormatada,\n    data_iso: dataISO,\n    hora: horaStr,\n    executionUrl: executionUrl\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1640,
+        740
+      ],
+      "id": "5e9dfaa4-8a30-484d-bb39-462a55bf6a4a",
+      "name": "Data e hora"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.redequeroimoveis.com/webhook/app-baserow",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json.data.replace(/\\//g, \"-\") }}"
+            },
+            {
+              "name": "tipo",
+              "value": "Receita"
+            },
+            {
+              "name": "valor",
+              "value": "={{ $('Webhook').item.json.body.Valor }}"
+            },
+            {
+              "name": "codigo",
+              "value": "1"
+            },
+            {
+              "name": "origem",
+              "value": "={{ $('Webhook').item.json.body.Origem }}"
+            },
+            {
+              "name": "pagamento",
+              "value": "={{ $('Webhook').item.json.body['Tipo Pagamento'] === 'CREDIT_CARD' ? 'Cartão' : $('Webhook').item.json.body['Tipo Pagamento'] }}"
+            },
+            {
+              "name": "centro_custo",
+              "value": "={{ $('If').item.json.comment }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6b60b0c6-c1ee-4673-bd57-c4a2f4e87ad9",
+      "name": "app-baserow",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1860,
+        620
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.redequeroimoveis.com/webhook/confirmacao-pagamento",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json.data.replace(/\\//g, \"-\") }}"
+            },
+            {
+              "name": "tipo",
+              "value": "Receita"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $('Webhook').item.json.body.Valor }}"
+            },
+            {
+              "name": "codigo",
+              "value": "1"
+            },
+            {
+              "name": "Empresa",
+              "value": "={{ $('Webhook').item.json.body.Origem }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "={{ $('Webhook').item.json.body['Tipo Pagamento'] === 'CREDIT_CARD' ? 'Cartão' : $('Webhook').item.json.body['Tipo Pagamento'] }}"
+            },
+            {
+              "name": "Pacote",
+              "value": "={{ $('If').item.json.comment }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.Nome }}"
+            },
+            {
+              "name": "Email"
+            },
+            {
+              "name": "Telefone",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "Data E Hora",
+              "value": "={{ $json.data.replace(/\\//g, \"-\") }} {{ $json.hora.slice(0,5) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1e7c8963-1aee-4ac9-89dd-c3ba2842674e",
+      "name": "confirmacao-pagamento",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1860,
+        860
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 500 }}",
+              "type": "number"
+            },
+            {
+              "id": "e4a83ea4-6332-4cbf-85a7-f6f649943e12",
+              "name": "Tipo pacote",
+              "value": "Compartilhado",
+              "type": "string"
+            },
+            {
+              "id": "b91c6e29-c649-478b-9a19-974021d62722",
+              "name": "creditos adicionar",
+              "value": 500,
+              "type": "number"
+            },
+            {
+              "id": "5de86546-bf51-4dee-a01f-503bdc7a3743",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "f55a6c37-4224-44ca-880d-c9dc500d06e4",
+              "name": "comment",
+              "value": "Pacote Personalizado 500 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        1900
+      ],
+      "id": "2d70aa5f-64ba-452e-b56a-ffb8c9a639ae",
+      "name": "500 créditos Compartilhado"
+    },
+    {
+      "parameters": {
+        "content": "## PERSONALIZADO",
+        "height": 1720,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        1820
+      ],
+      "typeVersion": 1,
+      "id": "0bee991c-f375-4a4e-a6c3-bd9217938ee9",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const telefoneRaw = $json.body['Telefone'].replace(/\\D/g, '');\n\n// Garante que tenha o código do país\nlet telefone = telefoneRaw;\nif (!telefone.startsWith('55')) {\n  telefone = '55' + telefone;\n}\n\nconst codigoPais = '55';\nconst ddd = telefone.substring(2, 4);\nlet numero = telefone.substring(4);\n\n// Remove o nono dígito se ele existir\nif (numero.length >= 9 && numero.startsWith('9')) {\n  numero = numero.substring(1);\n}\n\nreturn {\n  codigoPais,\n  ddd,\n  telefone: numero\n};\n"
+      },
+      "id": "293cb983-cf99-466c-a404-179e1e579069",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1680,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+{{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}9{{ $('Code').item.json.telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "29d6a6ea-573c-4baa-8855-50bc180b6e2d",
+      "name": "Retornar Créditos Disponíveis COM 9",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1440,
+        1040
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "60bdb71d-1a78-42cb-88a6-18deb191af27",
+              "leftValue": "={{ $json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1240,
+        1040
+      ],
+      "id": "eaf17c76-1ae5-4efd-926f-4877fb0ad830",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "60bdb71d-1a78-42cb-88a6-18deb191af27",
+              "leftValue": "={{ $json.creditos }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1240,
+        820
+      ],
+      "id": "525fc279-91bb-4471-b0fb-300a0a34678d",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "=+{{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}{{ $('Code').item.json.telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9d71a3f1-a45f-4347-bf8c-5c1ce117ede7",
+      "name": "Retornar Créditos Disponíveis SEM 9",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1440,
+        820
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "01ad721e-6f7f-452f-8d7c-12530d14959e",
+              "name": "Telefone",
+              "value": "=+{{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}9{{ $('Code').item.json.telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "32b5a445-ba33-4aa5-a33f-efa90991192d",
+              "name": "creditos",
+              "value": "={{ $('Retornar Créditos Disponíveis COM 9').item.json.creditos }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1020,
+        1020
+      ],
+      "id": "5609639d-c740-474d-a8c5-0965c588d67f",
+      "name": "Telefone COM 9"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "01ad721e-6f7f-452f-8d7c-12530d14959e",
+              "name": "Telefone",
+              "value": "=+{{ $('Code').item.json.codigoPais }}{{ $('Code').item.json.ddd }}{{ $('Code').item.json.telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "f9c53544-37ea-4c60-a797-5e3abb55e8ea",
+              "name": "creditos",
+              "value": "={{ $('Retornar Créditos Disponíveis SEM 9').item.json.creditos }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1020,
+        800
+      ],
+      "id": "19894b8f-526c-46b4-8539-f4e3c2ad37ae",
+      "name": "Telefone SEM 9"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "296d8d4a-303e-4386-915c-e175d803504c",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -740,
+        800
+      ],
+      "id": "75d3f677-f736-44a6-b886-2f5ecd6d0e16",
+      "name": "If Telefone"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/23474/l3BbM5GUAmLp/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Telefone BC",
+              "value": "={{ $('If Telefone').item.json.Telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $('Webhook').item.json.body.Nome }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e83a9fa7-8eff-4347-88fa-857991fbbef9",
+      "name": "retorno-cobrança-asaas-BOTCONVERSA-RESERVA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1900,
+        1080
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1720,
+        1080
+      ],
+      "id": "0b4396a5-cbb9-4aff-a7fc-537d2524a039",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 500 }}",
+              "type": "number"
+            },
+            {
+              "id": "ac95a937-5a3e-4088-a4f9-e965470a2b37",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "b6f141c8-f824-42f4-b506-f6e624ac8a51",
+              "name": "creditos adicionar",
+              "value": 500,
+              "type": "number"
+            },
+            {
+              "id": "e9479cb1-ebba-4a05-a3a0-0da5f4619f25",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "fcc840aa-0569-4ca8-a129-89fdc825e7b4",
+              "name": "comment",
+              "value": "Pacote Black 500 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        900
+      ],
+      "id": "8cf757b2-ce99-4ed5-bdc8-55d3897a3b59",
+      "name": "500 créditos"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 500 }}",
+              "type": "number"
+            },
+            {
+              "id": "e4a83ea4-6332-4cbf-85a7-f6f649943e12",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "b91c6e29-c649-478b-9a19-974021d62722",
+              "name": "creditos adicionar",
+              "value": 500,
+              "type": "number"
+            },
+            {
+              "id": "5de86546-bf51-4dee-a01f-503bdc7a3743",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "f55a6c37-4224-44ca-880d-c9dc500d06e4",
+              "name": "comment",
+              "value": "Pacote API 500 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        2120
+      ],
+      "id": "f442b537-e59d-4b7a-b6be-ec6e41edf57c",
+      "name": "500 créditos API"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 1000 }}",
+              "type": "number"
+            },
+            {
+              "id": "ac95a937-5a3e-4088-a4f9-e965470a2b37",
+              "name": "Tipo pacote",
+              "value": "Compartilhado",
+              "type": "string"
+            },
+            {
+              "id": "b6f141c8-f824-42f4-b506-f6e624ac8a51",
+              "name": "creditos adicionar",
+              "value": 1000,
+              "type": "number"
+            },
+            {
+              "id": "e9479cb1-ebba-4a05-a3a0-0da5f4619f25",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "fcc840aa-0569-4ca8-a129-89fdc825e7b4",
+              "name": "comment",
+              "value": "Pacote Personalizado 1000 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        2700
+      ],
+      "id": "96e1391f-4824-4050-b1c4-f29952fc2210",
+      "name": "1000 créditos Compartilhado"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 2000 }}",
+              "type": "number"
+            },
+            {
+              "id": "ac95a937-5a3e-4088-a4f9-e965470a2b37",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "b6f141c8-f824-42f4-b506-f6e624ac8a51",
+              "name": "creditos adicionar",
+              "value": 2000,
+              "type": "number"
+            },
+            {
+              "id": "e9479cb1-ebba-4a05-a3a0-0da5f4619f25",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "fcc840aa-0569-4ca8-a129-89fdc825e7b4",
+              "name": "comment",
+              "value": "Pacote Personalizado 2000 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        2920
+      ],
+      "id": "da104821-2d2c-481c-9410-d893c04ef27b",
+      "name": "1000 créditos Compartilhado1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 8000 }}",
+              "type": "number"
+            },
+            {
+              "id": "e4a83ea4-6332-4cbf-85a7-f6f649943e12",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "b91c6e29-c649-478b-9a19-974021d62722",
+              "name": "creditos adicionar",
+              "value": 8000,
+              "type": "number"
+            },
+            {
+              "id": "5de86546-bf51-4dee-a01f-503bdc7a3743",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "f55a6c37-4224-44ca-880d-c9dc500d06e4",
+              "name": "comment",
+              "value": "Pacote Personalizado",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        2320
+      ],
+      "id": "3479694e-3f97-4310-944d-7caabf20fbf0",
+      "name": "Personalizado Eduardo 6000"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 4000 }}",
+              "type": "number"
+            },
+            {
+              "id": "e4a83ea4-6332-4cbf-85a7-f6f649943e12",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "b91c6e29-c649-478b-9a19-974021d62722",
+              "name": "creditos adicionar",
+              "value": 4000,
+              "type": "number"
+            },
+            {
+              "id": "5de86546-bf51-4dee-a01f-503bdc7a3743",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "f55a6c37-4224-44ca-880d-c9dc500d06e4",
+              "name": "comment",
+              "value": "Pacote Personalizado",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        2520
+      ],
+      "id": "73ae0553-9d35-4fa1-b161-e19bcf99513d",
+      "name": "Personalizado Eduardo 3000"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 1000 }}",
+              "type": "number"
+            },
+            {
+              "id": "e4a83ea4-6332-4cbf-85a7-f6f649943e12",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "b91c6e29-c649-478b-9a19-974021d62722",
+              "name": "creditos adicionar",
+              "value": 1000,
+              "type": "number"
+            },
+            {
+              "id": "5de86546-bf51-4dee-a01f-503bdc7a3743",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "f55a6c37-4224-44ca-880d-c9dc500d06e4",
+              "name": "comment",
+              "value": "Pacote API 1000 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        3140
+      ],
+      "id": "4531c575-0bcf-4626-8190-c188bcb26dce",
+      "name": "Pacote API 1000 Créditos 740,00"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13786005-c3b5-4e75-9ac0-5c08a12f4a02",
+              "name": "creditos",
+              "value": "={{ (Number($json.creditos) || 0) + 1500 }}",
+              "type": "number"
+            },
+            {
+              "id": "e4a83ea4-6332-4cbf-85a7-f6f649943e12",
+              "name": "Tipo pacote",
+              "value": "Individual",
+              "type": "string"
+            },
+            {
+              "id": "b91c6e29-c649-478b-9a19-974021d62722",
+              "name": "creditos adicionar",
+              "value": 1500,
+              "type": "number"
+            },
+            {
+              "id": "5de86546-bf51-4dee-a01f-503bdc7a3743",
+              "name": "status usuario",
+              "value": "={{ $json.creditos !== undefined && $json.creditos !== null && $json.creditos !== \"\" ? \"usuario ok\" : \"novo usuario\" }}",
+              "type": "string"
+            },
+            {
+              "id": "f55a6c37-4224-44ca-880d-c9dc500d06e4",
+              "name": "comment",
+              "value": "Pacote API 1500 Créditos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        3320
+      ],
+      "id": "c962e79b-7831-4354-8548-6f88e573d7fb",
+      "name": "Pacote API 1500 Créditos 1100,00"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tipo da Mensagem": {
+      "main": [
+        [
+          {
+            "node": "5 créditos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "25 créditos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "100 créditos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "200 créditos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "300 créditos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "500 créditos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "100 créditos compartilhado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "200 créditos compartilhado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "300 créditos compartilhado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Teste",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "500 créditos Compartilhado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "500 créditos Compartilhado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "500 créditos API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Personalizado Eduardo 6000",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Personalizado Eduardo 3000",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "1000 créditos Compartilhado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "1000 créditos Compartilhado1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pacote API 1000 Créditos 740,00",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pacote API 1500 Créditos 1100,00",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Teste": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "300 créditos compartilhado": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "200 créditos compartilhado": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "100 créditos compartilhado": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "300 créditos": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "200 créditos": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "100 créditos": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "25 créditos": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5 créditos": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adicionar Créditos": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Adicionar Créditos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "retorno-confirmacao-pagamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "retorno-confirmacao-pagamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "retorno-confirmacao-pagamento": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Data e hora",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data e hora": {
+      "main": [
+        [
+          {
+            "node": "app-baserow",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "confirmacao-pagamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "app-baserow": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "confirmacao-pagamento": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "500 créditos Compartilhado": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Retornar Créditos Disponíveis SEM 9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis COM 9": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Telefone COM 9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telefone COM 9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar Créditos Disponíveis SEM 9": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Telefone SEM 9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar Créditos Disponíveis COM 9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telefone COM 9": {
+      "main": [
+        [
+          {
+            "node": "If Telefone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telefone SEM 9": {
+      "main": [
+        [
+          {
+            "node": "If Telefone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Telefone": {
+      "main": [
+        [
+          {
+            "node": "Tipo da Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "retorno-cobrança-asaas-BOTCONVERSA-RESERVA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "500 créditos": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "500 créditos API": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1000 créditos Compartilhado": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1000 créditos Compartilhado1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Personalizado Eduardo 6000": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Personalizado Eduardo 3000": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pacote API 1000 Créditos 740,00": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pacote API 1500 Créditos 1100,00": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "confirmacao-pagamento": [
+      {
+        "json": {
+          "Telefone": "553799781110",
+          "Pacote": "Pacote Bronze 5 Créditos",
+          "Data": "09-04-2025",
+          "Empresa": "UniConsultas",
+          "Nome": "Arthur Teste 1",
+          "Valor": "100",
+          "Email": "",
+          "Data E Hora": "09-04-2025 11:17",
+          "Tipo Pagamento": "PIX"
+        }
+      }
+    ],
+    "app-baserow": [
+      {
+        "json": {
+          "data": "2025-04-09",
+          "tipo": "Receita",
+          "centro_custo": "Pacote Bronze 5 Créditos",
+          "origem": "UniConsultas",
+          "valor": 1,
+          "pagamento": "PIX",
+          "codigo": "R4526",
+          "id": "67f681becd15154b08a3bb0e",
+          "created_date": "2025-04-09T14:18:38.944566Z",
+          "updated_date": "2025-04-09T14:18:38.944568Z",
+          "created_by": "redequeroimoveis@gmail.com",
+          "is_sample": false
+        }
+      }
+    ],
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "238",
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.8.2",
+            "accept-encoding": "gzip, compress, deflate, br"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "Telefone": "+553799781110",
+            "Nome": "Arthur Teste 1",
+            "Tipo Pagamento": "PIX",
+            "Valor": 2900,
+            "Origem": "202507281815024850300-uniconsultas",
+            "Webhook": "https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/ZCb55SisIslA/"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/retorno-confirmacao-pagamento",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "retorno-confirmacao-pagamento": [
+      {
+        "json": {}
+      }
+    ],
+    "Adicionar Créditos": [
+      {
+        "json": {
+          "message": "Créditos adicionados com sucesso"
+        }
+      }
+    ]
+  },
+  "versionId": "19b324fe-3396-47fc-b99e-1b5c07d7a859",
+  "triggerCount": 1,
+  "tags": []
+}
