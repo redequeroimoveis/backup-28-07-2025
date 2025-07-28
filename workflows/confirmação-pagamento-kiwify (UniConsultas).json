@@ -1,0 +1,332 @@
+{
+  "createdAt": "2025-07-25T02:49:30.896Z",
+  "updatedAt": "2025-07-25T02:49:32.000Z",
+  "id": "1YxbphtgTHQ54RTt",
+  "name": "confirmação-pagamento-kiwify (UniConsultas)",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "retorno-confirmacao-pagamento-kiwify-uniconsultas",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "2064b47d-9114-489c-bf9b-ed115ff94e75",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "ccf3927a-05cf-4efb-a88b-8547fb132454"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8408bd02-df2c-4595-b797-4d6b750b50e2",
+              "name": "Webhook",
+              "value": "https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/ZCb55SisIslA/",
+              "type": "string"
+            },
+            {
+              "id": "d345d88e-e8c4-46f5-86a3-cfac9cab3908",
+              "name": "Telefone",
+              "value": "={{ $json.body.Customer.mobile }}",
+              "type": "string"
+            },
+            {
+              "id": "a9be81d8-8517-4c7a-8f6e-cc2df180c503",
+              "name": "Nome",
+              "value": "={{ $json.body.Customer.full_name }}",
+              "type": "string"
+            },
+            {
+              "id": "74038a93-7dce-4808-80a2-b0a0a260a03e",
+              "name": "Tipo Pagamento",
+              "value": "={{ $json.body.payment_method }}",
+              "type": "string"
+            },
+            {
+              "id": "ee80f7a7-a111-4f63-833e-345d47003a92",
+              "name": "Valor",
+              "value": "={{ $json.body.Commissions.product_base_price }}",
+              "type": "string"
+            },
+            {
+              "id": "92c99cc3-87d3-4e24-844e-c53033200330",
+              "name": "Origem",
+              "value": "UniConsultas",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ],
+      "id": "6f0445ce-d42d-4399-89ed-bf7c696c4570",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        600,
+        0
+      ],
+      "id": "5ff42661-d532-4de9-85c1-f71552c15e82",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.redequeroimoveis.com/webhook-test/retorno-confirmacao-pagamento",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Webhook",
+              "value": "={{ $json.Webhook }}"
+            },
+            {
+              "name": "Telefone",
+              "value": "={{ $json.Telefone }}"
+            },
+            {
+              "name": "Nome",
+              "value": "={{ $json.Nome }}"
+            },
+            {
+              "name": "Tipo Pagamento",
+              "value": "={{ $json['Tipo Pagamento'] }}"
+            },
+            {
+              "name": "Valor",
+              "value": "={{ $json.Valor }}"
+            },
+            {
+              "name": "Origem",
+              "value": "={{ $json.Origem }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1991dba3-285c-461b-a8ad-5354ac2135e8",
+      "name": "HTTP Request19",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        400,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request19": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "2662",
+            "accept": "application/json, text/plain, */*",
+            "content-type": "application/json",
+            "user-agent": "axios/0.23.0",
+            "traceparent": "00-c95685f963d71f6d10fba0c4ab07acdf-825e0168baf5ed1a-01"
+          },
+          "params": {},
+          "query": {
+            "signature": "2ba6a4b8bb3e2e519c5c7966b9619523141c36cf"
+          },
+          "body": {
+            "order_id": "22f70009-5f3a-45b0-aa2b-3919e23962a1",
+            "order_ref": "bKWjyqb",
+            "order_status": "paid",
+            "product_type": "membership",
+            "payment_method": "credit_card",
+            "store_id": "RStrgYj8yBiqMCk",
+            "payment_merchant_id": 49975346,
+            "installments": 1,
+            "card_type": "mastercard",
+            "card_last4digits": "4468",
+            "card_rejection_reason": null,
+            "boleto_URL": null,
+            "boleto_barcode": null,
+            "boleto_expiry_date": null,
+            "pix_code": null,
+            "pix_expiration": null,
+            "sale_type": "producer",
+            "created_at": "2025-04-24 07:31",
+            "updated_at": "2025-04-24 07:31",
+            "approved_date": "2025-04-25 07:31",
+            "refunded_at": null,
+            "webhook_event_type": "order_approved",
+            "Product": {
+              "product_id": "7f748da9-6ea9-4912-ae7c-d1684436050e",
+              "product_name": "Example product"
+            },
+            "Customer": {
+              "full_name": "John Doe",
+              "first_name": "John",
+              "email": "johndoe@example.com",
+              "mobile": "+95114289803",
+              "CPF": "28938903481",
+              "ip": "38.144.37.144",
+              "instagram": "@kiwify",
+              "street": "Rua 1001",
+              "number": "315",
+              "complement": "SL 05",
+              "neighborhood": "Centro",
+              "city": "Balneário Camboriú",
+              "state": "SC",
+              "zipcode": "88330-756"
+            },
+            "Commissions": {
+              "charge_amount": 7234,
+              "product_base_price": 7234,
+              "product_base_price_currency": "BRL",
+              "kiwify_fee": 796,
+              "kiwify_fee_currency": "BRL",
+              "settlement_amount": 7234,
+              "settlement_amount_currency": "BRL",
+              "sale_tax_rate": 0,
+              "sale_tax_amount": 0,
+              "commissioned_stores": [
+                {
+                  "id": "315078af-0337-4811-aeb1-099762224293",
+                  "type": "producer",
+                  "custom_name": "Example store",
+                  "email": "example@store.domain",
+                  "value": "6438"
+                },
+                {
+                  "id": "7b8ca779-9b1f-4363-92c6-93e31a7cb642",
+                  "type": "coproducer",
+                  "custom_name": "Example coproducer",
+                  "email": "example@coproducer.domain",
+                  "value": "6438"
+                },
+                {
+                  "id": "29492f5f-13c2-4bed-a2e1-95cda916db81",
+                  "type": "affiliate",
+                  "affiliate_id": "LkrTDSx",
+                  "custom_name": "Example affiliate",
+                  "email": "example@affiliate.domain",
+                  "value": "6438"
+                }
+              ],
+              "currency": "BRL",
+              "my_commission": 6438,
+              "funds_status": null,
+              "estimated_deposit_date": null,
+              "deposit_date": null
+            },
+            "TrackingParameters": {
+              "src": null,
+              "sck": null,
+              "utm_source": null,
+              "utm_medium": null,
+              "utm_campaign": null,
+              "utm_content": null,
+              "utm_term": null,
+              "s1": null,
+              "s2": null,
+              "s3": null
+            },
+            "Subscription": {
+              "id": "0998532d-c12d-41a2-b2f6-bb96ca8a88ab",
+              "start_date": "2025-04-21T07:31:35.405Z",
+              "next_payment": "2025-04-28T07:31:35.405Z",
+              "status": "active",
+              "plan": {
+                "id": "419a3965-1088-42e9-9b39-b9a700a3af65",
+                "name": "Example plan",
+                "frequency": "weekly",
+                "qty_charges": 0
+              },
+              "charges": {
+                "completed": [
+                  {
+                    "order_id": "22f70009-5f3a-45b0-aa2b-3919e23962a1",
+                    "amount": 6438,
+                    "status": "paid",
+                    "installments": 1,
+                    "card_type": "mastercard",
+                    "card_last_digits": "2410",
+                    "card_first_digits": "604687",
+                    "created_at": "2025-04-21T07:31:35.405Z"
+                  }
+                ],
+                "future": [
+                  {
+                    "charge_date": "2025-04-28T07:31:35.405Z"
+                  }
+                ]
+              }
+            },
+            "subscription_id": "0998532d-c12d-41a2-b2f6-bb96ca8a88ab",
+            "access_url": null
+          },
+          "webhookUrl": "https://n8n.redequeroimoveis.com:5678/webhook-test/retorno-confirmacao-pagamento-kiwify",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "6b863b5d-c41c-4ab8-b665-8b9f02a0fb54",
+  "triggerCount": 1,
+  "tags": []
+}
