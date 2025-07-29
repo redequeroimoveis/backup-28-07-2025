@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T01:22:52.447Z",
-  "updatedAt": "2025-07-28T21:34:24.000Z",
+  "updatedAt": "2025-07-29T00:41:07.000Z",
   "id": "yuY4Xo09T0ZWZ6F6",
   "name": "OpenPIX",
   "active": true,
@@ -365,7 +365,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/23474/oaLD4vLToB5x/",
+        "url": "=https://new-backend.botconversa.com.br/api/v1/webhooks-automation/catch/23474/GzJ2wJkubscG/",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -1040,7 +1040,7 @@
       }
     ]
   },
-  "versionId": "0a23b895-2d5a-4a7a-9068-413b61264e04",
+  "versionId": "fb97a62d-7181-4f73-9f62-82500b2a644c",
   "triggerCount": 1,
   "tags": []
 }
