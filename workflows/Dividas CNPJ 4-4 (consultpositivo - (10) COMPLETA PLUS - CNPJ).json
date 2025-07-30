@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T01:06:22.461Z",
-  "updatedAt": "2025-07-25T16:44:24.000Z",
+  "updatedAt": "2025-07-29T22:24:26.000Z",
   "id": "LfRRlUxt52okBv3Y",
   "name": "Dividas CNPJ 4-4 (consultpositivo - (10) COMPLETA PLUS - CNPJ)",
   "active": true,
@@ -2229,7 +2229,7 @@
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "dividas-cnpj_4-3",
+        "path": "dividas-cnpj_4-4",
         "responseMode": "responseNode",
         "options": {}
       },
@@ -6309,7 +6309,7 @@
       }
     ]
   },
-  "versionId": "f12a6d61-2108-4f83-96a8-b8d7a2b7e4f5",
+  "versionId": "9bf72fa0-2b34-4a31-a1fe-d4c8cfd54891",
   "triggerCount": 1,
   "tags": []
 }
