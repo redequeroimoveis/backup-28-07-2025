@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T01:22:52.447Z",
-  "updatedAt": "2025-07-29T00:41:07.000Z",
+  "updatedAt": "2025-07-29T23:09:05.000Z",
   "id": "yuY4Xo09T0ZWZ6F6",
   "name": "OpenPIX",
   "active": true,
@@ -555,7 +555,7 @@
             },
             {
               "name": "Origem",
-              "value": "={{ $('Webhook').item.json.body.charge.correlationID }}"
+              "value": "=UniConsultas"
             },
             {
               "name": "Webhook",
@@ -601,7 +601,7 @@
             },
             {
               "name": "Origem",
-              "value": "={{ $('Webhook').item.json.body.charge.correlationID }}"
+              "value": "=Rede Quero Imóveis"
             },
             {
               "name": "Webhook",
@@ -1040,7 +1040,7 @@
       }
     ]
   },
-  "versionId": "fb97a62d-7181-4f73-9f62-82500b2a644c",
+  "versionId": "81c2e22d-6c0b-45d4-932c-b20f35de09c4",
   "triggerCount": 1,
   "tags": []
 }
