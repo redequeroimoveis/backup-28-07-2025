@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T01:05:28.622Z",
-  "updatedAt": "2025-07-25T16:44:11.000Z",
+  "updatedAt": "2025-07-29T22:24:24.000Z",
   "id": "qWdebXljsddoJAdI",
   "name": "Dividas CNPJ 4-3 (iconsultei - CONSULTA COMPLETA PREMIUM CPF /CNPJ)",
   "active": true,
@@ -1005,7 +1005,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://n8n.redequeroimoveis.com/webhook/dividas-cnpj_4-3",
+        "url": "https://n8n.redequeroimoveis.com/webhook/dividas-cnpj_4-4",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -6951,7 +6951,7 @@
       }
     ]
   },
-  "versionId": "1c06dfcc-0c40-4e43-b423-f24132ad51e0",
+  "versionId": "820fa66c-c128-47ca-ab1d-dd8bb644d236",
   "triggerCount": 1,
   "tags": []
 }
