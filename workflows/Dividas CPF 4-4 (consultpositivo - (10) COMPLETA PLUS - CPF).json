@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-24T23:49:03.028Z",
-  "updatedAt": "2025-07-25T16:34:59.000Z",
+  "updatedAt": "2025-07-29T19:02:25.000Z",
   "id": "Bi2q8cfzdsrWqnq4",
   "name": "Dividas CPF 4-4 (consultpositivo - (10) COMPLETA PLUS - CPF)",
   "active": true,
@@ -2288,7 +2288,7 @@
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "dividas-cpf_4-3",
+        "path": "dividas-cpf_4-4",
         "responseMode": "responseNode",
         "options": {}
       },
@@ -8099,7 +8099,7 @@
       }
     ]
   },
-  "versionId": "16c9eac9-4e0c-4b40-961d-c80a9fd5c19e",
+  "versionId": "1e8d88a4-7114-4596-956c-7fb45348048d",
   "triggerCount": 1,
   "tags": []
 }
