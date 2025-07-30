@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T01:38:52.825Z",
-  "updatedAt": "2025-07-25T16:38:42.000Z",
+  "updatedAt": "2025-07-29T19:03:07.000Z",
   "id": "qpJbnzkslNGcMzxM",
   "name": "Dividas CPF 6-3 (iconsultei - CONSULTA COMPLETA PREMIUM CPF /CNPJ)",
   "active": true,
@@ -1777,7 +1777,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://n8n.redequeroimoveis.com/webhook/dividas-cpf_6-3",
+        "url": "https://n8n.redequeroimoveis.com/webhook/dividas-cpf_6-4",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -8087,7 +8087,7 @@
       }
     ]
   },
-  "versionId": "7fa7d5e4-757f-4f56-a7ca-5e54bcadb70b",
+  "versionId": "ac105622-3bc0-41f4-bf23-eb316b8cbcde",
   "triggerCount": 1,
   "tags": []
 }
