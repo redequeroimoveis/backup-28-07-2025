@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T02:50:02.669Z",
-  "updatedAt": "2025-07-25T02:50:03.000Z",
+  "updatedAt": "2025-07-29T23:15:10.000Z",
   "id": "y4FlmIjx5hZ8ukLX",
   "name": "cliente-pagou-direto",
   "active": true,
@@ -112,7 +112,7 @@
               "id": "678eaa98-7fb5-41e4-b972-2523053d9732",
               "name": "Valor",
               "value": "={{ $json.body.valor }}",
-              "type": "string"
+              "type": "number"
             },
             {
               "id": "1bd3b1d4-024a-4e07-bfe7-b73f6f8424c8",
@@ -207,7 +207,7 @@
       }
     ]
   },
-  "versionId": "758fb64f-1a63-42cc-a3aa-556237a82dfd",
+  "versionId": "32c2aed4-10d0-400d-83be-48b9884d894a",
   "triggerCount": 1,
   "tags": []
 }
