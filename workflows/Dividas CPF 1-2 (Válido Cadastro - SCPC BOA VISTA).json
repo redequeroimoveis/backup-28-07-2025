@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-24T23:16:51.331Z",
-  "updatedAt": "2025-07-25T16:29:54.000Z",
+  "updatedAt": "2025-07-30T10:43:00.000Z",
   "id": "WtMYf5CDYgyNpKbZ",
   "name": "Dividas CPF 1-2 (Válido Cadastro - SCPC BOA VISTA)",
   "active": true,
@@ -33,8 +33,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -1020,
-        1580
+        -1260,
+        1660
       ]
     },
     {
@@ -528,8 +528,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.1,
       "position": [
-        1900,
-        2100
+        1920,
+        1940
       ]
     },
     {
@@ -1216,8 +1216,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        -1240,
-        1580
+        -1800,
+        1660
       ],
       "onError": "continueRegularOutput"
     },
@@ -1634,8 +1634,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -2840,
-        1600
+        -2900,
+        1440
       ]
     },
     {
@@ -1650,8 +1650,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -3120,
-        1520
+        -3180,
+        1360
       ]
     },
     {
@@ -1663,8 +1663,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -3040,
-        1580
+        -3100,
+        1420
       ]
     },
     {
@@ -1719,165 +1719,9 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -2860,
-        1920
+        -2920,
+        1760
       ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict"
-          },
-          "conditions": [
-            {
-              "id": "3a0d598a-3b82-480e-b95a-b760b969e9fe",
-              "leftValue": "={{ $json.creditos }}",
-              "rightValue": 2,
-              "operator": {
-                "type": "number",
-                "operation": "gte"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "4cc27248-d943-4161-b293-733b02c5609d",
-      "name": "Crédito maior ou igual",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [
-        -1860,
-        1700
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict"
-          },
-          "conditions": [
-            {
-              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
-              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
-              "rightValue": "botconversa",
-              "operator": {
-                "type": "string",
-                "operation": "contains"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "c570929a-5a50-43c1-ac21-ccd6430c9a8d",
-      "name": "Se site / bc",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [
-        -2240,
-        1600
-      ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "={{ $('Webhook').item.json.body.Webhook }}",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "TelefoneBC",
-              "value": "={{ $('Webhook').item.json.body.Telefone }}"
-            },
-            {
-              "name": "CPF",
-              "value": "={{ $('Webhook').item.json.body.CPF }}"
-            },
-            {
-              "name": "Consulta",
-              "value": "=Atenção: você não possui créditos suficientes para realizar esta consulta. Adquira mais créditos ou tente através de outro módulo."
-            },
-            {
-              "name": "Retorno Consulta",
-              "value": "Ok"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "f4b56e7d-00e1-4b49-8190-b8ab1bf112fa",
-      "name": "Crédito inferior",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -2040,
-        1900
-      ]
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "id": "344d509a-2cc6-4108-8ad8-ad0cd80ec244",
-      "name": "Respond to Webhook2",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.1,
-      "position": [
-        -1860,
-        1900
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## SE SITE VERIFICAR CRÉDITO",
-        "height": 618.9881218861381,
-        "width": 710.1829541272629,
-        "color": 4
-      },
-      "id": "63cf5f4f-d03b-41e0-b91c-42fce5903bb3",
-      "name": "Sticky Note5",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -2320,
-        1480
-      ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "telefone",
-              "value": "={{ $('Webhook').item.json.body.Telefone }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "723b1445-ed76-4b35-89db-fa58f11f5828",
-      "name": "Retornar Créditos Site",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -2040,
-        1700
-      ],
-      "retryOnFail": true,
-      "maxTries": 5,
-      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -2004,8 +1848,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -3060,
-        1940
+        -3120,
+        1780
       ]
     },
     {
@@ -2017,8 +1861,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        -2860,
-        2140
+        -2920,
+        1980
       ]
     },
     {
@@ -2053,8 +1897,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -3060,
-        2140
+        -3120,
+        1980
       ]
     },
     {
@@ -2631,74 +2475,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -3060,
-        1780
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 1
-          },
-          "conditions": [
-            {
-              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
-              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
-              "rightValue": "typebot",
-              "operator": {
-                "type": "string",
-                "operation": "contains"
-              }
-            },
-            {
-              "id": "7d48410c-1168-4701-9db6-cfa7ececaddc",
-              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
-              "rightValue": "consultasite44",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "9464b777-30df-4f76-a38c-aa782d89223c",
-      "name": "If12",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [
-        -2040,
-        2080
-      ]
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "4523dbda-713f-421c-94d1-db6b52bbbe08",
-              "name": "resposta",
-              "value": "=Atenção: você não possui créditos suficientes para realizar esta consulta. Adquira mais créditos ou tente através de outro módulo.",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "6ae81e36-6ad4-461e-b66d-1c58a13eec1c",
-      "name": "Edit Fields6",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.3,
-      "position": [
-        -1860,
-        2060
+        -3120,
+        1620
       ]
     },
     {
@@ -2713,8 +2491,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -3280,
-        1580
+        -3340,
+        1420
       ],
       "webhookId": "ccf3927a-05cf-4efb-a88b-8547fb132454"
     },
@@ -3137,8 +2915,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        -3060,
-        2340
+        -3120,
+        2180
       ]
     },
     {
@@ -3206,8 +2984,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        -2680,
-        1760
+        -2740,
+        1600
       ]
     },
     {
@@ -3246,8 +3024,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -2860,
-        1760
+        -2920,
+        1600
       ],
       "alwaysOutputData": true,
       "onError": "continueRegularOutput"
@@ -3507,8 +3285,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        -460,
-        1300
+        -140,
+        1260
       ]
     },
     {
@@ -4060,6 +3838,167 @@
       "id": "7740c8dc-730d-4931-9524-dd2b47ce59fd",
       "name": "Base44 API - Última Consulta",
       "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "apin8n",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "dado",
+              "keyValue": "={{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}"
+            },
+            {
+              "keyName": "consulta",
+              "keyValue": "Válido Cadastro - BOA VISTA SCPC CPF"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -2300,
+        1420
+      ],
+      "id": "c23c884f-6d69-4560-ad3c-64350daed978",
+      "name": "Obter Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a2ba1813-65ee-4ce4-a393-8f658c12d43f",
+              "leftValue": "={{ $json.dado }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2140,
+        1420
+      ],
+      "id": "c108648f-8316-4ce0-a8fc-c25d2f06d4c0",
+      "name": "Se Supabase"
+    },
+    {
+      "parameters": {
+        "tableId": "apin8n",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "fieldId": "dado",
+              "fieldValue": "={{ $('If15').item.json.numeroOriginal.replace(/[.\\-\\/\\s]/g, '') }}"
+            },
+            {
+              "fieldId": "opcao",
+              "fieldValue": "=CPF 4-2"
+            },
+            {
+              "fieldId": "consulta",
+              "fieldValue": "Válido Cadastro - BOA VISTA SCPC CPF"
+            },
+            {
+              "fieldId": "HEADER",
+              "fieldValue": "={{ $('If').item.json.HEADER }}"
+            },
+            {
+              "fieldId": "CREDCADASTRAL",
+              "fieldValue": "={{ $('If').item.json.CREDCADASTRAL }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        1420
+      ],
+      "id": "9e1a273b-c8b3-473d-a9e4-b5f67b415c80",
+      "name": "Salvar Supabase1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a2ba1813-65ee-4ce4-a393-8f658c12d43f",
+              "leftValue": "={{ $json.dado }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -700,
+        1420
+      ],
+      "id": "8f8460b9-a063-4dd3-9403-f4b875209170",
+      "name": "Se Supabase1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -900,
+        1420
+      ],
+      "id": "4ebe9d94-10a6-4697-b2fd-79cae03880e8",
+      "name": "Limit2"
     }
   ],
   "connections": {
@@ -4077,7 +4016,7 @@
             "index": 0
           },
           {
-            "node": "Edit Fields31",
+            "node": "Limit2",
             "type": "main",
             "index": 0
           }
@@ -4860,7 +4799,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request29",
+            "node": "Obter Supabase",
             "type": "main",
             "index": 0
           }
@@ -4890,64 +4829,6 @@
         [
           {
             "node": "Respond to Webhook",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Crédito maior ou igual": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request29",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "If12",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Se site / bc": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request29",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Retornar Créditos Site",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Crédito inferior": {
-      "main": [
-        [
-          {
-            "node": "Respond to Webhook2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Retornar Créditos Site": {
-      "main": [
-        [
-          {
-            "node": "Crédito maior ou igual",
             "type": "main",
             "index": 0
           }
@@ -5267,35 +5148,6 @@
         [
           {
             "node": "If8",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If12": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields6",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Crédito inferior",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields6": {
-      "main": [
-        [
-          {
-            "node": "Respond to Webhook2",
             "type": "main",
             "index": 0
           }
@@ -5750,6 +5602,75 @@
         [
           {
             "node": "Dados Histórico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obter Supabase": {
+      "main": [
+        [
+          {
+            "node": "Se Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se Supabase": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request29",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields31",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Salvar Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit2": {
+      "main": [
+        [
+          {
+            "node": "Se Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields31",
             "type": "main",
             "index": 0
           }
@@ -6424,7 +6345,7 @@
       }
     ]
   },
-  "versionId": "965d3e03-d5a9-44ce-929b-b8869dc3d166",
+  "versionId": "3ce5f20f-6cc6-4b0c-b8d9-d973b530a4df",
   "triggerCount": 1,
   "tags": []
 }
