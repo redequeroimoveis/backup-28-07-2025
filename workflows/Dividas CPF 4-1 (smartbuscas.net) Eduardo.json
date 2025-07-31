@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T18:53:27.123Z",
-  "updatedAt": "2025-07-26T00:28:53.000Z",
+  "updatedAt": "2025-07-30T13:19:08.000Z",
   "id": "xaakcAJ6JzxZxrZV",
   "name": "Dividas CPF 4-1 (smartbuscas.net) Eduardo",
   "active": true,
@@ -3026,7 +3026,8 @@
         320
       ],
       "id": "cf20b2ad-02dc-4dfa-a2d0-f3bbae1c93db",
-      "name": "HTTP Request1"
+      "name": "HTTP Request1",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -3187,7 +3188,8 @@
         480
       ],
       "id": "5f2dd9e6-54d9-419d-9e39-0bd230ff520f",
-      "name": "HTTP Request2"
+      "name": "HTTP Request2",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -9255,7 +9257,7 @@
       }
     ]
   },
-  "versionId": "2c42fd66-89db-49b1-95b6-933f89ae5480",
+  "versionId": "8dfdb8be-2130-4d0b-b6f1-de2a2e75ec93",
   "triggerCount": 1,
   "tags": []
 }
