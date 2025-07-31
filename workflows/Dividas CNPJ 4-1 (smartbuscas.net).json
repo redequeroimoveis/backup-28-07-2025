@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T01:01:19.943Z",
-  "updatedAt": "2025-07-27T11:26:56.000Z",
+  "updatedAt": "2025-07-30T13:17:54.000Z",
   "id": "dDLfWVKICHpm9SWN",
   "name": "Dividas CNPJ 4-1 (smartbuscas.net)",
   "active": true,
@@ -3382,7 +3382,8 @@
         840
       ],
       "id": "108775cf-4b30-4459-84c6-c306db798270",
-      "name": "HTTP Request1"
+      "name": "HTTP Request1",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -3452,7 +3453,8 @@
         1020
       ],
       "id": "545d7de1-b75d-46a7-9d20-65039ee38eab",
-      "name": "HTTP Request2"
+      "name": "HTTP Request2",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -6847,7 +6849,7 @@
       }
     ]
   },
-  "versionId": "5dadbad1-df15-49c0-9eec-7ce3c90fa472",
+  "versionId": "815f4b4f-2f17-4471-8c6f-5619bc5dc4fb",
   "triggerCount": 1,
   "tags": []
 }
