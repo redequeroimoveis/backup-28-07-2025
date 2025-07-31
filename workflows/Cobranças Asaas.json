@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T03:39:26.911Z",
-  "updatedAt": "2025-07-25T03:39:32.000Z",
+  "updatedAt": "2025-07-30T12:53:28.000Z",
   "id": "rp6md5JxuZ38XeJc",
   "name": "Cobranças Asaas",
   "active": true,
@@ -17,7 +17,7 @@
             },
             {
               "name": "access_token",
-              "value": "$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDA1MTE5MTk6OiRhYWNoX2U5NjAzZjI4LWZlY2YtNDdkYi04MjhkLWQyOTgzODE5NmRjNA=="
+              "value": "$aact_prod_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmZiMjI5ZWM3LTY2YzUtNDEyMS04MmY4LWJkY2ZmY2U2YTU1OTo6JGFhY2hfYTEzZmI3YzYtOTJjNS00MjNiLTgxNWItOTk2ODhhYzllMDA3"
             }
           ]
         },
@@ -696,7 +696,7 @@
               "id": "678eaa98-7fb5-41e4-b972-2523053d9732",
               "name": "Valor",
               "value": "={{ $('Pagamento confirmado').item.json.body.payment.value }}00",
-              "type": "string"
+              "type": "number"
             },
             {
               "id": "1bd3b1d4-024a-4e07-bfe7-b73f6f8424c8",
@@ -749,7 +749,7 @@
               "id": "678eaa98-7fb5-41e4-b972-2523053d9732",
               "name": "Valor",
               "value": "={{ $('Pagamento confirmado').item.json.body.payment.value }}00",
-              "type": "string"
+              "type": "number"
             },
             {
               "id": "67fde576-a70b-450d-be1d-d3b7a17c67d0",
@@ -802,7 +802,7 @@
               "id": "678eaa98-7fb5-41e4-b972-2523053d9732",
               "name": "Valor",
               "value": "={{ $('Pagamento confirmado').item.json.body.payment.value }}00",
-              "type": "string"
+              "type": "number"
             },
             {
               "id": "1bd3b1d4-024a-4e07-bfe7-b73f6f8424c8",
@@ -855,7 +855,7 @@
               "id": "678eaa98-7fb5-41e4-b972-2523053d9732",
               "name": "Valor",
               "value": "={{ $('Pagamento confirmado').item.json.body.payment.value }}00",
-              "type": "string"
+              "type": "number"
             },
             {
               "id": "67fde576-a70b-450d-be1d-d3b7a17c67d0",
@@ -1311,7 +1311,7 @@
       }
     ]
   },
-  "versionId": "0cc2edb2-d08b-46da-9087-ed5ad7464a59",
+  "versionId": "e1b5ef32-4b8e-4ca0-9dd2-7aa41b6eff00",
   "triggerCount": 1,
   "tags": []
 }
