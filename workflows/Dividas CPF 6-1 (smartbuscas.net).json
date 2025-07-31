@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-24T23:57:20.129Z",
-  "updatedAt": "2025-07-27T11:25:56.000Z",
+  "updatedAt": "2025-07-30T13:18:47.000Z",
   "id": "3qLGh6qRhh6hbbJz",
   "name": "Dividas CPF 6-1 (smartbuscas.net)",
   "active": true,
@@ -3666,7 +3666,8 @@
         840
       ],
       "id": "e59e67bd-bae9-45c4-af20-0854b160df21",
-      "name": "HTTP Request1"
+      "name": "HTTP Request1",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -3821,7 +3822,8 @@
         1000
       ],
       "id": "e961e08e-4bae-40f4-9a14-fcadebe1ff39",
-      "name": "HTTP Request3"
+      "name": "HTTP Request3",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -8157,7 +8159,7 @@
       }
     ]
   },
-  "versionId": "e1292429-a2f0-452e-86ff-794a0379cb51",
+  "versionId": "667dd9eb-c73d-4a37-98d0-6b7f342c6e7d",
   "triggerCount": 1,
   "tags": []
 }
