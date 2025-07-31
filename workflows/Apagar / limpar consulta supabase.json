@@ -1,0 +1,146 @@
+{
+  "createdAt": "2025-07-25T03:43:13.981Z",
+  "updatedAt": "2025-07-30T12:18:40.000Z",
+  "id": "cAU2ChbkndEOa17i",
+  "name": "Apagar / limpar consulta supabase",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "174e90c8-b1a2-4591-b26d-0d89e0ef2f70",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "af5cf6cd-d942-426b-95d6-f106e07f3010",
+              "name": "dado",
+              "value": "32095249801",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ],
+      "id": "554800b0-e21c-4e32-80e2-8d0f15fa9042",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "apin8n",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "dado",
+              "keyValue": "={{ $json.dado }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ],
+      "id": "cc098065-1a63-4c5e-bdec-299cb1e8f5c8",
+      "name": "Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "apin8n",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        660,
+        0
+      ],
+      "id": "bf20fd31-dc6f-4354-b5dc-6eebac6af0cb",
+      "name": "Supabase1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "5949e8d4-5955-4a21-a8ac-8eb9e9f3fced",
+  "triggerCount": 0,
+  "tags": []
+}
