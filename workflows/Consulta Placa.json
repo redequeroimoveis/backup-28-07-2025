@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T01:16:30.494Z",
-  "updatedAt": "2025-07-25T16:48:48.000Z",
+  "updatedAt": "2025-07-30T23:56:01.000Z",
   "id": "k313Pq8RYQttQlpE",
   "name": "Consulta Placa",
   "active": true,
@@ -1146,7 +1146,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.1,
       "position": [
-        780,
+        480,
         1540
       ]
     },
@@ -1156,7 +1156,8 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "strict",
+            "version": 1
           },
           "conditions": [
             {
@@ -1179,8 +1180,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        520,
-        1560
+        260,
+        1540
       ],
       "onError": "continueRegularOutput"
     },
@@ -3011,7 +3012,7 @@
       "typeVersion": 4.1,
       "position": [
         -400,
-        20
+        40
       ],
       "retryOnFail": false,
       "maxTries": 5,
@@ -3036,6 +3037,16 @@
                 "operation": "notEmpty",
                 "singleValue": true
               }
+            },
+            {
+              "id": "4d107461-a85f-431c-930e-3cb3c3a11f42",
+              "leftValue": "={{ $json.data.external_raw.placa }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
             }
           ],
           "combinator": "or"
@@ -3048,7 +3059,7 @@
       "typeVersion": 2,
       "position": [
         -200,
-        20
+        40
       ]
     },
     {
@@ -3069,8 +3080,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.1,
       "position": [
-        0,
-        0
+        280,
+        -60
       ]
     },
     {
@@ -3294,6 +3305,139 @@
       "position": [
         2060,
         3140
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "Informações",
+              "stringValue": "=*Placa:* _{{ $json.resposta.dados_veiculo.placa }}_\n\n*Proprietário:* _{{ $json.resposta.proprietario.nome }}_\n*CPF / CNPJ:* _{{ $json.resposta.proprietario.documento }}_\n\n---------------------------\n\n*Modelo:* _{{ $('HTTP Request13').item.json.resposta.dados_veiculo['marca/modelo'] }}_\n*Ano Modelo:* _{{ $('HTTP Request13').item.json.resposta.dados_veiculo.ano_mod }}_\n*Cor:* _{{ $('HTTP Request13').item.json.resposta.dados_veiculo.cor }}_\n\n*Chassi:* _{{ $('HTTP Request13').item.json.resposta.dados_veiculo.chassi }}_\n*Renavam:* _{{ $('HTTP Request13').item.json.resposta.dados_veiculo.renavam }}_"
+            }
+          ]
+        },
+        "include": "selected",
+        "options": {}
+      },
+      "id": "0fa117ba-ea5c-41b2-ae75-acaf5dde94ce",
+      "name": "Edit Fields16",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.1,
+      "position": [
+        0,
+        -240
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "bb1bf704-a057-4466-b776-10b9a2722c80",
+              "leftValue": "={{ $json.resposta.dados_veiculo.placa }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "da915c75-954a-415b-8854-a0a71abfd0ee",
+      "name": "If18",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -200,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://natbusca.com/Servicos/api_consulta.564KCWS30CEJ.php?placa={{ $('Code1').item.json.cleanedPlaca }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "4442803c-de94-4e09-a6f8-b15873badd81",
+      "name": "HTTP Request13",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -400,
+        -200
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "bb1bf704-a057-4466-b776-10b9a2722c80",
+              "leftValue": "={{ $json.data.data.proprietario.nomeProprietario }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "e7b67266-75a2-47e8-9c28-4836e74d486f",
+      "name": "If26",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        100,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "Informações",
+              "stringValue": "=*Placa:* _{{ $('Code1').item.json.cleanedPlaca }}_\n\n*Proprietário:* {{ $json.data.external_raw.nomeProprietario }}__\n*CPF / CNPJ:* _{{ $json.data.external_raw.numeroIdentificacaoProprietario }}_\n\n---------------------------\n\n*Modelo:* _{{ $json.data.external_raw.descricaoMarcaModelo }}_\n*Ano Modelo:* _{{ $json.data.external_raw.anoModelo }}_\n*Cor:* _{{ $json.data.external_raw.descricaoCor }}_\n\n*Chassi:* _{{ $json.data.external_raw.chassi }}_\n*Renavam:* _{{ $json.data.external_raw.codigoRenavam }}_"
+            }
+          ]
+        },
+        "include": "selected",
+        "options": {}
+      },
+      "id": "ee7d8d36-d8d7-424b-a4bc-41b76b33991f",
+      "name": "Edit Fields17",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.1,
+      "position": [
+        380,
+        100
       ]
     }
   ],
@@ -3851,7 +3995,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request12",
+            "node": "HTTP Request13",
             "type": "main",
             "index": 0
           }
@@ -4512,7 +4656,7 @@
       "main": [
         [
           {
-            "node": "Edit Fields15",
+            "node": "If26",
             "type": "main",
             "index": 0
           }
@@ -4593,6 +4737,75 @@
         [
           {
             "node": "If27",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If18": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields16",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request13": {
+      "main": [
+        [
+          {
+            "node": "If18",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields16": {
+      "main": [
+        [
+          {
+            "node": "Se base44",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If26": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields15",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields17",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields17": {
+      "main": [
+        [
+          {
+            "node": "Se base44",
             "type": "main",
             "index": 0
           }
@@ -4919,9 +5132,163 @@
           }
         }
       }
+    ],
+    "HTTP Request12": [
+      {
+        "json": {
+          "data": {
+            "external_raw": {
+              "chassi": "9BHGA811BNP264084",
+              "placa": "RTD2I21",
+              "codigoRenavam": "01280169114",
+              "situacao": "EM_CIRCULACAO",
+              "codigoMunicipioEmplacamento": "4941",
+              "descricaoMunicipioEmplacamento": "PARA DE MINAS",
+              "ufJurisdicao": "MG",
+              "codigoRemarcacaoChassi": "2",
+              "descricaoRemarcacaoChassi": "NORMAL",
+              "codigoTipoVeiculo": "06",
+              "descricaoTipoVeiculo": "AUTOMOVEL",
+              "codigoMarcaModelo": "163728",
+              "descricaoMarcaModelo": "HYUNDAI/CRETA 16A ACTION",
+              "codigoEspecieVeiculo": "01",
+              "descricaoEspecieVeiculo": "PASSAGEIRO",
+              "codigoTipoCarroceria": "999",
+              "descricaoTipoCarroceria": "NãO APLICAVEL",
+              "codigoCor": "11",
+              "descricaoCor": "PRETA",
+              "codigoCategoria": "01",
+              "descricaoCategoria": "PARTICULAR",
+              "anoModelo": 2022,
+              "anoFabricacao": 2021,
+              "potencia": 130,
+              "cilindradas": 1591,
+              "codigoCombustivel": "16",
+              "descricaoCombustivel": "ALCOOL/GASOLINA",
+              "numeroMotor": "F4FGMU087327",
+              "cmt": 2.34,
+              "pbt": 1.79,
+              "cmc": 0,
+              "procedencia": "NACIONAL",
+              "numeroCambio": "RAMXFS199960",
+              "codigoTipoProprietario": "1",
+              "descricaoTipoProprietario": "FISICA",
+              "numeroIdentificacaoProprietario": "39109046615",
+              "numeroCarroceria": "",
+              "codigoRestricao1": "00",
+              "descricaoRestricao1": "SEM RESTRICAO",
+              "codigoRestricao2": "00",
+              "descricaoRestricao2": "SEM RESTRICAO",
+              "codigoRestricao3": "00",
+              "descricaoRestricao3": "SEM RESTRICAO",
+              "codigoRestricao4": "00",
+              "descricaoRestricao4": "SEM RESTRICAO",
+              "qtdEixos": 2,
+              "numeroEixoTraseiro": "",
+              "numeroEixoAuxiliar": "",
+              "nomeProprietario": "MARCILIO M ALVARES DA SILVA",
+              "lotacao": 5,
+              "dataEmissaoCrv": "2021-11-16",
+              "naturezaImportacao": "",
+              "codigoOrgaoRfb": "0000000",
+              "descricaoOrgaoRfb": "INEXISTENTE",
+              "registroAduaneiro": "",
+              "numeroDeclaracaoImportacao": "",
+              "dataDistImportacao": null,
+              "naturezaFaturamento": null,
+              "ufFaturado": "MG",
+              "dataLimite": null,
+              "dataUltimaAtualizacaoImportacao": null,
+              "codigoTipoImportacao": null,
+              "descricaoTipoImportacao": null,
+              "numeroProcessoImportacao": "0",
+              "dataBaixaImportacao": null,
+              "codigoPaisTransferencia": "00000",
+              "descricaoPaisTransferencia": "INEXISTENTE",
+              "indicadorMultaRenainf": false,
+              "indicadorComunicacaoVenda": false,
+              "indicadorPendenciaEmissao": false,
+              "indicadorRestricaoRenajud": false,
+              "indicadorRecall1": null,
+              "indicadorRecall2": null,
+              "indicadorRecall3": null,
+              "indicadorRecall4": null,
+              "tipoDocProprietarioIndicado": "0",
+              "descricaoDocProprietarioIndicado": "INEXISTENTE",
+              "numeroDocProprietarioIndicado": "",
+              "dataAtualizacaoMre": null,
+              "indicadorSiniav": null,
+              "codigoOrigemPropriedade": null,
+              "indicadorRestricaoRfb": "0",
+              "descricaoRestricaoRfb": "INEXISTENTE",
+              "indicadorLeilao": false,
+              "indicadorRouboFurto": false,
+              "indicadorAlarme": false,
+              "isPesquisado": true,
+              "dataCrlv": null,
+              "numeroCrlv": null,
+              "dataTransferencia": null,
+              "servicoConsultado": "RENAVAM",
+              "anoExercicioLicenciamentoPago": "2025",
+              "dataEmissaoCRLV": "2025-04-12T17:42:05"
+            }
+          }
+        }
+      }
+    ],
+    "HTTP Request13": [
+      {
+        "json": {
+          "placa": "NRQ5697",
+          "resposta": {
+            "dados_veiculo": {
+              "placa": "NRQ5697",
+              "marca/modelo": "FIAT/UNO MILLE WAY ECON",
+              "tipo/espécie": "AUTOMOVEL / PASSAGEIRO",
+              "carroceria": "NãO APLICAVEL",
+              "cor": "BRANCA",
+              "categoria": "PARTICULAR",
+              "ano_fab": "2012",
+              "ano_mod": "2012",
+              "combustível": "ALCOOL/GASOLINA",
+              "potência": "66 cv | Cilindradas: 1000 cc",
+              "cilindradas": "1000 cc",
+              "potencia": "66 cv",
+              "procedência": "NACIONAL",
+              "situação": "EM CIRCULACAO",
+              "no_motor": "146E10110830807",
+              "chassi": "9BD15804AC6702618",
+              "renavam": "00460393146"
+            },
+            "municipio": {
+              "municipio": "SIDROLANDIA",
+              "uf": "MS",
+              "ibge": "Desconhecido"
+            },
+            "proprietario": {
+              "nome": "EMERSON EMANUEL PINHEIRO",
+              "tipo": "FISICA",
+              "documento": "07525278199",
+              "tipo_doc_faturado": "JURIDICA",
+              "id_faturamento": "05950849000220",
+              "uf_faturado": "MS"
+            },
+            "restricoes": {
+              "1": "ALIENACAO_FIDUCIARIA_FILE_VEICULOS",
+              "2": "RENAINF",
+              "3": "PRINCIPAL_CONDUTOR",
+              "4": "SEM RESTRICAO",
+              "renajud": "NÃO",
+              "leilão": "NÃO",
+              "roubo/furto": "NÃO",
+              "comunicação_de_venda": "NÃO"
+            }
+          }
+        }
+      }
     ]
   },
-  "versionId": "368eaee1-80e0-4657-8450-2eb8aac094a5",
+  "versionId": "0f40526b-9bdf-4ef1-9fb1-6bfc72b99ef2",
   "triggerCount": 1,
   "tags": []
 }
