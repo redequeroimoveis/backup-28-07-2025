@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T01:33:21.725Z",
-  "updatedAt": "2025-07-25T01:33:22.000Z",
+  "updatedAt": "2025-07-30T13:55:05.000Z",
   "id": "fjO1zqbYMuCSRzDr",
   "name": "Confirmação de Pagamento (Alimentar planilhas)",
   "active": true,
@@ -14,7 +14,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        400,
+        380,
         500
       ]
     },
@@ -799,7 +799,7 @@
             },
             {
               "name": "telefone-que-indicou",
-              "value": "={{ $json.telefone_cod }}"
+              "value": "={{ $('telefone_indicado').item.json.codigoPais }}{{ $('telefone_indicado').item.json.ddd }}{{ $('telefone_indicado').item.json.telefone }}"
             },
             {
               "name": "Pacote",
@@ -1103,6 +1103,11 @@
           }
         ]
       ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        []
+      ]
     }
   },
   "settings": {
@@ -1224,7 +1229,7 @@
       }
     ]
   },
-  "versionId": "01fad935-a46d-48a9-8769-fd06cbbc65c9",
+  "versionId": "f835110c-8929-4647-bf94-2c178f37494e",
   "triggerCount": 1,
   "tags": []
 }
