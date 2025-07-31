@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-24T23:18:18.911Z",
-  "updatedAt": "2025-07-25T16:33:58.000Z",
+  "updatedAt": "2025-07-30T13:19:22.000Z",
   "id": "Mi7sSnOjwhSf76qM",
   "name": "Dividas CPF 2-1 (smartbuscas.net)",
   "active": true,
@@ -3201,7 +3201,8 @@
         660
       ],
       "id": "927d0c1a-7ade-490d-9849-8834c091108c",
-      "name": "HTTP Request1"
+      "name": "HTTP Request1",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -3437,7 +3438,8 @@
         820
       ],
       "id": "275969bb-efed-4465-9c0c-e037452b3d71",
-      "name": "HTTP Request2"
+      "name": "HTTP Request2",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -6643,7 +6645,7 @@
       }
     ]
   },
-  "versionId": "2332dfdb-84a3-4320-b70d-0cccba4a2823",
+  "versionId": "ab147d96-7080-483d-bdd3-23a23d68b1b3",
   "triggerCount": 1,
   "tags": []
 }
