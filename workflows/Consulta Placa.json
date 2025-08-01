@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T01:16:30.494Z",
-  "updatedAt": "2025-07-30T23:56:01.000Z",
+  "updatedAt": "2025-07-31T12:46:47.000Z",
   "id": "k313Pq8RYQttQlpE",
   "name": "Consulta Placa",
   "active": true,
@@ -41,8 +41,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        1820,
-        1640
+        2780,
+        1980
       ]
     },
     {
@@ -81,21 +81,21 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        2240,
-        3300
+        3240,
+        3280
       ]
     },
     {
       "parameters": {
-        "jsCode": "const placa = $json.body.Placa || ''; // Obtém a placa ou usa uma string vazia\nconst cleanedPlaca = placa.replace(/[^a-zA-Z0-9]/g, ''); // Remove caracteres indesejados\n\n// Verifica se a placa tem exatamente 7 caracteres\nif (cleanedPlaca.length === 7) {\n    return { cleanedPlaca }; // Retorna a placa limpa se estiver correta\n} else {\n    return { error: 'A placa não possui 7 caracteres válidos após a limpeza.' };\n}\n"
+        "jsCode": "const placa = ($json.body.Placa || '').toUpperCase(); // Converte para maiúsculo e evita undefined\nconst cleanedPlaca = placa.replace(/[^A-Z0-9]/g, ''); // Remove caracteres indesejados (somente letras maiúsculas e números)\n\n// Verifica se a placa tem exatamente 7 caracteres\nif (cleanedPlaca.length === 7) {\n    return { cleanedPlaca }; // Retorna a placa limpa se estiver correta\n} else {\n    return { error: 'A placa não possui 7 caracteres válidos após a limpeza.' };\n}"
       },
       "id": "b948bb22-6404-4bf4-b436-aa3fac946ff1",
       "name": "Code1",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -3600,
-        740
+        -5140,
+        -160
       ]
     },
     {
@@ -117,8 +117,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        2960,
-        1760
+        3960,
+        1740
       ]
     },
     {
@@ -149,8 +149,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        3360,
-        1740
+        4360,
+        1720
       ]
     },
     {
@@ -173,8 +173,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3800,
-        1720
+        4800,
+        1700
       ],
       "onError": "continueRegularOutput"
     },
@@ -198,8 +198,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2760,
-        1760
+        3760,
+        1740
       ],
       "onError": "continueRegularOutput"
     },
@@ -232,8 +232,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        3140,
-        1760
+        4140,
+        1740
       ]
     },
     {
@@ -260,8 +260,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3600,
-        1720
+        4600,
+        1700
       ],
       "onError": "continueRegularOutput"
     },
@@ -285,8 +285,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3600,
-        1920
+        4600,
+        1900
       ],
       "retryOnFail": true,
       "maxTries": 5
@@ -315,8 +315,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3800,
-        1920
+        4800,
+        1900
       ],
       "retryOnFail": true,
       "maxTries": 5
@@ -341,8 +341,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3460,
-        2240
+        4460,
+        2220
       ],
       "onError": "continueRegularOutput"
     },
@@ -375,8 +375,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        3640,
-        2240
+        4640,
+        2220
       ]
     },
     {
@@ -407,8 +407,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        4000,
-        1720
+        5000,
+        1700
       ]
     },
     {
@@ -422,8 +422,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2680,
-        1640
+        3680,
+        1620
       ]
     },
     {
@@ -624,8 +624,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        -2540,
-        1600
+        -3700,
+        -180
       ],
       "onError": "continueRegularOutput"
     },
@@ -653,169 +653,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict"
-          },
-          "conditions": [
-            {
-              "id": "3a0d598a-3b82-480e-b95a-b760b969e9fe",
-              "leftValue": "={{ $json.creditos }}",
-              "rightValue": 1,
-              "operator": {
-                "type": "number",
-                "operation": "gte"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "d32750c1-8cb0-4ce1-84ab-bd6e5e48dc8e",
-      "name": "Crédito maior ou igual",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [
-        -2920,
-        1720
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict"
-          },
-          "conditions": [
-            {
-              "id": "b3537d53-3488-4a2c-8c87-079f40680398",
-              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
-              "rightValue": "botconversa",
-              "operator": {
-                "type": "string",
-                "operation": "contains"
-              }
-            },
-            {
-              "id": "98a598ce-4e98-442c-a67b-cf18b4052dcf",
-              "leftValue": "={{ $('Webhook').item.json.body.Webhook }}",
-              "rightValue": "typebot",
-              "operator": {
-                "type": "string",
-                "operation": "contains"
-              }
-            }
-          ],
-          "combinator": "or"
-        },
-        "options": {}
-      },
-      "id": "fe24a8b0-554e-4702-8d28-c8813945a944",
-      "name": "Se site / bc",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [
-        -3300,
-        1620
-      ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "={{ $('Webhook').item.json.body.Webhook }}",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "TelefoneBC",
-              "value": "={{ $('Webhook').item.json.body.Telefone }}"
-            },
-            {
-              "name": "CPF",
-              "value": "={{ $('Webhook').item.json.body.CPF }}"
-            },
-            {
-              "name": "Consulta",
-              "value": "=Atenção: você não possui créditos suficientes para realizar esta consulta. Adquira mais créditos ou tente através de outro módulo."
-            },
-            {
-              "name": "Retorno Consulta",
-              "value": "Ok"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "711bbcbc-d7e9-423a-be23-73202074dcb8",
-      "name": "Crédito inferior",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -3100,
-        1920
-      ]
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "id": "b6d5ba61-bbf0-4c48-a00c-be7394aec78a",
-      "name": "Respond to Webhook2",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.1,
-      "position": [
-        -2920,
-        1920
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## SE SITE VERIFICAR CRÉDITO",
-        "height": 618.9881218861381,
-        "width": 710.1829541272629,
-        "color": 4
-      },
-      "id": "da9695eb-ce68-4dc3-a941-0cee838d2b3e",
-      "name": "Sticky Note5",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -3380,
-        1500
-      ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://api.uniconsultas.io:3000/3406bddf-8759-404e-bd3f-a4261a6c6ce6/select/api/credits",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "telefone",
-              "value": "={{ $('Webhook').item.json.body.Telefone }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "05bef5b7-d0b2-4587-acf9-50f03974a341",
-      "name": "Retornar Créditos Site",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -3100,
-        1720
-      ],
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
         "options": {}
       },
       "id": "fc5f6aa1-7ef0-4bab-a9b0-0140fd1c7471",
@@ -823,8 +660,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        2260,
-        3460
+        3260,
+        3440
       ]
     },
     {
@@ -855,8 +692,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        2060,
-        3300
+        3060,
+        3280
       ]
     },
     {
@@ -891,8 +728,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2060,
-        3460
+        3060,
+        3440
       ]
     },
     {
@@ -907,8 +744,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1960,
-        3000
+        2960,
+        2980
       ]
     },
     {
@@ -920,8 +757,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        1820,
-        1820
+        2780,
+        2160
       ]
     },
     {
@@ -930,7 +767,8 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "strict",
+            "version": 1
           },
           "conditions": [
             {
@@ -952,8 +790,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        1620,
-        1660
+        2580,
+        2000
       ]
     },
     {
@@ -968,8 +806,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1560,
-        1540
+        2520,
+        1880
       ]
     },
     {
@@ -1004,8 +842,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1620,
-        1820
+        2580,
+        2160
       ]
     },
     {
@@ -1017,8 +855,8 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        1520,
-        3000
+        2520,
+        2980
       ]
     },
     {
@@ -1030,8 +868,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1700,
-        3000
+        2700,
+        2980
       ]
     },
     {
@@ -1053,8 +891,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        1700,
-        3160
+        2700,
+        3140
       ]
     },
     {
@@ -1085,8 +923,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        1520,
-        3160
+        2520,
+        3140
       ]
     },
     {
@@ -1108,8 +946,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        1520,
-        3300
+        2520,
+        3280
       ]
     },
     {
@@ -1124,8 +962,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1460,
-        2920
+        2460,
+        2900
       ]
     },
     {
@@ -1307,8 +1145,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        -780,
-        2140
+        -2580,
+        380
       ]
     },
     {
@@ -1320,8 +1158,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        -780,
-        2300
+        -2580,
+        540
       ]
     },
     {
@@ -1352,8 +1190,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -960,
-        2140
+        -2760,
+        380
       ]
     },
     {
@@ -1388,8 +1226,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -960,
-        2320
+        -2760,
+        560
       ]
     },
     {
@@ -1404,8 +1242,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -1040,
-        1780
+        -2840,
+        20
       ]
     },
     {
@@ -1437,8 +1275,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -1340,
-        1580
+        -3140,
+        -180
       ]
     },
     {
@@ -1470,8 +1308,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        3840,
-        2240
+        4840,
+        2220
       ],
       "onError": "continueRegularOutput"
     },
@@ -1494,8 +1332,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        4200,
-        2240
+        5200,
+        2220
       ]
     },
     {
@@ -1530,8 +1368,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        4020,
-        2240
+        5020,
+        2220
       ]
     },
     {
@@ -1543,8 +1381,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        4200,
-        2440
+        5200,
+        2420
       ],
       "webhookId": "797e600e-3fd0-4b68-a11c-fd1fa406aff3"
     },
@@ -1587,8 +1425,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -1180,
-        1940
+        -2980,
+        180
       ]
     },
     {
@@ -1610,8 +1448,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        -640,
-        1920
+        -2440,
+        160
       ]
     },
     {
@@ -1643,8 +1481,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        2040,
-        2840
+        3040,
+        2820
       ]
     },
     {
@@ -1676,21 +1514,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        1640,
-        1380
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "const placa = $json.body.Placa;\nconst cleanedPlaca = placa.replace(/[^a-zA-Z0-9]/g, '');\nreturn { cleanedPlaca };"
-      },
-      "id": "8de25cf9-b3fb-499a-8068-3ff6025587da",
-      "name": "Code",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -2380,
-        1280
+        2320,
+        1320
       ]
     },
     {
@@ -1705,8 +1530,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        -3820,
-        740
+        -5360,
+        -160
       ],
       "webhookId": "2b8ba5b6-30bb-4848-9494-aca5d13ef16f"
     },
@@ -1962,8 +1787,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -780,
-        1920
+        -2580,
+        160
       ]
     },
     {
@@ -1985,8 +1810,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        2400,
-        3100
+        3400,
+        3080
       ]
     },
     {
@@ -2188,8 +2013,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4400,
-        1700
+        5400,
+        1680
       ],
       "id": "a8aff7ea-6a6c-43d4-bfc5-de7b9f4efa16",
       "name": "Code4"
@@ -2223,8 +2048,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -2960,
-        840
+        -4500,
+        -60
       ]
     },
     {
@@ -2259,8 +2084,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -3140,
-        1040
+        -4680,
+        140
       ]
     },
     {
@@ -2272,8 +2097,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        -2960,
-        1040
+        -4500,
+        140
       ]
     },
     {
@@ -2296,8 +2121,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -3140,
-        840
+        -4680,
+        -60
       ],
       "retryOnFail": true,
       "maxTries": 5,
@@ -2342,8 +2167,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -3280,
-        1220
+        -4820,
+        320
       ]
     },
     {
@@ -2358,8 +2183,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -3380,
-        680
+        -4920,
+        -220
       ]
     },
     {
@@ -2381,8 +2206,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        -2960,
-        1200
+        -4500,
+        300
       ]
     },
     {
@@ -2414,8 +2239,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -3300,
-        740
+        -4840,
+        -160
       ]
     },
     {
@@ -2447,8 +2272,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        1360,
-        1120
+        2280,
+        800
       ]
     },
     {
@@ -2458,7 +2283,7 @@
             {
               "id": "774d16d2-47c6-411a-8c78-78812c161e93",
               "name": "resposta",
-              "value": "={{ $('Se base44').item.json['Informações'].replace(/  +/g, '').replace(/[*_]/g, '') }}",
+              "value": "=*UniConsultas*\nTodas as consultas em um só lugar!\n\n------- / / -------\n\n## Consulta Placa\n\n{{ $('Se base44').item.json['Informações'].replace(/  +/g, '').replace(/[*_]/g, '') }}",
               "type": "string"
             }
           ]
@@ -2470,8 +2295,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.3,
       "position": [
-        1780,
-        1120
+        2740,
+        800
       ]
     },
     {
@@ -2533,8 +2358,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        4660,
-        1600
+        5660,
+        1580
       ],
       "id": "f76de1f0-2310-4a49-b6d9-db193126db09",
       "name": "Dados Histórico"
@@ -2598,8 +2423,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        4880,
-        1600
+        5880,
+        1580
       ],
       "id": "80e41703-d4fd-434e-b610-25b89297b9ef",
       "name": "Base44 API - Histórico",
@@ -2627,7 +2452,7 @@
             },
             {
               "name": "resposta",
-              "value": "={{ $('Se base44').item.json['Informações'].replace(/  +/g, '').replace(/[*_]/g, '') }}"
+              "value": "=*UniConsultas*\nTodas as consultas em um só lugar!\n\n------- / / -------\n\n## Consulta Placa\n\n{{ $('Se base44').item.json['Informações'].replace(/  +/g, '').replace(/[*_]/g, '') }}"
             }
           ]
         },
@@ -2636,8 +2461,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1560,
-        1120
+        2520,
+        800
       ],
       "id": "cb431e1f-1f49-452a-932c-96c7dd4e8790",
       "name": "Base44 API - RetornoConsulta",
@@ -2686,8 +2511,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        4880,
-        1780
+        5880,
+        1760
       ],
       "id": "2d15198d-bd4e-4b36-9d8e-43d8dce46916",
       "name": "Base44 API - Última Consulta",
@@ -2715,7 +2540,7 @@
             },
             {
               "name": "resposta",
-              "value": "={{ $('se typebot1').item.json['Consulta erro'] }}"
+              "value": "={{ $('se typebot3').item.json['Consulta erro'] }}"
             }
           ]
         },
@@ -2724,8 +2549,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2240,
-        3100
+        3240,
+        3080
       ],
       "id": "8351330c-54ef-4914-8cf3-644e8e81e005",
       "name": "Base44 API - Erro Consulta",
@@ -2970,8 +2795,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -820,
-        1760
+        -2620,
+        0
       ],
       "id": "2adc56dc-1cf5-4385-8416-07efc25d9319",
       "name": "Base44 API - Erro Consulta1",
@@ -3115,8 +2940,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -3120,
-        1220
+        -4660,
+        320
       ],
       "id": "02d28581-7aeb-4571-9b23-eaa0fb840126",
       "name": "EvolutionAPI - Sem credito",
@@ -3153,8 +2978,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1000,
-        1760
+        -2800,
+        0
       ],
       "id": "02d71d8a-a6db-4859-880f-349bdc969c83",
       "name": "EvolutionAPI - Erro",
@@ -3191,49 +3016,12 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2240,
-        2820
+        3240,
+        2800
       ],
       "id": "d7cd774d-8646-4260-b787-1ee38fb976d1",
       "name": "EvolutionAPI - Erro1",
       "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "=https://evolution.unisistemas.tech/message/sendText/{{ $('Webhook').item.json.body.Webhook.split('_')[1] }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "apikey",
-              "value": "={{ $('Webhook').item.json.body.Webhook.split('_').pop() }}"
-            }
-          ]
-        },
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "number",
-              "value": "={{ $('Webhook').item.json.body.Telefone }}"
-            },
-            {
-              "name": "text",
-              "value": "=*UniConsultas*\nTodas as consultas em um só lugar!\n\n------- / / -------\n\n## Consulta Cheques Bacen\n\n{{ $('se typebot2').item.json['Informações'].replace(/  +/g, '').replace(/[*_]/g, '') }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1880,
-        1360
-      ],
-      "id": "1793473e-1808-4786-8322-b58d76339eed",
-      "name": "EvolutionAPI - Consulta"
     },
     {
       "parameters": {
@@ -3266,8 +3054,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -3600,
-        580
+        -5140,
+        -320
       ],
       "id": "2bf5866f-dbc9-4e67-b081-5f9d40261fc4",
       "name": "EvolutionAPI - Realizando consulta",
@@ -3303,8 +3091,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        2060,
-        3140
+        3060,
+        3120
       ]
     },
     {
@@ -3439,6 +3227,274 @@
         380,
         100
       ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "apin8n",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "dado",
+              "keyValue": "={{ $('Code1').item.json.cleanedPlaca }}"
+            },
+            {
+              "keyName": "consulta",
+              "keyValue": "placa"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1720,
+        -440
+      ],
+      "id": "7133ff14-72f2-4ae5-a760-2e3f6821f3d4",
+      "name": "Obter Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a2ba1813-65ee-4ce4-a393-8f658c12d43f",
+              "leftValue": "={{ $json.dado }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1440,
+        -440
+      ],
+      "id": "509ad07d-e96e-4cd2-86eb-1496b0207703",
+      "name": "Se Supabase"
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "Informações",
+              "stringValue": "={{ $json[\"consulta-informacoes\"] }}"
+            }
+          ]
+        },
+        "include": "selected",
+        "options": {}
+      },
+      "id": "91610b0c-cbc1-4148-bb3c-7314e3861ee4",
+      "name": "Edit Fields18",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.1,
+      "position": [
+        -440,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a2ba1813-65ee-4ce4-a393-8f658c12d43f",
+              "leftValue": "={{ $json.dado }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1520,
+        900
+      ],
+      "id": "66e45b60-9964-4eef-8922-50a75a11c2ee",
+      "name": "Se Supabase1",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        900
+      ],
+      "id": "8b180311-3201-4686-9ed2-2bb4a05a5962",
+      "name": "Limit4"
+    },
+    {
+      "parameters": {
+        "tableId": "apin8n",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "fieldId": "opcao",
+              "fieldValue": "=informacoes"
+            },
+            {
+              "fieldId": "consulta",
+              "fieldValue": "placa"
+            },
+            {
+              "fieldId": "consulta-informacoes",
+              "fieldValue": "={{ $json[\"Informações\"] }}"
+            },
+            {
+              "fieldId": "dado",
+              "fieldValue": "={{ $('Code1').item.json.cleanedPlaca }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1860,
+        1020
+      ],
+      "id": "16f081bf-73a5-4220-b1cb-8820210bf209",
+      "name": "Salvar Supabase1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "sdFa9K80QsELWsD1",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://evolution.unisistemas.tech/message/sendText/{{ $('Webhook').item.json.body.Webhook.split('_')[1] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Webhook').item.json.body.Webhook.split('_').pop() }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Webhook').item.json.body.Telefone }}"
+            },
+            {
+              "name": "text",
+              "value": "=*UniConsultas*\nTodas as consultas em um só lugar!\n\n------- / / -------\n\n## Consulta Placa\n\n{{ $('se typebot2').item.json[\"Informações\"]  .replace(/_ /g, '_')\n  .replace(/---------+/g, '------- / / -------') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3060,
+        1300
+      ],
+      "id": "6bbdfc0b-0a83-4049-885e-518fc28084e3",
+      "name": "EvolutionAPI - Resposta3",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        2900,
+        1300
+      ],
+      "id": "c3ad99b4-6e24-4dda-9530-a2e7dddb2185",
+      "name": "Limit7"
+    },
+    {
+      "parameters": {
+        "content": "## Resposta Typebot",
+        "height": 260,
+        "width": 940,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2660,
+        1220
+      ],
+      "typeVersion": 1,
+      "id": "3be0a20c-7fb6-45b7-bd1b-ffa31e6bcb37",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "79562ec1-3144-483e-9734-2410cb05867f",
+              "name": "Informações",
+              "value": "={{ $('Limit4').item.json[\"Informações\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2060,
+        1020
+      ],
+      "id": "a2463c0c-7c5c-41d2-a808-b7e4abf8ed70",
+      "name": "Edit Fields2"
     }
   ],
   "connections": {
@@ -3653,7 +3709,7 @@
       "main": [
         [
           {
-            "node": "Se base44",
+            "node": "Limit4",
             "type": "main",
             "index": 0
           }
@@ -3675,65 +3731,7 @@
       "main": [
         [
           {
-            "node": "Se base44",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Crédito maior ou igual": {
-      "main": [
-        [
-          {
-            "node": "Dados N8N5",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Crédito inferior",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Se site / bc": {
-      "main": [
-        [
-          {
-            "node": "Dados N8N5",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Retornar Créditos Site",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Crédito inferior": {
-      "main": [
-        [
-          {
-            "node": "Respond to Webhook2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Retornar Créditos Site": {
-      "main": [
-        [
-          {
-            "node": "Crédito maior ou igual",
+            "node": "Limit4",
             "type": "main",
             "index": 0
           }
@@ -3933,7 +3931,7 @@
       "main": [
         [
           {
-            "node": "Se base44",
+            "node": "Limit4",
             "type": "main",
             "index": 0
           }
@@ -3995,7 +3993,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request13",
+            "node": "Obter Supabase",
             "type": "main",
             "index": 0
           }
@@ -4111,7 +4109,7 @@
       "main": [
         [
           {
-            "node": "EvolutionAPI - Consulta",
+            "node": "Limit7",
             "type": "main",
             "index": 0
           }
@@ -4185,7 +4183,7 @@
       "main": [
         [
           {
-            "node": "Se base44",
+            "node": "Limit4",
             "type": "main",
             "index": 0
           }
@@ -4236,7 +4234,7 @@
       "main": [
         [
           {
-            "node": "Se base44",
+            "node": "Limit4",
             "type": "main",
             "index": 0
           }
@@ -4298,7 +4296,7 @@
       "main": [
         [
           {
-            "node": "Se base44",
+            "node": "Limit4",
             "type": "main",
             "index": 0
           }
@@ -4338,7 +4336,7 @@
       "main": [
         [
           {
-            "node": "Se base44",
+            "node": "Limit4",
             "type": "main",
             "index": 0
           }
@@ -4532,7 +4530,7 @@
       "main": [
         [
           {
-            "node": "Se base44",
+            "node": "Limit4",
             "type": "main",
             "index": 0
           }
@@ -4590,7 +4588,7 @@
       "main": [
         [
           {
-            "node": "Se base44",
+            "node": "Limit4",
             "type": "main",
             "index": 0
           }
@@ -4601,7 +4599,7 @@
       "main": [
         [
           {
-            "node": "Se base44",
+            "node": "Limit4",
             "type": "main",
             "index": 0
           }
@@ -4674,7 +4672,7 @@
       "main": [
         [
           {
-            "node": "Se base44",
+            "node": "Limit4",
             "type": "main",
             "index": 0
           }
@@ -4708,17 +4706,6 @@
         [
           {
             "node": "Respond to Webhook1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "EvolutionAPI - Consulta": {
-      "main": [
-        [
-          {
-            "node": "Respond to Webhook3",
             "type": "main",
             "index": 0
           }
@@ -4776,7 +4763,7 @@
       "main": [
         [
           {
-            "node": "Se base44",
+            "node": "Limit4",
             "type": "main",
             "index": 0
           }
@@ -4802,6 +4789,119 @@
       ]
     },
     "Edit Fields17": {
+      "main": [
+        [
+          {
+            "node": "Limit4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obter Supabase": {
+      "main": [
+        [
+          {
+            "node": "Se Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se Supabase": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields18",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Se base44",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Salvar Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit4": {
+      "main": [
+        [
+          {
+            "node": "Se Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields18": {
+      "main": [
+        [
+          {
+            "node": "Se base44",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EvolutionAPI - Resposta3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit7": {
+      "main": [
+        [
+          {
+            "node": "EvolutionAPI - Resposta3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
       "main": [
         [
           {
@@ -4953,33 +5053,6 @@
             "tipo": "AUTOMOVEL",
             "ultimo_pagamento_ipva": "2025"
           }
-        }
-      }
-    ],
-    "Webhook": [
-      {
-        "json": {
-          "headers": {
-            "connection": "upgrade",
-            "host": "n8n.redequeroimoveis.com",
-            "content-length": "181",
-            "sentry-trace": "c21507a9f8de4a36b0f963ebf1be37c4-b5438de2c66151fb-0",
-            "baggage": "sentry-trace_id=c21507a9f8de4a36b0f963ebf1be37c4,sentry-environment=production_new,sentry-release=b182ade3ae701d69de4cfde929db7df66186bb3e,sentry-public_key=af3c6636fa6e4f89948eaa4e575b3286,sentry-transaction=/api/v1/blocks_integration/test_request/,sentry-sample_rate=0.02,sentry-sampled=false",
-            "user-agent": "python-requests/2.32.3",
-            "accept-encoding": "gzip, deflate",
-            "accept": "*/*",
-            "content-type": "application/json"
-          },
-          "params": {},
-          "query": {},
-          "body": {
-            "Placa": "NRQ5697",
-            "Webhook": "https://backend.botconversa.com.br/api/v1/webhooks-automation/catch/66767/AvJYYfdaqprz/",
-            "Telefone": "+553799781110",
-            "Status Consulta": "Offline"
-          },
-          "webhookUrl": "https://n8n.redequeroimoveis.com:5678/webhook-test/Consulta-Placa-Novo",
-          "executionMode": "test"
         }
       }
     ],
@@ -5286,9 +5359,56 @@
           }
         }
       }
+    ],
+    "Salvar Supabase1": [
+      {
+        "json": {
+          "id": 79923,
+          "telefone": "+553799781110",
+          "dado": "NRQ5697",
+          "data": null,
+          "opcao": "informacoes",
+          "HEADER": null,
+          "CREDCADASTRAL": null,
+          "consulta": "placa",
+          "data_consulta": null,
+          "hora_consulta": null,
+          "Consulta": null,
+          "consulta-informacoes": "*Placa:* _NRQ5697_\n\n*Proprietário:* _EMERSON EMANUEL PINHEIRO_\n*CPF / CNPJ:* _07525278199_\n\n---------------------------\n\n*Modelo:* _FIAT/UNO MILLE WAY ECON_\n*Ano Modelo:* _2012_\n*Cor:* _BRANCA_\n\n*Chassi:* _9BD15804AC6702618_\n*Renavam:* _00460393146_",
+          "pessoa": null,
+          "restricoes": null
+        }
+      }
+    ],
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.redequeroimoveis.com",
+            "content-length": "134",
+            "content-type": "application/json",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "br, gzip, deflate"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "Telefone": "+553799781110",
+            "Placa": "MBI8496",
+            "Webhook": "typebot_instancia-06_a000fe8108da00d129af25648cae1631",
+            "Tipo consulta": "cpf"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/Consulta-Placa-Novo",
+          "executionMode": "test"
+        }
+      }
     ]
   },
-  "versionId": "0f40526b-9bdf-4ef1-9fb1-6bfc72b99ef2",
+  "versionId": "cf23ec19-7139-4432-9a39-de63729e7a8d",
   "triggerCount": 1,
   "tags": []
 }
