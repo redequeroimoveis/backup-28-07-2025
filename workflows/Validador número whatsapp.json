@@ -1,9 +1,9 @@
 {
-  "createdAt": "2025-07-25T02:50:22.156Z",
-  "updatedAt": "2025-07-25T02:50:22.156Z",
-  "id": "PUpLVQtFsJUem3bu",
+  "createdAt": "2025-07-25T02:50:22.159Z",
+  "updatedAt": "2025-07-25T02:50:23.000Z",
+  "id": "XZTomTDdci4GXfSU",
   "name": "Validador número whatsapp",
-  "active": false,
+  "active": true,
   "nodes": [
     {
       "parameters": {},
@@ -97,7 +97,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "ecfe29e7-b947-4341-8737-0d60328bec8d",
-  "triggerCount": 0,
+  "versionId": "cc975313-daf1-4216-868f-88108ea30804",
+  "triggerCount": 1,
   "tags": []
 }
