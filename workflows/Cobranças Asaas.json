@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-07-25T03:39:26.911Z",
-  "updatedAt": "2025-07-30T12:53:28.000Z",
+  "updatedAt": "2025-08-01T16:39:59.000Z",
   "id": "rp6md5JxuZ38XeJc",
   "name": "Cobranças Asaas",
   "active": true,
@@ -17,7 +17,7 @@
             },
             {
               "name": "access_token",
-              "value": "$aact_prod_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmZiMjI5ZWM3LTY2YzUtNDEyMS04MmY4LWJkY2ZmY2U2YTU1OTo6JGFhY2hfYTEzZmI3YzYtOTJjNS00MjNiLTgxNWItOTk2ODhhYzllMDA3"
+              "value": "$aact_prod_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmU2NWE2MmJjLTQ5OWMtNDVmMy1iNTgxLTBhYmU0NGU2MTZkNTo6JGFhY2hfNzhiYjNmMTItOTEwMC00YjA3LWFiZmQtYWNkYjc0ZTA1ZmU5"
             }
           ]
         },
@@ -1311,7 +1311,7 @@
       }
     ]
   },
-  "versionId": "e1b5ef32-4b8e-4ca0-9dd2-7aa41b6eff00",
+  "versionId": "0a789208-1a99-4f9b-a47a-3dc5e6241919",
   "triggerCount": 1,
   "tags": []
 }
